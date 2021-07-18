@@ -1,0 +1,19 @@
+﻿@using GameSky.Models
+@using EFDataAccessLibrary.Models
+@model List<EFDataAccessLibrary.Models.NewsHeader>
+
+@{
+    List<NewsHeader> wiadomosci = Model;
+}
+
+@foreach (NewsHeader news in wiadomosci)
+{
+    <li class="feedItem">
+        <div class="titleNewsBar">
+            <p>@news.NewsTitle</p>
+            <p class="newsFeed-date">@news.NewsPublishDate.ToString("dd/MM/yyyy")</p>
+        </div>
+        <span>@news.NewsDesc</span>
+        <span class="linkRead"><a asp-page="/Post" asp-route-id="@news.NewsId">Read more...</a></span>
+    </li>
+}

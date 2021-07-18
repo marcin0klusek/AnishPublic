@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31205.134
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameSky", "GameSky.csproj", "{2ADB25AF-4E3A-4A3E-BCD1-8D837B6909FE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CE533A5A-6DB1-4D30-B04F-D1AD0D90576F} = {CE533A5A-6DB1-4D30-B04F-D1AD0D90576F}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFDataAccessLibrary", "..\EFDataAccessLibrary\EFDataAccessLibrary.csproj", "{3B810ADB-7356-49A9-BE2B-61C8FAF46998}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameSkyTests", "..\GameSkyTests\GameSkyTests.csproj", "{CE533A5A-6DB1-4D30-B04F-D1AD0D90576F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2ADB25AF-4E3A-4A3E-BCD1-8D837B6909FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2ADB25AF-4E3A-4A3E-BCD1-8D837B6909FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2ADB25AF-4E3A-4A3E-BCD1-8D837B6909FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2ADB25AF-4E3A-4A3E-BCD1-8D837B6909FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B810ADB-7356-49A9-BE2B-61C8FAF46998}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B810ADB-7356-49A9-BE2B-61C8FAF46998}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B810ADB-7356-49A9-BE2B-61C8FAF46998}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B810ADB-7356-49A9-BE2B-61C8FAF46998}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE533A5A-6DB1-4D30-B04F-D1AD0D90576F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE533A5A-6DB1-4D30-B04F-D1AD0D90576F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE533A5A-6DB1-4D30-B04F-D1AD0D90576F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE533A5A-6DB1-4D30-B04F-D1AD0D90576F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8FF31899-0F8F-474E-BE0A-AA6C8FF0BD8D}
+	EndGlobalSection
+EndGlobal

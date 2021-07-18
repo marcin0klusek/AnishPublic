@@ -1,0 +1,248 @@
+﻿@font-face {
+    font-family: OpenSans-Regular;
+    src: url('../../../../../Downloads/OpenSans-Regular.ttf') format('truetype');
+}
+
+/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+:root {
+    --text-primary: #000;
+    --text-secondary: #1861ac;
+    --background-primary: #fff;
+    --background-secondary: #909090;
+    --navbar-height: 50px;
+}
+
+body, html {
+    min-height: 100%;
+    background: #181b1f !important;
+    color: #929a9e;
+    font-size: 12px;
+    line-height: 5/3;
+}
+
+* {
+    font-family: 'Open Sans', sans-serif;
+}
+
+div {
+    display: block;
+}
+
+.a-default, a {
+    text-decoration: none;
+    color: #87a3bf;
+}
+
+.navbar-expand-sm > .container, .navbar-expand-sm > .container-fluid {
+    top: 0;
+    height: var(--navbar-height) !important;
+}
+
+.navbar {
+    height: var(--navbar-height);
+    margin-bottom: 0px !important;
+    background-color: #2d3844 !important;
+    color: white !important;
+    position: fixed !important;
+    box-shadow: 0 1px 1px 0 rgb(0 0 0 / 50%);
+    width: 100%;
+    top: 0 !important;
+    padding: 0 1rem;
+    z-index: 10001;
+}
+
+.nav-link {
+    color: #fff !important;
+}
+
+.navbar-brand {
+    border-radius: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: filter 230ms ease-in-out;
+}
+
+.navbar-brand:hover{
+    filter: brightness(1.2);
+}
+
+    .navbar-brand .brand-logo {
+        height: calc(var(--navbar-height) * 0.9);
+        width: calc(var(--navbar-height) * 0.9);
+        border-radius: 2px;
+        -webkit-transform: scaleX(-1);
+        transform: scaleX(-1);
+    }
+
+/*    .navbar-brand::after {
+        content: 'alpha';
+        text-transform: uppercase;
+        position: absolute;
+        top: 2.1rem;
+        font-size: 0.55rem;
+        background: yellow;
+        color: black;
+        padding: 0.05rem 0.20rem;
+        font-weight: 700;
+        border-radius: 0.2rem;
+    }*/
+
+.nav-link:hover {
+    font-weight: 700;
+    background: rgba(0,0,0,.25);
+    border-radius: 3px;
+}
+
+a.navbar-brand {
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
+    color: #fff !important;
+}
+
+/* Provide sufficient contrast against white background */
+a {
+    color: #0366d6;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.border-top {
+    border-top: 1px solid #404040 !important;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #013b7d !important;
+}
+
+.box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(1, 59, 125, .05);
+}
+
+button.accept-policy {
+    font-size: 1rem;
+    line-height: inherit;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    /* Margin bottom by footer height */ background: #232526; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #414345, #232526); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #414345, #232526); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    /* background: var(--background-primary) !important;*/
+    margin: 50px 0;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 50px; /* Vertically center the text there */
+    background: rgb(0,0,0,.8);
+    color: #fff !important;
+}
+
+.spacing {
+    margin: 50rem 0;
+}
+
+.mainAlert {
+    display: flex;
+    padding: 0.7rem;
+    width: 100%;
+    background: red;
+    display: none;
+}
+
+    .mainAlert span {
+        margin: 0px 3px;
+    }
+
+.titleNewsBar {
+    display: grid;
+    grid-template-columns: 90% 10%;
+    grid-template-areas: "title date";
+    font-size: 14px;
+}
+
+    .titleNewsBar .newsFeed-date {
+        grid-area: date;
+        padding: 3px 10px 0 0;
+        font-size: 11px;
+        display: flex;
+        flex-direction: row-reverse;
+    }
+
+@media screen and (max-width: 1160px) {
+    .titleNewsBar {
+        display: grid;
+    }
+
+        .titleNewsBar > p {
+            padding: 0 10px;
+        }
+
+    .newsFeed-date {
+        display: none;
+    }
+}
+
+.headline {
+    color: #929a9e;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.section-spacer {
+    height: 18px;
+}
+
+.text-ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.standard-box {
+    box-shadow: 0 1px 1px 0 rgb(0 0 0 / 50%);
+    background-color: #2d3844;
+}
+
+.flag {
+    height: 16px;
+    width: 18px;
+    box-sizing: border-box;
+    background-color: rgba(0,0,0,.05);
+}

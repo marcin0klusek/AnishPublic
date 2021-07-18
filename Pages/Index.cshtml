@@ -1,0 +1,90 @@
+﻿@page
+@using EFDataAccessLibrary.Models
+@using Models
+@model IndexModel
+@{
+    ViewData["Title"] = "Your step in e-Sport";
+    Random rnd = new Random();
+    List<String> events = new List<string>()
+{
+                "European Development Championship 4", "ESL One Cologne", "IEM Katowice", "ARRMY League Masters",
+                "ARRMY League Rising", "ARRMY League Open", "ESEA Open", "ESEA Advanced", "Sweet Home Spring 3"
+            };
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/indexSite.css" />
+}
+
+<div class="indexBody">
+    <div class="banner">
+        <img src="~/images/banner.png" />
+    </div>
+
+    <div class="hero">
+        <div class="titleBar">
+            <h1 class="title">Your first step in @Model.City!</h1>
+            <p>Stwórz drużynę i przebij się do światej czołówki! <a class="gettingStart" href="https://docs.microsoft.com/aspnet/core">Zaczynajmy.</a></p>
+        </div>
+
+        <div class="colLeft">
+        </div>
+
+        <div class="colMain">
+            <div class="newsfeed">
+                <p class="titleBar">AKTUALNOŚCI</p>
+                <ul>
+                    @foreach (NewsHeader news in Model.NewsHeaders)
+                    {
+                        <li>
+                            <div class="titleNewsBar">
+                                <p>@news.NewsTitle</p>
+                                <p class="newsFeed-date">@news.NewsPublishDate.ToString("dd/MM/yyyy")</p>
+                            </div>
+                            <span>@news.NewsDesc</span>
+                            <span class="linkRead"><a asp-page="/post" asp-route-id="@news.NewsId">Read more...</a></span>
+
+                        </li>
+                    }
+                </ul>
+                <form method="get" action="/news">
+                    <button type="submit">Więcej aktualności</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="colRight">
+            <div class="matchesResults">
+                <p>Wyniki</p>
+                <ul>
+                    @for (int i = 0; i < 12; i++)@*change to code that generates lastest matches*@
+                    {
+                        <li>
+                            <a class="eventName" href="#">@(events[(rnd.Next(0, events.Count))])</a>
+                            <a asp-controller="Matches" asp-action="Match" asp-route-id="@(rnd.Next(1,5))">
+                                <div class="teamrows">
+                                    <div class="teamrow">
+                                        <img src="@Country.GetCountry()"> @*replace flags with team's country name*@
+                                        <span>@("Not vEry long name but its funn to not trim this string lol".Substring(0, rnd.Next(3, 32)))</span>
+                                    </div>
+                                    <div class="teamrow">
+                                        <img src="@Country.GetCountry()">
+                                        <span>@("TeamNameVeryLongButNotShort2cpskpreokrepojweioewoiqoweobqowboiwqh".Substring(0, rnd.Next(3, 32)))</span>
+                                    </div>
+                                </div>
+                                <div class="twoRowExtra">
+                                    <div class="twoRowExtraRow won">
+                                        1
+                                    </div>
+                                    <div class="twoRowExtraRow lost">
+                                        2
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

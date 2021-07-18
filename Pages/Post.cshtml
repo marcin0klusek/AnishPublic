@@ -1,0 +1,38 @@
+﻿@page
+@model GameSky.Pages.PostModel
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@{
+    string name = "Marcin Klusek";
+
+    if (SignInManager.IsSignedIn(User))
+    {
+        name = @User.Identity.Name;
+    }
+}
+@section Styles{
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/postSite.css" />
+}
+
+
+<div class="newsContainer">
+    <div class="title">
+        <h3>@Model.news.NewsTitle</h3>
+    </div>
+    <div class="dates">
+        <h6>
+            <a href="https://www.twitter.com/klusekcs" target="_blank">@name</a>
+        </h6>
+        <h6>@Model.news.NewsPublishDate.ToString("dd/MM/yyyy - HH:mm")</h6>
+    </div>
+    <div class="desc">
+        <h5>@Model.news.NewsDesc</h5>
+    </div>
+    <br />
+    <div class="text">
+        <p>@Model.news.NewsContent.Content</p>
+    </div>
+</div>
+
+

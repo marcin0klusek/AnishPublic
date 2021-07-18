@@ -1,0 +1,104 @@
+﻿@using EFDataAccessLibrary.Models
+@using GameSky.Models
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+    NewsHeader news = ViewBag.News;
+    ViewBag.Title = "#" + news.NewsId + " - " + news.NewsTitle;
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/matchUpSite.css" />
+}
+
+<h2 class="text-center">@DateTime.Now</h2>
+<div class="text-center"><input type="button" id="refresher" value="Refresh" /></div>
+
+<div class="match-container">
+    <div class="match-header" id="partialHeader">
+        @Html.Partial("~/Views/Shared/Matches/_MatchHeader.cshtml", news)
+    </div>
+    <div class="clearfix spacer"></div>
+    <div class="section-spacer"></div>
+
+    <!-- #region Linups -->
+    <div class="lineups">
+        <div class="headline">Lineups</div>
+        <div class="lineups-container">
+            <div class="lineup lineup-team1 standard-box">
+                <div class="box-headline flex-aling-center">
+                    <div class="flex-align-center box-headline-team1">
+                        <img src="~/images/100pg.png" class="logo" />
+                        <a class="text-ellipsis">100PG</a>
+                    </div>
+                </div>
+                <div class="players">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td class="player player-image"> <img src="~/images/players/navi/1.png" class="player-photo" /></td>
+                                <td class="player player-image"> <img src="~/images/players/navi/2.png" class="player-photo" /></td>
+                                <td class="player player-image"> <img src="~/images/players/navi/3.png" class="player-photo" /></td>
+                                <td class="player player-image"> <img src="~/images/players/navi/4.png" class="player-photo" /></td>
+                                <td class="player player-image"> <img src="~/images/players/navi/5.png" class="player-photo" /></td>
+                            </tr>
+                            <tr>
+                                <td class="player"> <div class="flagAlign"> <img src="@Country.GetCountry("UA")" class="flag" /> <div class="text-ellipsis">Perfecto</div> </div></td>
+                                <td class="player"> <div class="flagAlign"> <img src="@Country.GetCountry("UA")" class="flag" /> <div class="text-ellipsis">boombl4</div> </div></td>
+                                <td class="player"> <div class="flagAlign"> <img src="@Country.GetCountry("UA")" class="flag" /> <div class="text-ellipsis">electronic</div> </div></td>
+                                <td class="player"> <div class="flagAlign"> <img src="@Country.GetCountry("UA")" class="flag" /> <div class="text-ellipsis">b1t</div> </div></td>
+                                <td class="player"> <div class="flagAlign"> <img src="@Country.GetCountry("UA")" class="flag" /> <div class="text-ellipsis">s1mple</div> </div></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="versus">vs</div>
+
+            <div class="lineup lineup-team2 standard-box">
+                <div class="box-headline flex-aling-center">
+                    <div class="flex-align-center  box-headline-team2">
+                        <img src="~/images/virtuspro.svg" class="logo" />
+                        <a class="text-ellipsis">Virtus.pro</a>
+                    </div>
+                </div>
+                <div class="players">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td class="player player-image"> <img src="~/images/players/g2/1.png" class="player-photo" /></td>
+                                <td class="player player-image"> <img src="~/images/players/g2/2.png" class="player-photo" /></td>
+                                <td class="player player-image"> <img src="~/images/players/g2/3.png" class="player-photo" /></td>
+                                <td class="player player-image"> <img src="~/images/players/g2/4.png" class="player-photo" /></td>
+                                <td class="player player-image"> <img src="~/images/players/g2/5.png" class="player-photo" /></td>
+                            </tr>
+                            <tr>
+                                <td class="player"> <div class="flagAlign"><img src="@Country.GetCountry("FR")" class="flag" /> <div class="text-ellipsis">Amanek</div> </div></td>
+                                <td class="player"> <div class="flagAlign"><img src="@Country.GetCountry("FR")" class="flag" /> <div class="text-ellipsis">Hunter</div> </div></td>
+                                <td class="player"> <div class="flagAlign"><img src="@Country.GetCountry("FR")" class="flag" /> <div class="text-ellipsis">JackZz</div> </div></td>
+                                <td class="player"> <div class="flagAlign"><img src="@Country.GetCountry("FR")" class="flag" /> <div class="text-ellipsis">nexa</div> </div></td>
+                                <td class="player"> <div class="flagAlign"><img src="@Country.GetCountry("FR")" class="flag" /> <div class="text-ellipsis">niko</div> </div></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- #endregion -->
+
+    <div class="clearfix spacer"></div>
+    <div class="section-spacer"></div>
+</div>
+<script>
+    $("#refresher").click(function () {
+        $.ajax({
+            url: "/Matches/MatchHeaderRefresh",
+            type: "get",
+            data: { id :  @news.NewsId  }, //if you need to post Model data, use this
+            success: function (result) {
+                $("#partialHeader").html(result);
+            }
+        })
+    });
+</script>

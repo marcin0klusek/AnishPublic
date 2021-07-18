@@ -1,0 +1,73 @@
+﻿@model EFDataAccessLibrary.Models.NewsHeader
+@using GameSky.Models
+@using EFDataAccessLibrary.Models
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/matchUpSite.css" />
+}
+@{
+    NewsHeader news = Model;
+    int team1score = 0;
+    int team2score = 2;
+}
+
+<div class="match-headerbar">
+    <div class="flex">
+        <div class="match-button">
+            <a href="#">Set reminder</a>
+        </div>
+        <h1 class="match-title">@news.NewsTitle</h1>
+    </div>
+</div>
+<div class="match-team1 team">
+    <div class="team-logo fadeRight">
+        <div class="team-logo-container">
+            <img src="~/images/100pg.png" />
+        </div>
+    </div>
+    <div class="team-name fadeRight fadeName">
+        <div class="name">100PG</div>
+    </div>
+    <div class="team-country fadeRight fadeName">
+        <img src="@Country.GetCountry()" class="flag">
+    </div>
+    @if (news.isPublished)
+    {
+        <div class="team-score-container fadeRight fadeScore">
+            <div class="team-score score-lost">
+                <span>@team1score</span>
+            </div>
+        </div>
+    }
+</div>
+<div class="match-info fadeUp">
+    <div class="event-time">
+        <span data-time-format="HH:mm">@DateTime.Now.ToString("HH:mm:ss")</span>
+    </div>
+    <div class="event-name">StarLadder CIS RMR 2021</div>
+    <div class="event-date">
+        <span data-time-format="do MM yyyy">@DateTime.Now.ToString("dd MMM yyyy")</span>
+    </div>
+    <div class="event-type">Online</div>
+</div>
+<div class="match-team2 team">
+    @if (news.isPublished)
+    {
+        <div class="team-score-container fadeLeft fadeScore">
+            <div class="team-score score-won">
+                <span>@team2score</span>
+            </div>
+        </div>
+    }
+    <div class="team-logo fadeLeft">
+        <div class="team-logo-container">
+            <img src="~/images/virtuspro.svg" />
+        </div>
+    </div>
+    <div class="team-name fadeLeft fadeName">
+        <div class="name">Virtus.pro</div>
+    </div>
+    <div class="team-country fadeLeft fadeName">
+        <img src="@Country.GetCountry()" class="flag">
+    </div>
+</div>

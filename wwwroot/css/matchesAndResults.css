@@ -1,0 +1,156 @@
+﻿body {
+    background: #181b1f;
+}
+
+a {
+    text-decoration: none;
+    color: #929a9e;
+}
+
+a:hover{
+    text-decoration: none;
+    cursor: pointer;
+    color: #8aadd4;
+}
+
+.results {
+    font-size: 12px;
+    width: 550px;
+    margin: 80px auto;
+    color: #929a9e;
+}
+
+.results .results-sublist:first-child{
+    margin-top: 0;
+}
+.results .results-sublist{
+    margin-top: 18px;
+}
+
+.results .standard-headline{
+    font-size: 20px;
+    font-weight: 700;
+    opacity: 1;
+}
+
+.standard-headline {
+    color: #929a9e;
+    margin: 0 0 5px;
+}
+
+.result-con {
+    margin-top: 5px;
+    background-color: #2d3844;
+    box-shadow: 0 1px 1px 0 rgb(0 0 0 / 50%);
+}
+
+.result-con:hover{
+    background-color: #45515f!important;
+}
+
+.results .result{
+    padding: 5px;
+    margin-bottom: 5px;
+}
+
+.results .result table{
+    width: 100%;
+    table-layout: fixed;
+}
+
+table{
+    display: table;
+    border-collapse: separate;
+    box-sizing: border-box;
+    text-indent: initial;
+    border-spacing: 2px;
+    border-color: grey;
+}
+
+tbody{
+    display: table-row-group;
+    vertical-align: middle;
+    border-color: inherit;
+}
+
+tr{
+    display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;
+}
+
+td{
+    display: table-cell;
+    vertical-align: inherit;
+}
+
+.results .team-cell{
+    width: 25%;
+}
+
+.results .result .line-align{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    min-width: 1%;
+}
+
+.results .team-cell .team1{
+    justify-content: flex-end;
+}
+
+.results .team-cell .team2{
+    justify-content: flex-start;
+}
+
+.results .result .team{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.results .team-cell .team1 img{
+    margin-left: 5px;
+}
+
+.results .team-cell .team2 img {
+    margin-right: 5px;
+}
+
+.results .result-score {
+    width: 60px;
+    font-weight: 700;
+    text-align: center;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.results .score-won{
+    color: #09b300;
+}
+
+.results .score-lost {
+    color: #c30404;
+}
+
+@media (min-width: 501px){
+    .results .result .event{
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+.results .result .event-name{
+    opacity: .85;
+    font-weight: 700;
+}
+
+.results .star-cell{
+    text-align: right;
+    width: 53px;
+}
+
+.results .star-cell .map-text{
+    opacity: .5;
+}
