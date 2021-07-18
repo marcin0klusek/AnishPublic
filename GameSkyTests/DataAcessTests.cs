@@ -149,37 +149,109 @@ namespace GameSkyTests
         {
             var context = GetDbContext();
 
-            string[] expected = new string[]
-            {
-                  "AWP",
-                  "Rifler",
-                  "IGL",
-            };
-
             var result = context.GetPlayersIncludePosition();
 
-            string[] actual = new string[3];
-
-            int i = 0;
             foreach (var player in result)
             {
-                actual[i++] = player.PlayerPosition.Name;
-            }
-
-            foreach (string position in actual)
-            {
-                Assert.Contains(position, expected);
+                Assert.NotNull(player.PlayerPosition.Name);
+                Assert.NotEmpty(player.PlayerPosition.Name);
+                Assert.NotEqual(String.Empty, player.PlayerPosition.Name);
             }
         }
 
         #endregion
 
         #region Team and PlayerTeam Tests
+       [Theory]
+       [InlineData("x-kom AGO", 2)]
+        public List<Player> TakePlayersListShouldMatchExpectedCount(string teamName, int expected)
+        {
+            var context = GetDbContext();
+
+            var players = context.Players.Include(t => t.Teams).ToList();
+
+            Assert.True(players.Count > 0);
+
+            List<Player> expectedPlayers = new();
+
+            foreach (var player in players)
+            {
+                foreach (var team in player.Teams)
+                {
+                    if (team.TeamName.Equals(teamName))
+                    {
+                        expectedPlayers.Add(player);
+                        break;
+                    }
+                }
+            }
+            Assert.Equal(expected, expectedPlayers.Count);
+            return expectedPlayers;
+        }
+        
         [Fact]
         public void ShouldPlayerHaveTeamAfterAddingHimToTeam()
         {
             var context = GetDbContext();
-            Assert.True(true);
+
+            string expectedTeamName = "x-kom AGO";
+
+            var players = context.Players.Include(t => t.Teams).ToList();
+
+            int expected = 2;
+            int actual = 0;
+
+            Assert.True(players.Count > 0);
+
+            foreach (var player in players)
+            {
+                foreach (var team in player.Teams)
+                {
+                    if (team.TeamName.Equals(expectedTeamName))
+                    {
+                        actual++;
+                    }
+                }
+            }
+
+            Assert.Equal(expected, actual);
+
+        }
+
+        [Theory]
+        [InlineData("G2", 2)]
+        public void AddingPlayersToTeamSavesThem(string teamName, int expectedAmount)
+        {
+            var context = GetDbContext();
+
+            var players2 = TakePlayersListShouldMatchExpectedCount(teamName, expectedAmount);
+
+            var team = context.Teams.Where(x => x.TeamName == teamName).Include(x => x.Players).SingleOrDefault();
+            Assert.NotNull(team);
+            var player = new Player
+            {
+                PlayerID = 98,
+                FirstName = "Kacper",
+                LastName = "Rusztowski",
+                NickName = "sn0wgrill",
+                BirthDate = DateTime.Now.AddYears(-9),
+                Prize = 164f,
+                Potencial = 7,
+                Aim = 6,
+                Knowledge = 4,
+                PlayerLevel = 32,
+                PlayerPosition = context.PlayerPosition.Where(x => x.Name == "AWP").SingleOrDefault(),
+                Teams = new List<Team>(),
+            };
+            team.Players.Add(player);
+            context.Players.Add(player);
+            context.Teams.Update(team);
+            context.SaveChanges();
+
+            var players3 = TakePlayersListShouldMatchExpectedCount(teamName, ++expectedAmount);
+
+            Assert.True(players2.Count < players3.Count);
+            _output.WriteLine("Ilosc przed i po dodaniu: " + players2.Count + " < " + players3.Count);
         }
         #endregion
 
@@ -245,7 +317,15 @@ namespace GameSkyTests
                 new Player{PlayerID = 3, FirstName = "Tomek", LastName = "Cebulski", NickName = "tikson", BirthDate = DateTime.Now.AddYears(-32), Prize = 452f, 
                                 Potencial = 10, Aim = 10, Knowledge = 10, PlayerLevel = 94,  PlayerPosition = playerPositions[2]},
             };
-            context.Player.AddRange(players);
+            context.Players.AddRange(players);
+
+            var teams = new[]
+            {
+                new Team{TeamId = 1, TeamName = "x-kom AGO", Tag="AGO", Players = new List<Player>{ players[0], players[1]}},
+                new Team{TeamId = 2, TeamName = "G2", Tag="G2", Players = new List<Player>{ players[1], players[2]}},
+                new Team{TeamId = 3, TeamName = "piratesports", Tag="ARR", Players = new List<Player>{ players[2], players[0]}},
+            };
+            context.Teams.AddRange(teams);
             context.SaveChanges();
 
             dbSeeded = true;
