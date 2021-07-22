@@ -10,7 +10,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameSky", "GameSky.csproj",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFDataAccessLibrary", "..\EFDataAccessLibrary\EFDataAccessLibrary.csproj", "{3B810ADB-7356-49A9-BE2B-61C8FAF46998}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameSkyTests", "..\GameSkyTests\GameSkyTests.csproj", "{CE533A5A-6DB1-4D30-B04F-D1AD0D90576F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameSkyTests", "..\GameSkyTests\GameSkyTests.csproj", "{CE533A5A-6DB1-4D30-B04F-D1AD0D90576F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

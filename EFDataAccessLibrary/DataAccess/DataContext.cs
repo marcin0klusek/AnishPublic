@@ -13,10 +13,10 @@ namespace EFDataAccessLibrary.DataAccess
         public DataContext(DbContextOptions options) : base(options) {}
         public DbSet<NewsHeader> NewsHeader { get; set; }
         public DbSet<NewsContent> NewsContent { get; set; }
-        public DbSet<Player> Players { get; set; }
+        public DbSet<Player> Player { get; set; }
         public DbSet<PlayerPosition> PlayerPosition { get; set; }
 
-        public DbSet<Team> Teams { get; set; }
+        public DbSet<Team> Team { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -41,7 +41,6 @@ namespace EFDataAccessLibrary.DataAccess
             {
                 entity.HasKey(i => i.PositionID);
             });
-
         }
 
         public NewsHeader GetFirstNewsHeader()
@@ -62,7 +61,7 @@ namespace EFDataAccessLibrary.DataAccess
 
         public List<Player> GetPlayers()
         {
-            return Players.ToList();
+            return Player.ToList();
         }
 
         public PlayerPosition GetPlayerPosition(string name)
@@ -72,7 +71,7 @@ namespace EFDataAccessLibrary.DataAccess
 
         public List<Player> GetPlayersIncludePosition()
         {
-            return Players.Include(p => p.PlayerPosition).ToList();
+            return Player.Include(p => p.PlayerPosition).ToList();
         }
 
     }

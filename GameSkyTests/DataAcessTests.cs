@@ -168,7 +168,7 @@ namespace GameSkyTests
         {
             var context = GetDbContext();
 
-            var players = context.Players.Include(t => t.Teams).ToList();
+            var players = context.Player.Include(t => t.Teams).ToList();
 
             Assert.True(players.Count > 0);
 
@@ -196,7 +196,7 @@ namespace GameSkyTests
 
             string expectedTeamName = "x-kom AGO";
 
-            var players = context.Players.Include(t => t.Teams).ToList();
+            var players = context.Player.Include(t => t.Teams).ToList();
 
             int expected = 2;
             int actual = 0;
@@ -226,7 +226,7 @@ namespace GameSkyTests
 
             var players2 = TakePlayersListShouldMatchExpectedCount(teamName, expectedAmount);
 
-            var team = context.Teams.Where(x => x.TeamName == teamName).Include(x => x.Players).SingleOrDefault();
+            var team = context.Team.Where(x => x.TeamName == teamName).Include(x => x.Players).SingleOrDefault();
             Assert.NotNull(team);
             var player = new Player
             {
@@ -244,8 +244,8 @@ namespace GameSkyTests
                 Teams = new List<Team>(),
             };
             team.Players.Add(player);
-            context.Players.Add(player);
-            context.Teams.Update(team);
+            context.Player.Add(player);
+            context.Team.Update(team);
             context.SaveChanges();
 
             var players3 = TakePlayersListShouldMatchExpectedCount(teamName, ++expectedAmount);
@@ -317,7 +317,7 @@ namespace GameSkyTests
                 new Player{PlayerID = 3, FirstName = "Tomek", LastName = "Cebulski", NickName = "tikson", BirthDate = DateTime.Now.AddYears(-32), Prize = 452f, 
                                 Potencial = 10, Aim = 10, Knowledge = 10, PlayerLevel = 94,  PlayerPosition = playerPositions[2]},
             };
-            context.Players.AddRange(players);
+            context.Player.AddRange(players);
 
             var teams = new[]
             {
@@ -325,7 +325,7 @@ namespace GameSkyTests
                 new Team{TeamId = 2, TeamName = "G2", Tag="G2", Players = new List<Player>{ players[1], players[2]}},
                 new Team{TeamId = 3, TeamName = "piratesports", Tag="ARR", Players = new List<Player>{ players[2], players[0]}},
             };
-            context.Teams.AddRange(teams);
+            context.Team.AddRange(teams);
             context.SaveChanges();
 
             dbSeeded = true;

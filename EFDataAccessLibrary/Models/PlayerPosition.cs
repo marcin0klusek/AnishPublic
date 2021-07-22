@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace EFDataAccessLibrary.Models
 {
+    [Table("PlayerPosition")]
     public class PlayerPosition
     {
         [Key]
