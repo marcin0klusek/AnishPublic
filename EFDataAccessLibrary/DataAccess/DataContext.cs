@@ -13,8 +13,8 @@ namespace EFDataAccessLibrary.DataAccess
         public DataContext(DbContextOptions options) : base(options) {}
         public DbSet<NewsHeader> NewsHeader { get; set; }
         public DbSet<NewsContent> NewsContent { get; set; }
-        public DbSet<Player> Player { get; set; }
         public DbSet<PlayerPosition> PlayerPosition { get; set; }
+        public DbSet<Player> Player { get; set; }
 
         public DbSet<Team> Team { get; set; }
 
@@ -33,13 +33,13 @@ namespace EFDataAccessLibrary.DataAccess
 
             modelBuilder.Entity<Player>(entity =>
             {
-                entity.HasKey(i => i.PlayerID);
-                entity.HasOne(p => p.PlayerPosition);
+                entity.HasKey(ap => ap.PlayerID);
+                entity.HasOne(p => p.PlayerPosition).WithOne().HasForeignKey<Player>(x => x.PositionID);
             });
 
             modelBuilder.Entity<PlayerPosition>(entity =>
             {
-                entity.HasKey(i => i.PositionID);
+                entity.HasKey(p => p.PositionID);
             });
         }
 
@@ -74,6 +74,15 @@ namespace EFDataAccessLibrary.DataAccess
             return Player.Include(p => p.PlayerPosition).ToList();
         }
 
+        public PlayerPosition GetPositionByName(string position)
+        {
+            return PlayerPosition.Where(x => x.Name == position).SingleOrDefault();
+        }
+
+        public List<Team> GetTeams()
+        {
+            return Team.ToList();
+        }
     }
 
 }

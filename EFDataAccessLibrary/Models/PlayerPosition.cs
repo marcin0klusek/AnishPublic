@@ -16,12 +16,6 @@ namespace EFDataAccessLibrary.Models
         public int PositionID { get; set; }
         [StringLength(8)]
         public string Name { get; set; }
-        public override String ToString()
-        {
-            if(Name != null)
-                return Name;
-            return "";
-        }
     }
 
 }

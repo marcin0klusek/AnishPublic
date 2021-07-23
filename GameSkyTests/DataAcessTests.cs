@@ -94,7 +94,7 @@ namespace GameSkyTests
 
             var result = context.GetNewsHeaderListIncludeContent();
 
-            int[] expected = {2,3,4,6,8, 12};
+            int[] expected = {1,2,3,4,5,6};
 
             int[] actual = new int[6];
 
@@ -228,6 +228,8 @@ namespace GameSkyTests
 
             var team = context.Team.Where(x => x.TeamName == teamName).Include(x => x.Players).SingleOrDefault();
             Assert.NotNull(team);
+            var position = context.PlayerPosition.Where(x => x.Name == "AWP").SingleOrDefault();
+
             var player = new Player
             {
                 PlayerID = 98,
@@ -240,7 +242,7 @@ namespace GameSkyTests
                 Aim = 6,
                 Knowledge = 4,
                 PlayerLevel = 32,
-                PlayerPosition = context.PlayerPosition.Where(x => x.Name == "AWP").SingleOrDefault(),
+                PlayerPosition = position,
                 Teams = new List<Team>(),
             };
             team.Players.Add(player);
@@ -277,24 +279,24 @@ namespace GameSkyTests
 
             var content = new[]
             {
-                new NewsContent {NewsContentId = 2, Content = "test content9" },
-                new NewsContent {NewsContentId = 3, Content = "test content8" },
-                new NewsContent {NewsContentId = 4, Content = "test content7" },
-                new NewsContent {NewsContentId = 6, Content = "test content6" },
-                new NewsContent {NewsContentId = 8, Content = "test content5" },
-                new NewsContent {NewsContentId = 12, Content = "test content2" },
+                new NewsContent {Content = "test content9" },
+                new NewsContent {Content = "test content8" },
+                new NewsContent {Content = "test content7" },
+                new NewsContent {Content = "test content6" },
+                new NewsContent {Content = "test content5" },
+                new NewsContent {Content = "test content2" },
             };
             context.NewsContent.AddRange(content);
             context.SaveChanges();
 
             var news = new[]
                 {
-                new NewsHeader{ NewsId = 8, NewsTitle = "Test8", NewsDesc = "test test test8", NewsCreateDate = DateTime.Now, NewsPublishDate = DateTime.Now, isPublished = false, NewsContent = content[0]},
-                new NewsHeader{ NewsId = 9, NewsTitle = "Test9", NewsDesc = "test test Test9", NewsCreateDate = DateTime.Now, NewsPublishDate = DateTime.Now, isPublished = false, NewsContent = content[1]},
-                new NewsHeader{ NewsId = 1, NewsTitle = "Test10", NewsDesc = "test test Test10", NewsCreateDate = DateTime.Now, NewsPublishDate = DateTime.Now, isPublished = false, NewsContent = content[2]},
-                new NewsHeader{ NewsId = 11, NewsTitle = "Test11", NewsDesc = "test test Test11", NewsCreateDate = DateTime.Now, NewsPublishDate = DateTime.Now, isPublished = false, NewsContent = content[3]},
-                new NewsHeader{ NewsId = 12, NewsTitle = "Test12", NewsDesc = "test test Test12", NewsCreateDate = DateTime.Now, NewsPublishDate = DateTime.Now, isPublished = false, NewsContent = content[4]},
-                new NewsHeader{ NewsId = 13, NewsTitle = "Test13", NewsDesc = "test test Test13", NewsCreateDate = DateTime.Now, NewsPublishDate = DateTime.Now, isPublished = false, NewsContent = content[5]},
+                new NewsHeader{ NewsTitle = "Test8", NewsDesc = "test test test8", NewsCreateDate = DateTime.Now, NewsPublishDate = DateTime.Now, isPublished = false, NewsContent = content[0]},
+                new NewsHeader{ NewsTitle = "Test9", NewsDesc = "test test Test9", NewsCreateDate = DateTime.Now, NewsPublishDate = DateTime.Now, isPublished = false, NewsContent = content[1]},
+                new NewsHeader{ NewsTitle = "Test10", NewsDesc = "test test Test10", NewsCreateDate = DateTime.Now, NewsPublishDate = DateTime.Now, isPublished = false, NewsContent = content[2]},
+                new NewsHeader{ NewsTitle = "Test11", NewsDesc = "test test Test11", NewsCreateDate = DateTime.Now, NewsPublishDate = DateTime.Now, isPublished = false, NewsContent = content[3]},
+                new NewsHeader{ NewsTitle = "Test12", NewsDesc = "test test Test12", NewsCreateDate = DateTime.Now, NewsPublishDate = DateTime.Now, isPublished = false, NewsContent = content[4]},
+                new NewsHeader{ NewsTitle = "Test13", NewsDesc = "test test Test13", NewsCreateDate = DateTime.Now, NewsPublishDate = DateTime.Now, isPublished = false, NewsContent = content[5]},
             };
             context.NewsHeader.AddRange(news);
             context.SaveChanges();
@@ -310,20 +312,20 @@ namespace GameSkyTests
 
             var players = new[]
              {
-                new Player{PlayerID = 1, FirstName = "Marcin", LastName = "Klusek", NickName = "fr0y", BirthDate = DateTime.Now.AddYears(-16), Prize = 100f,
-                                Potencial = 10, Aim = 10, Knowledge = 10, PlayerLevel = 94, PlayerPosition = playerPositions[0]},
-                new Player{PlayerID = 2, FirstName = "Wojtek", LastName = "Sakowicz", NickName = "sako", BirthDate = DateTime.Now.AddYears(-21), Prize = 300f,  
-                                Potencial = 10, Aim = 10, Knowledge = 10, PlayerLevel = 94, PlayerPosition = playerPositions[1]},
-                new Player{PlayerID = 3, FirstName = "Tomek", LastName = "Cebulski", NickName = "tikson", BirthDate = DateTime.Now.AddYears(-32), Prize = 452f, 
-                                Potencial = 10, Aim = 10, Knowledge = 10, PlayerLevel = 94,  PlayerPosition = playerPositions[2]},
+                new Player{FirstName = "Marcin", LastName = "Klusek", NickName = "fr0y", BirthDate = DateTime.Now.AddYears(-16), Prize = 100f,
+                                Potencial = 10, Aim = 10, Knowledge = 10, PlayerLevel = 94, PositionID = context.GetPositionByName("AWP").PositionID, PlayerPosition = context.GetPositionByName("AWP")},
+                new Player{FirstName = "Wojtek", LastName = "Sakowicz", NickName = "sako", BirthDate = DateTime.Now.AddYears(-21), Prize = 300f,  
+                                Potencial = 10, Aim = 10, Knowledge = 10, PlayerLevel = 94, PositionID = context.GetPositionByName("IGL").PositionID, PlayerPosition = context.GetPositionByName("IGL")},
+                new Player{FirstName = "Tomek", LastName = "Cebulski", NickName = "tikson", BirthDate = DateTime.Now.AddYears(-32), Prize = 452f, 
+                                Potencial = 10, Aim = 10, Knowledge = 10, PlayerLevel = 94,  PositionID = context.GetPositionByName("Rifler").PositionID, PlayerPosition = context.GetPositionByName("Rifler")},
             };
             context.Player.AddRange(players);
 
             var teams = new[]
             {
-                new Team{TeamId = 1, TeamName = "x-kom AGO", Tag="AGO", Players = new List<Player>{ players[0], players[1]}},
-                new Team{TeamId = 2, TeamName = "G2", Tag="G2", Players = new List<Player>{ players[1], players[2]}},
-                new Team{TeamId = 3, TeamName = "piratesports", Tag="ARR", Players = new List<Player>{ players[2], players[0]}},
+                new Team{TeamName = "x-kom AGO", Tag="AGO", Players = new List<Player>{ players[0], players[1]}},
+                new Team{TeamName = "G2", Tag="G2", Players = new List<Player>{ players[1], players[2]}},
+                new Team{TeamName = "piratesports", Tag="ARR", Players = new List<Player>{ players[2], players[0]}},
             };
             context.Team.AddRange(teams);
             context.SaveChanges();

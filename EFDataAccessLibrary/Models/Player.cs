@@ -20,11 +20,13 @@ namespace EFDataAccessLibrary.Models
         [StringLength(64)]
         public string NickName { get; set; }
         public DateTime BirthDate { get; set; }
-        public float Prize { get; set; }
+        public double Prize { get; set; }
         public int Potencial { get; set; }
         public int Aim { get; set; }
         public int Knowledge { get; set; }
         public int PlayerLevel { get; set; }
+        [ForeignKey("PlayerPosition")]
+        public int PositionID { get; set; }
         public virtual PlayerPosition PlayerPosition { get; set; }
         public ICollection<Team> Teams { get; set; }
 
