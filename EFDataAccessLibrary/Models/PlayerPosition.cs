@@ -12,7 +12,6 @@ namespace EFDataAccessLibrary.Models
     public class PlayerPosition
     {
         [Key]
-        [ForeignKey("Player")]
         public int PositionID { get; set; }
         [StringLength(8)]
         public string Name { get; set; }

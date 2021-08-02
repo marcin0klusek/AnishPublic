@@ -15,31 +15,17 @@ namespace EFDataAccessLibrary.DataAccess
         public DbSet<NewsContent> NewsContent { get; set; }
         public DbSet<PlayerPosition> PlayerPosition { get; set; }
         public DbSet<Player> Player { get; set; }
-
         public DbSet<Team> Team { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<NewsHeader>(entity =>
-            {
-                entity.HasKey(e => e.NewsId);
-                entity.HasOne(s => s.NewsContent);
-            });
+            modelBuilder.Entity<Player>().HasKey(q => q.PlayerID);
+            modelBuilder.Entity<Team>().HasKey(q => q.TeamID);
 
-            modelBuilder.Entity<NewsContent>(entity =>
+            modelBuilder.Entity<PlayerTeam>().HasKey(x =>
+            new
             {
-                entity.HasKey(e => e.NewsContentId);
-            });
-
-            modelBuilder.Entity<Player>(entity =>
-            {
-                entity.HasKey(ap => ap.PlayerID);
-                entity.HasOne(p => p.PlayerPosition).WithOne().HasForeignKey<Player>(x => x.PositionID);
-            });
-
-            modelBuilder.Entity<PlayerPosition>(entity =>
-            {
-                entity.HasKey(p => p.PositionID);
+                x.PlayerID, x.TeamID
             });
         }
 

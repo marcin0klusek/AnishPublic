@@ -49,7 +49,7 @@ namespace GameSky.Pages.Matches
                 return RedirectToPage("./Index");
             }
             ViewBag.News = news;
-            if (news.isPublished)
+            if (news.IsPublished)
             {
                // _notyf.ShowInformation("Mecz zakonczony");
                 return View("MatchFinished");

@@ -10,10 +10,10 @@ namespace EFDataAccessLibrary.Models
     public class Team
     {
         [Key]
-        public int TeamId { get; set; }
+        public int TeamID { get; set; }
         public string TeamName { get; set; }
         [StringLength(8)]
         public string Tag { get; set; }
-        public ICollection<Player> Players { get; set; }
+        public virtual ICollection<PlayerTeam> PlayerTeam { get; set; }
     }
 }

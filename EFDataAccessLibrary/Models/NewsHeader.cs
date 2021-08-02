@@ -21,8 +21,8 @@ namespace EFDataAccessLibrary.Models
 
         public DateTime NewsPublishDate { get; set; }
 
-        public Boolean isPublished { get; set; }
-
+        public Boolean IsPublished { get; set; }
+        public int NewsContentID { get; set; }
         public virtual NewsContent NewsContent { get; set; }
     }
 }

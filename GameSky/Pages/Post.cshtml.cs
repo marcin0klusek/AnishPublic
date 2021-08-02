@@ -26,7 +26,7 @@ namespace GameSky.Pages
         {
             news = (NewsHeader)_db.NewsHeader.Include(e => e.NewsContent).First(a => a.NewsId == id);
             
-            if (!news.isPublished)
+            if (!news.IsPublished)
             {
                 return RedirectToPage("/Index");
             }

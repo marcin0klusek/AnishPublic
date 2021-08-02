@@ -12,7 +12,7 @@ namespace EFDataAccessLibrary.Models
     {
         [Key]
         [ForeignKey("NewsHeader")]
-        public int NewsContentId { get; set; }
+        public int NewsContentID { get; set; }
 
         public string Content { get; set; }
     }

@@ -31,7 +31,7 @@
     <div class="team-country fadeRight fadeName">
         <img src="@Country.GetCountry()" class="flag">
     </div>
-    @if (news.isPublished)
+    @if (news.IsPublished)
     {
         <div class="team-score-container fadeRight fadeScore">
             <div class="team-score score-lost">
@@ -51,7 +51,7 @@
     <div class="event-type">Online</div>
 </div>
 <div class="match-team2 team">
-    @if (news.isPublished)
+    @if (news.IsPublished)
     {
         <div class="team-score-container fadeLeft fadeScore">
             <div class="team-score score-won">

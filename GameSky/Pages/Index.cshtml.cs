@@ -36,7 +36,7 @@ namespace GameSky.Pages
             }
             else
             {
-                NewsHeaders = _db.NewsHeader.OrderByDescending(d => d.NewsPublishDate).Where(d=>d.isPublished == true).Take(5).ToList();
+                NewsHeaders = _db.NewsHeader.OrderByDescending(d => d.NewsPublishDate).Where(d=>d.IsPublished == true).Take(5).ToList();
             }
 
             //Testing models and dependencies
