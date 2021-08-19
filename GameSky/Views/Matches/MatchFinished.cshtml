@@ -9,7 +9,6 @@
     Layout = "~/Pages/Shared/_Layout.cshtml";
     NewsHeader news = ViewBag.News;
     ViewBag.Title = "#" + news.NewsId + " - " + news.NewsTitle;
-    GameSky.Models.Player.CreatePlayers();
 }
 
 <h2 class="text-center">@DateTime.Now</h2>

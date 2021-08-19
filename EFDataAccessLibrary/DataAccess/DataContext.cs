@@ -60,6 +60,11 @@ namespace EFDataAccessLibrary.DataAccess
             return Player.Include(p => p.PlayerPosition).ToList();
         }
 
+        public List<Player> GetPlayersIncludePosition(int skip, int take)
+        {
+            return Player.Skip(skip).Include(p => p.PlayerPosition).Take(take).ToList();
+        }
+
         public PlayerPosition GetPositionByName(string position)
         {
             return PlayerPosition.Where(x => x.Name == position).SingleOrDefault();

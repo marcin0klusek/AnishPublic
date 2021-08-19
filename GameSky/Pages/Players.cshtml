@@ -2,27 +2,11 @@
 @model GameSky.Pages.PlayersModel
 @using EFDataAccessLibrary.Models;
 @{
-    var position = new PlayerPosition { PositionID = 1, Name = "IGL" };
+    List<Player> players = Model.players;
+    List<Team> teams = Model.teams;
 
-    var player1 = new Player
-    {
-        PlayerID = 1,
-        FirstName = "Miguel",
-        LastName = "Janovic",
-        NickName = "Lopez",
-        BirthDate = DateTime.Now.AddYears(-32),
-        Prize = 7300000f,
-        Potencial = 62,
-        Aim = 91,
-        Knowledge = 35,
-        PlayerLevel = 60,
-        PlayerPosition = position,
-    };
-
-    var players = Model.players;
-    var teams = Model.teams;
-
-    int playerIndex = 0;
+    int iteamsPerPage = Model.playersPerPage;
+    int pages = Model.pagesOfPlayers;
 
 }
 
@@ -39,10 +23,10 @@
                 <select name="teams" id="teams">
                     <option value="noteam">---</option>
                     @foreach (Team team in teams)
-                                        {
-                    <option value="@team.TeamID">@team.TeamName</option>
+                    {
+                        <option value="@team.TeamID">@team.TeamName</option>
 
-                }
+                    }
                 </select>
             </div>
             <div class="search-bar">
@@ -51,273 +35,47 @@
             </div>
         </div>
     </div>
-    <div class="players-list--wrapper">
-        @foreach (Player player in players)
-                {
-        <div class="players-list--container">
-            <div class="player">
-                <div class="playerImg">
-                    <img src="~/images/players/navi/5.png" class="playerImg blank" />
-                </div>
-                <div class="position">
-                    <img src="~/images/playerPositions/@(player.PlayerPosition.Name).png" class="positionImg" />
-                </div>
-                <div class="playerName">
-                    <p class="playerName">@player.NickName</p>
-                </div>
-                <div class="skills--container">
-                    <div class="skill potencial">
-                        <div class="skill-name">PTNL</div>
-                        <span class="skill-text" style="color: @(PlayersModel.ColorSkillGroup(player.Potencial))">@(@player.Potencial*10)</span>
-                    </div>
-                    <div class="skill aim">
-                        <div class="skill-name">Aim</div>
-                        <span class="skill-text" style="color: @(PlayersModel.ColorSkillGroup(player.Aim))">@(@player.Aim*10)</span>
-                    </div>
-                    <div class="skill knowledge">
-                        <div class="skill-name">KNWL</div>
-                        <span class="skill-text" style="color: @(PlayersModel.ColorSkillGroup(player.Knowledge))">@(@player.Knowledge*10)</span>
-                    </div>
-                </div>
-            </div>
+        <div id="players-view">
+            @Html.Partial("~/Pages/Shared/PartialViews/_PlayersPage.cshtml", players)
         </div>
+        <div class="pagination">
+            <a onclick="changePage(1)">&laquo;</a>
+            @for (int i = 0; i < pages; i++)
+            {
+                int pageNum = i + 1;
+                if (i == 0)
+                {
+                    <a class="pageBtn currentPage" onclick="changePage(@pageNum)" id="@("pageBtn" + pageNum)">@pageNum</a>
                 }
-
-        @*<div class="players-list--container">
-                <div class="player">
-                    <div class="playerImg">
-                        <img src="~/images/players/navi/1.png" class="playerImg blank" />
-                    </div>
-                    <div class="position">
-                        <img src="~/images/playerPositions/awp.png" class="positionImg" />
-                    </div>
-                    <div class="playerName">
-                        <p class="playerName">b1t</p>
-                    </div>
-                    <div class="skills--container">
-                        <div class="skill potencial">
-                            <div class="skill-name">PTNL</div>
-                            <span class="skill-text">@player1.Potencial</span>
-                        </div>
-                        <div class="skill aim">
-                            <div class="skill-name">Aim</div>
-                            <span class="skill-text">@player1.Aim</span>
-                        </div>
-                        <div class="skill knowledge">
-                            <div class="skill-name">KNWL</div>
-                            <span class="skill-text">@player1.Knowledge</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="player">
-                    <div class="playerImg">
-                        <img src="~/images/players/navi/2.png" class="playerImg blank" />
-                    </div>
-                    <div class="position">
-                        <img src="~/images/playerPositions/igl.png" class="positionImg" />
-                    </div>
-                    <div class="playerName">
-                        <p class="playerName">b00mbel123456789</p>
-                    </div>
-                    <div class="skills--container">
-                        <div class="skill potencial">
-                            <div class="skill-name">PTNL</div>
-                            <span class="skill-text">@player1.Potencial</span>
-                        </div>
-                        <div class="skill aim">
-                            <div class="skill-name">Aim</div>
-                            <span class="skill-text">@player1.Aim</span>
-                        </div>
-                        <div class="skill knowledge">
-                            <div class="skill-name">KNWL</div>
-                            <span class="skill-text">@player1.Knowledge</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="player">
-                    <div class="playerImg">
-                        <img src="~/images/players/navi/3.png" class="playerImg blank" />
-                    </div>
-                    <div class="position">
-                        <img src="~/images/playerPositions/rifler.png" class="positionImg" />
-                    </div>
-                    <div class="playerName">
-                        <p class="playerName">electronic</p>
-                    </div>
-                    <div class="skills--container">
-                        <div class="skill potencial">
-                            <div class="skill-name">PTNL</div>
-                            <span class="skill-text">@player1.Potencial</span>
-                        </div>
-                        <div class="skill aim">
-                            <div class="skill-name">Aim</div>
-                            <span class="skill-text">@player1.Aim</span>
-                        </div>
-                        <div class="skill knowledge">
-                            <div class="skill-name">KNWL</div>
-                            <span class="skill-text">@player1.Knowledge</span>
-                        </div>
-                    </div>
-                </div>
-            </div>*@
-
-
-
-
-        @*<div class="players-list--container">
-                <div class="player">
-                    <div class="playerImg">
-                        <img src="~/images/players/navi/4.png" class="playerImg blank" />
-                    </div>
-                    <div class="position">
-                        <img src="~/images/playerPositions/awp.png" class="positionImg" />
-                    </div>
-                    <div class="playerName">
-                        <p class="playerName">Perfecto</p>
-                    </div>
-                    <div class="skills--container">
-                        <div class="skill potencial">
-                            <div class="skill-name">PTNL</div>
-                            <span class="skill-text">@player.Potencial</span>
-                        </div>
-                        <div class="skill aim">
-                            <div class="skill-name">Aim</div>
-                            <span class="skill-text">@player.Aim</span>
-                        </div>
-                        <div class="skill knowledge">
-                            <div class="skill-name">KNWL</div>
-                            <span class="skill-text">@player.Knowledge</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="player">
-                    <div class="playerImg">
-                        <img src="~/images/players/navi/5.png" class="playerImg blank" />
-                    </div>
-                    <div class="position">
-                        <img src="~/images/playerPositions/igl.png" class="positionImg" />
-                    </div>
-                    <div class="playerName">
-                        <p class="playerName">s1mple</p>
-                    </div>
-                    <div class="skills--container">
-                        <div class="skill potencial">
-                            <div class="skill-name">PTNL</div>
-                            <span class="skill-text">@player.Potencial</span>
-                        </div>
-                        <div class="skill aim">
-                            <div class="skill-name">Aim</div>
-                            <span class="skill-text">@player.Aim</span>
-                        </div>
-                        <div class="skill knowledge">
-                            <div class="skill-name">KNWL</div>
-                            <span class="skill-text">@player.Knowledge</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="player">
-                    <div class="playerImg">
-                        <img src="~/images/players/g2/1.png" class="playerImg blank" />
-                    </div>
-                    <div class="position">
-                        <img src="~/images/playerPositions/rifler.png" class="positionImg" />
-                    </div>
-                    <div class="playerName">
-                        <p class="playerName">amanek</p>
-                    </div>
-                    <div class="skills--container">
-                        <div class="skill potencial">
-                            <div class="skill-name">PTNL</div>
-                            <span class="skill-text">@player.Potencial</span>
-                        </div>
-                        <div class="skill aim">
-                            <div class="skill-name">Aim</div>
-                            <span class="skill-text">@player.Aim</span>
-                        </div>
-                        <div class="skill knowledge">
-                            <div class="skill-name">KNWL</div>
-                            <span class="skill-text">@player.Knowledge</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="players-list--container">
-                <div class="player">
-                    <div class="playerImg">
-                        <img src="~/images/players/g2/2.png" class="playerImg blank" />
-                    </div>
-                    <div class="position">
-                        <img src="~/images/playerPositions/awp.png" class="positionImg" />
-                    </div>
-                    <div class="playerName">
-                        <p class="playerName">huNter</p>
-                    </div>
-                    <div class="skills--container">
-                        <div class="skill potencial">
-                            <div class="skill-name">PTNL</div>
-                            <span class="skill-text">@player.Potencial</span>
-                        </div>
-                        <div class="skill aim">
-                            <div class="skill-name">Aim</div>
-                            <span class="skill-text">@player.Aim</span>
-                        </div>
-                        <div class="skill knowledge">
-                            <div class="skill-name">KNWL</div>
-                            <span class="skill-text">@player.Knowledge</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="player">
-                    <div class="playerImg">
-                        <img src="~/images/players/g2/3.png" class="playerImg blank" />
-                    </div>
-                    <div class="position">
-                        <img src="~/images/playerPositions/igl.png" class="positionImg" />
-                    </div>
-                    <div class="playerName">
-                        <p class="playerName">jackZzz</p>
-                    </div>
-                    <div class="skills--container">
-                        <div class="skill potencial">
-                            <div class="skill-name">PTNL</div>
-                            <span class="skill-text">@player.Potencial</span>
-                        </div>
-                        <div class="skill aim">
-                            <div class="skill-name">Aim</div>
-                            <span class="skill-text">@player.Aim</span>
-                        </div>
-                        <div class="skill knowledge">
-                            <div class="skill-name">KNWL</div>
-                            <span class="skill-text">@player.Knowledge</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="player">
-                    <div class="playerImg">
-                        <img src="~/images/players/g2/4.png" class="playerImg blank" />
-                    </div>
-                    <div class="position">
-                        <img src="~/images/playerPositions/rifler.png" class="positionImg" />
-                    </div>
-                    <div class="playerName">
-                        <p class="playerName">nexa</p>
-                    </div>
-                    <div class="skills--container">
-                        <div class="skill potencial">
-                            <div class="skill-name">PTNL</div>
-                            <span class="skill-text">@player.Potencial</span>
-                        </div>
-                        <div class="skill aim">
-                            <div class="skill-name">Aim</div>
-                            <span class="skill-text">@player.Aim</span>
-                        </div>
-                        <div class="skill knowledge">
-                            <div class="skill-name">KNWL</div>
-                            <span class="skill-text">@player.Knowledge</span>
-                        </div>
-                    </div>
-                </div>
-            </div>*@
-    </div>
+                else
+                {
+                    <a class="pageBtn" onclick="changePage(@pageNum)" id="@("pageBtn" + pageNum)">@pageNum</a>
+                }
+            }
+            <a onclick="changePage(@pages)">&raquo;</a>
+        </div>
 </div>
+
+<script>
+    function changePage(number) {
+        var button = document.getElementById("pageBtn" + number);
+        var activeBtn = document.getElementsByClassName("currentPage")[0];
+
+
+        if (!button.disabled) {
+            activeBtn.classList.remove("currentPage");
+            activeBtn.disabled = false;
+
+            button.classList.add("currentPage");
+            button.disabled = true;
+            $.ajax({
+                url: "/players?handler=Players",
+                type: "get",
+                data: { pageNum: number, pageSize: @iteamsPerPage},
+                success: function (result) {
+                    $("#players-view").html(result);
+                }
+            });
+        }
+    }
+</script>

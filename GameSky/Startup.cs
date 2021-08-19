@@ -43,13 +43,23 @@ namespace GameSky
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddSignalR();
-            services.AddNotyf(config => { config.DurationInSeconds = 10; config.IsDismissable = true; config.Position = NotyfPosition.BottomRight; });
+            services.AddNotyf(config => { config.DurationInSeconds = 10; config.IsDismissable = true; config.Position = NotyfPosition.TopRight; });
 
-            services.AddControllers();
+
+
             services.AddMvc();
             services.AddControllersWithViews();
-            services.AddRazorPages()
+            services.AddRazorPages(options =>
+            {
+                options.Conventions.AuthorizePage("/Privacy", "RequireAdminRole");
+            })
                 .AddRazorRuntimeCompilation();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RequireAdminRole",
+                     policy => policy.RequireRole("Admin"));
+            });
 
             services.Configure<RouteOptions>(option =>
             {
