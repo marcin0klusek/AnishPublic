@@ -39,6 +39,21 @@ namespace GameSky.Pages
             return Partial("~/Pages/Shared/PartialViews/_PlayersPage.cshtml", items);
         }
 
+        public PartialViewResult OnGetPlayersInTeam(int teamID)
+        {
+            List<Player> items;
+
+            if (teamID == -1) 
+            { 
+                items = _db.GetPlayersIncludePosition();
+            }
+            else
+            {
+                items = _db.PlayerTeam.Where(x => x.TeamID == teamID).Include(p => p.Player.PlayerPosition).Select(x => x.Player).ToList();
+            }
+            return Partial("~/Pages/Shared/PartialViews/_PlayersPage.cshtml", items);
+        }
+
         public static string ColorSkillGroup(int skillPoints)
         {
             if (skillPoints <= 3)

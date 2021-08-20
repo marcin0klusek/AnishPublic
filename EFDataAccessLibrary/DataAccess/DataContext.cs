@@ -10,12 +10,13 @@ namespace EFDataAccessLibrary.DataAccess
 {
     public class DataContext : DbContext
     {
-        public DataContext(DbContextOptions options) : base(options) {}
+        public DataContext(DbContextOptions options) : base(options) { }
         public DbSet<NewsHeader> NewsHeader { get; set; }
         public DbSet<NewsContent> NewsContent { get; set; }
         public DbSet<PlayerPosition> PlayerPosition { get; set; }
         public DbSet<Player> Player { get; set; }
         public DbSet<Team> Team { get; set; }
+        public DbSet<PlayerTeam> PlayerTeam { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -20,8 +20,8 @@
             <div class="teamComboBox">
                 <label for="cars">Drużyna:</label>
 
-                <select name="teams" id="teams">
-                    <option value="noteam">---</option>
+                <select name="teams" id="teams" onchange="findPlayersOfTeam(this)">
+                    <option value="-1">---</option>
                     @foreach (Team team in teams)
                     {
                         <option value="@team.TeamID">@team.TeamName</option>
@@ -77,5 +77,18 @@
                 }
             });
         }
+    }
+
+    function findPlayersOfTeam(teams) {
+        var selectedValue = teams.value;
+
+        $.ajax({
+                url: "/players?handler=PlayersInTeam",
+                type: "get",
+                data: { teamID : selectedValue },
+                success: function (result) {
+                    $("#players-view").html(result);
+                }
+            });
     }
 </script>
