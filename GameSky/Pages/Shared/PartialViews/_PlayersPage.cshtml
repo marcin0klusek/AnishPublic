@@ -10,32 +10,35 @@
 }
 
 <div class="players-list--container">
-    @foreach(Player player in players)
+    @if (players != null)
     {
-        <div class="player">
-            <div class="playerImg">
-                <img src="~/images/players/navi/5.png" class="playerImg blank" />
-            </div>
-            <div class="position">
-                <img src="~/images/playerPositions/@(player.PlayerPosition.Name).png" class="positionImg" />
-            </div>
-            <div class="playerName">
-                <p class="playerName">@player.NickName</p>
-            </div>
-            <div class="skills--container">
-                <div class="skill potencial">
-                    <div class="skill-name">PTNL</div>
-                    <span class="skill-text" style="color: @(PlayersModel.ColorSkillGroup(player.Potencial))">@(@player.Potencial*10)</span>
+        @foreach (Player player in players)
+        {
+            <div class="player">
+                <div class="playerImg">
+                    <img src="~/images/players/navi/5.png" class="playerImg blank" />
                 </div>
-                <div class="skill aim">
-                    <div class="skill-name">Aim</div>
-                    <span class="skill-text" style="color: @(PlayersModel.ColorSkillGroup(player.Aim))">@(@player.Aim*10)</span>
+                <div class="position">
+                    <img src="~/images/playerPositions/@(player.PlayerPosition.Name).png" class="positionImg" />
                 </div>
-                <div class="skill knowledge">
-                    <div class="skill-name">KNWL</div>
-                    <span class="skill-text" style="color: @(PlayersModel.ColorSkillGroup(player.Knowledge))">@(@player.Knowledge*10)</span>
+                <div class="playerName">
+                    <p class="playerName">@player.NickName</p>
+                </div>
+                <div class="skills--container">
+                    <div class="skill potencial">
+                        <div class="skill-name">PTNL</div>
+                        <span class="skill-text" style="color: @(PlayersModel.ColorSkillGroup(player.Potencial))">@(@player.Potencial * 10)</span>
+                    </div>
+                    <div class="skill aim">
+                        <div class="skill-name">Aim</div>
+                        <span class="skill-text" style="color: @(PlayersModel.ColorSkillGroup(player.Aim))">@(@player.Aim * 10)</span>
+                    </div>
+                    <div class="skill knowledge">
+                        <div class="skill-name">KNWL</div>
+                        <span class="skill-text" style="color: @(PlayersModel.ColorSkillGroup(player.Knowledge))">@(@player.Knowledge * 10)</span>
+                    </div>
                 </div>
             </div>
-        </div>
+        }
     }
 </div>

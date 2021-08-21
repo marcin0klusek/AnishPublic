@@ -16,8 +16,8 @@ namespace GameSky.Pages
         private readonly DataContext _db;
         public List<Player> players;
         public List<Team> teams;
-        public int pagesOfPlayers = 0;
         public int playersPerPage = 6;
+        public int playersCount = 0;
 
         public PlayersModel(DataContext db)
         {
@@ -28,30 +28,37 @@ namespace GameSky.Pages
         {
             players = _db.GetPlayersIncludePosition(0, playersPerPage);
             teams = _db.GetTeams();
-            int playersInDb = _db.Player.Count();
-            pagesOfPlayers = (int)(_db.Player.Count() / playersPerPage);
-            if (playersInDb % playersPerPage > 0) pagesOfPlayers++;
+            playersCount = _db.Player.Count();
         }
 
-        public PartialViewResult OnGetPlayers(int pageNum, int pageSize)
+        public PartialViewResult OnGetPlayersWithFilters(int pageNum, int pageSize, int teamID, string query)
         {
-            List<Player> items = _db.Player.Skip((pageNum - 1) * pageSize).Include(x => x.PlayerPosition).Take(pageSize).ToList();
-            return Partial("~/Pages/Shared/PartialViews/_PlayersPage.cshtml", items);
-        }
-
-        public PartialViewResult OnGetPlayersInTeam(int teamID)
-        {
-            List<Player> items;
+            if (query == null) query = String.Empty;
+            List<Player> playersInTeam;
 
             if (teamID == -1) 
-            { 
-                items = _db.GetPlayersIncludePosition();
+            {
+                playersInTeam = _db.GetPlayersIncludePosition();
             }
             else
             {
-                items = _db.PlayerTeam.Where(x => x.TeamID == teamID).Include(p => p.Player.PlayerPosition).Select(x => x.Player).ToList();
+                playersInTeam = _db.Team.Where(t => t.TeamID == teamID)
+                    .SelectMany(t => t.PlayerTeam.Where(x => x.ExitDate == DateTime.MinValue).Select(p => p.Player)).Include(p => p.PlayerPosition)
+                    .ToList();
             }
-            return Partial("~/Pages/Shared/PartialViews/_PlayersPage.cshtml", items);
+
+            this.playersCount = playersInTeam.Count();
+
+            if (query != String.Empty)
+            {
+                playersInTeam = playersInTeam.Where(p => (p.FirstName.Contains(query)) 
+                || (p.LastName.Contains(query))
+                || (p.NickName.Contains(query))).ToList();
+            }
+
+            playersInTeam = playersInTeam.Skip((pageNum - 1) * pageSize).Take(pageSize).ToList();
+
+            return Partial("~/Pages/Shared/PartialViews/_PlayersPage.cshtml", playersInTeam);
         }
 
         public static string ColorSkillGroup(int skillPoints)
@@ -68,5 +75,6 @@ namespace GameSky.Pages
             }
             return "#fff";
         }
+
     }
 }

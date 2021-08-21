@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -52,6 +53,7 @@ namespace GameSky
             services.AddRazorPages(options =>
             {
                 options.Conventions.AuthorizePage("/Privacy", "RequireAdminRole");
+                options.Conventions.ConfigureFilter(new IgnoreAntiforgeryTokenAttribute());
             })
                 .AddRazorRuntimeCompilation();
 

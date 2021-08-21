@@ -5,8 +5,9 @@
     List<Player> players = Model.players;
     List<Team> teams = Model.teams;
 
-    int iteamsPerPage = Model.playersPerPage;
-    int pages = Model.pagesOfPlayers;
+    int itemsPerPage = Model.playersPerPage;
+    int pages = Model.playersCount / itemsPerPage;
+    if (pages % 3 > 0) pages++;
 
 }
 
@@ -19,45 +20,62 @@
         <div class="filters-wrapper">
             <div class="teamComboBox">
                 <label for="cars">Drużyna:</label>
-
-                <select name="teams" id="teams" onchange="findPlayersOfTeam(this)">
+                <select name="teams" id="teams" onchange="findPlayersOfTeam()">
                     <option value="-1">---</option>
-                    @foreach (Team team in teams)
+                    @if (teams != null)
                     {
-                        <option value="@team.TeamID">@team.TeamName</option>
-
+                        @foreach (Team team in teams)
+                        {
+                            <option value="@team.TeamID">@team.TeamName</option>
+                        }
                     }
                 </select>
             </div>
             <div class="search-bar">
-                <input type="text" placeholder="Szukaj..." />
-                <button id="search">Szukaj</button>
+                <input id="searchInput" type="text" placeholder="Szukaj..." />
+                <button id="search" onclick="searchQuery()">Szukaj</button>
             </div>
         </div>
     </div>
-        <div id="players-view">
-            @Html.Partial("~/Pages/Shared/PartialViews/_PlayersPage.cshtml", players)
-        </div>
-        <div class="pagination">
-            <a onclick="changePage(1)">&laquo;</a>
-            @for (int i = 0; i < pages; i++)
+    <div id="players-view">
+        @Html.Partial("~/Pages/Shared/PartialViews/_PlayersPage.cshtml", players)
+    </div>
+    <div class="pagination">
+        <a onclick="changePage(1)">&laquo;</a>
+        @for (int pageNum = 1; pageNum < pages + 1; pageNum++)
+        {
+            if (pageNum == 1)
             {
-                int pageNum = i + 1;
-                if (i == 0)
-                {
-                    <a class="pageBtn currentPage" onclick="changePage(@pageNum)" id="@("pageBtn" + pageNum)">@pageNum</a>
-                }
-                else
-                {
-                    <a class="pageBtn" onclick="changePage(@pageNum)" id="@("pageBtn" + pageNum)">@pageNum</a>
-                }
+                <a class="pageBtn currentPage" onclick="changePage(@pageNum)" id="@("pageBtn" + pageNum)">@pageNum</a>
             }
-            <a onclick="changePage(@pages)">&raquo;</a>
-        </div>
+            else
+            {
+                <a class="pageBtn" onclick="changePage(@pageNum)" id="@("pageBtn" + pageNum)">@pageNum</a>
+            }
+        }
+        <a onclick="changePage(@pages)">&raquo;</a>
+    </div>
 </div>
 
 <script>
+    function findPlayersOfTeam() {
+        var teamVal = document.getElementById("teams").value;
+        var queryVal = document.getElementById("searchInput").value;
+
+        $.ajax({
+                url: "/players?handler=PlayersWithFilters",
+            type: "get",
+            data: { pageNum: 1, pageSize: @itemsPerPage, teamID: teamVal, query: queryVal },
+            success: function (result) {
+                $("#players-view").html(result);
+            }
+            });
+    }
+
     function changePage(number) {
+        var teamVal = document.getElementById("teams").value;
+        var queryVal = document.getElementById("searchInput").value;
+
         var button = document.getElementById("pageBtn" + number);
         var activeBtn = document.getElementsByClassName("currentPage")[0];
 
@@ -68,10 +86,11 @@
 
             button.classList.add("currentPage");
             button.disabled = true;
+
             $.ajax({
-                url: "/players?handler=Players",
+                url: "/players?handler=PlayersWithFilters",
                 type: "get",
-                data: { pageNum: number, pageSize: @iteamsPerPage},
+                data: { pageNum: number, pageSize: @itemsPerPage, teamID: teamVal, query: queryVal},
                 success: function (result) {
                     $("#players-view").html(result);
                 }
@@ -79,16 +98,17 @@
         }
     }
 
-    function findPlayersOfTeam(teams) {
-        var selectedValue = teams.value;
+    function searchQuery() {
+        var teamVal = document.getElementById("teams").value;
+        var queryVal = document.getElementById("searchInput").value;
 
         $.ajax({
-                url: "/players?handler=PlayersInTeam",
+                url: "/players?handler=PlayersWithFilters",
                 type: "get",
-                data: { teamID : selectedValue },
+                data: { pageNum: 1, pageSize: @itemsPerPage, teamID: teamVal, query: queryVal },
                 success: function (result) {
                     $("#players-view").html(result);
                 }
-            });
+        });
     }
 </script>
