@@ -3,7 +3,8 @@
 @using Models
 @model IndexModel
 @{
-    ViewData["Title"] = "Your step in e-Sport";
+    string title = "Your first step in e-Sport";
+    ViewData["Title"] = title;
     Random rnd = new Random();
     List<String> events = new List<string>()
 {
@@ -23,7 +24,7 @@
 
     <div class="hero">
         <div class="titleBar">
-            <h1 class="title">Your first step in @Model.City!</h1>
+            <h1 class="title">@title</h1>
             <p>Stwórz drużynę i przebij się do światej czołówki! <a class="gettingStart" href="https://docs.microsoft.com/aspnet/core">Zaczynajmy.</a></p>
         </div>
 

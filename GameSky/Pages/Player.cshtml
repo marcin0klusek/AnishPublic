@@ -1,0 +1,37 @@
+﻿@page
+@model GameSky.Pages.PlayerModel
+@using EFDataAccessLibrary.Models
+@{
+    Player player = Model.player;
+    int PtnlPrice = @Model.PotencialPrice;
+    int AimPrice = @Model.AimPrice;
+    int KnwlPrice = @Model.KnowledgePrice;
+}
+
+<h1>#@player.PlayerID | @player.NickName</h1>
+@if (PtnlPrice != -1)
+{
+    <p>Potencial: @player.Potencial --- To upgrade: @PtnlPrice$</p>
+}
+else
+{
+    <p>Potencial: @player.Potencial --- Skill can not be upgraded.</p>
+}
+
+@if (AimPrice != -1)
+{
+    <p>Aim: @player.Aim --- To upgrade: @AimPrice$</p>
+}
+else
+{
+    <p>Aim: @player.Aim --- Skill can not be upgraded.</p>
+}
+
+@if (KnwlPrice != -1)
+{
+    <p>Knowledge: @player.Knowledge --- To upgrade: @KnwlPrice$</p>
+}
+else
+{
+<p>Knowledge: @player.Knowledge --- Skill can not be upgraded.</p>
+}

@@ -16,6 +16,7 @@ namespace GameSky.Pages
         private readonly ILogger<IndexModel> _logger;
         public List<NewsHeader> NewsHeaders = null;
         private readonly DataContext _db;
+        private int NewsToTake = 15;
 
         public IndexModel(ILogger<IndexModel> logger, DataContext db)
         {
@@ -23,27 +24,10 @@ namespace GameSky.Pages
             _db = db;
         }
 
-        [BindProperty(SupportsGet = true)]
-        public string City { get; set; }
-
 
         public void OnGet()
         {
-
-            if (_db.NewsHeader.Count() == 0)
-            {
-                City = "Pustki";
-            }
-            else
-            {
-                NewsHeaders = _db.NewsHeader.OrderByDescending(d => d.NewsPublishDate).Where(d=>d.IsPublished == true).Take(30).ToList();
-            }
-
-            //Testing models and dependencies
-            if (string.IsNullOrWhiteSpace(City))
-            {
-                City = "e-Sport";
-            }
+                NewsHeaders = _db.NewsHeader.OrderByDescending(d => d.NewsPublishDate).Where(d=>d.IsPublished == true).Take(NewsToTake).ToList();
         }
     }
 }

@@ -22,7 +22,7 @@
                     <img src="~/images/playerPositions/@(player.PlayerPosition.Name).png" class="positionImg" />
                 </div>
                 <div class="playerName">
-                    <p class="playerName">@player.NickName</p>
+                    <p class="playerName"><a asp-page="/player" asp-route-id="@player.PlayerID">@player.NickName</a></p>
                 </div>
                 <div class="skills--container">
                     <div class="skill potencial">
