@@ -1,0 +1,115 @@
+﻿.playerInfo{
+    display: flex;
+    margin: 5rem auto;
+    justify-content: space-evenly;
+}
+
+.playerInfo--top {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    cursor: default;
+}
+
+.playerName {
+    position: relative;
+}
+
+.player-photo{
+    position: static;
+}
+
+.skills--container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+}
+
+.infoBox {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 200px;
+    height: 200px;
+    color: #fff;
+}
+
+.infoHeader{
+    text-transform: lowercase;
+    margin-bottom: 0;
+}
+
+.infoBody{
+    font-size: 1.7rem;
+    text-transform: uppercase;
+}
+
+.skillBox {
+    padding: 4rem 2rem;
+    margin: 0 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.upgrade {
+    color: #fff;
+    background-color: #808080;
+    border-radius: 2px;
+    padding: 5px;
+}
+
+.upgrade:hover{
+    cursor: default;
+}
+
+.upgradeBtn {
+    color: #fff !important;
+    font-weight: 700;
+    background-color: #911AE6;
+    border-radius: 2px;
+    padding: 5px;
+}
+
+.upgradeBtn:hover{
+    background-color:#7014B3;
+    cursor: pointer;
+}
+
+.upgradeBtn:active{
+    color: #fff;
+    background-color: #400B66;
+    -webkit-box-shadow: 0px 0px 6px 3px rgba(163,30,155,0.89); 
+    box-shadow: 0px 0px 6px 3px rgba(163,30,155,0.89);
+}
+
+.disabled {
+    border: 1px solid #999999;
+    background-color: #cccccc;
+    color: #000;
+}
+
+.full {
+    color: #fff;
+    background-color: #808080;
+    border-radius: 2px;
+    padding: 5px;
+    filter: brightness(60%);
+}
+
+.full:hover{
+    cursor: not-allowed;
+}
+
+.skill {
+    font-size: 2rem;
+}
+
+.skill:hover{
+    cursor: default;
+}
+
+.blank {
+    filter: brightness(0%);
+}

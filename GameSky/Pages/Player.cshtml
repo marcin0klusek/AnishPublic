@@ -1,37 +1,81 @@
 ﻿@page
 @model GameSky.Pages.PlayerModel
 @using EFDataAccessLibrary.Models
+@using GameSky.Models
 @{
-    Player player = Model.player;
-    int PtnlPrice = @Model.PotencialPrice;
-    int AimPrice = @Model.AimPrice;
-    int KnwlPrice = @Model.KnowledgePrice;
-}
+    Player player = Model._player;
 
-<h1>#@player.PlayerID | @player.NickName</h1>
-@if (PtnlPrice != -1)
-{
-    <p>Potencial: @player.Potencial --- To upgrade: @PtnlPrice$</p>
+    Random rnd = new Random();
 }
-else
-{
-    <p>Potencial: @player.Potencial --- Skill can not be upgraded.</p>
+@section Styles {
+    <link rel="stylesheet" href="~/css/matchesAndResults.css" />
+    <link rel="stylesheet" href="~/css/playerProfil.css" />
 }
+<div id="partial-view">
+    @Html.Partial("~/Pages/Shared/PartialViews/_PlayerProfileHeader.cshtml", player)
+</div>
+<div class="matchList">
+    <h3 class="text-center">Lastest matches</h3>
+    <div class="results" style="margin-top:20px">
+        <div class="results-all">
+            <div class="results-sublist">
+                @for (int k = 0; k < 20; k++)
+                {
+                    <div class="result-con">
+                        <a asp-controller="Matches" asp-action="Match" asp-route-id="@(rnd.Next(1,5))">
+                            <div class="result">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td class="team-cell">
+                                                <div class="line-align team1">
+                                                    <div class="team">Nazwa1</div>
+                                                    <img src="@Country.GetCountry("PL")">
+                                                </div>
+                                            </td>
+                                            <td class="result-score">
+                                                <span class="score-won">16</span>
+                                                -
+                                                <span class="score-lost">11</span>
+                                            </td>
+                                            <td class="team-cell">
+                                                <div class="line-align team2">
+                                                    <img src="@Country.GetCountry("BR")">
+                                                    <div class="team">Nazwa2</div>
+                                                </div>
+                                            </td>
+                                            <td class="event">
+                                                <span class="event-name">ESL One Cologne</span>
+                                            </td>
+                                            <td class="star-cell">
+                                                <div class="map-text">bo3</div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
 
-@if (AimPrice != -1)
-{
-    <p>Aim: @player.Aim --- To upgrade: @AimPrice$</p>
-}
-else
-{
-    <p>Aim: @player.Aim --- Skill can not be upgraded.</p>
-}
+<audio id="successPayment" src="~/sounds/success_payment.mp3" />
 
-@if (KnwlPrice != -1)
-{
-    <p>Knowledge: @player.Knowledge --- To upgrade: @KnwlPrice$</p>
-}
-else
-{
-<p>Knowledge: @player.Knowledge --- Skill can not be upgraded.</p>
-}
+<script>
+    function UpgradeSkill(skill) {
+        var skillname = $(skill).data("custom-value");
+        $.ajax({
+            url: "/player?handler=UpgradeSkill",
+            type: "post",
+            data: { name: skillname, id: @player.PlayerID },
+            success: function (result) {
+                var audio = document.getElementById('successPayment');
+                audio.play();
+                setTimeout($("#partial-view").html(result), 700);
+            }
+        });
+    }
+</script>

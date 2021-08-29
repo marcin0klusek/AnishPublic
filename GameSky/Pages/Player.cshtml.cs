@@ -13,10 +13,8 @@ namespace GameSky.Pages
     public class PlayerModel : PageModel
     {
         private readonly DataContext _db;
-        public Player player { get; set; }
-        public int PotencialPrice;
-        public int AimPrice;
-        public int KnowledgePrice;
+        public Player _player { get; set; }
+        public int PlayerID { get; set; }
 
 
         public PlayerModel(DataContext db)
@@ -26,56 +24,53 @@ namespace GameSky.Pages
 
         public void OnGet(int id)
         {
-            player = _db.Player.Where(p => p.PlayerID == id).FirstOrDefault();
-
-            if (player == null) { RedirectToPage("/Index"); }
-
-            PotencialPrice = SkillsProccessor.GetPriceToUpgradeSkill(player.Potencial);
-            AimPrice = SkillsProccessor.GetPriceToUpgradeSkill(player.Aim);
-            KnowledgePrice = SkillsProccessor.GetPriceToUpgradeSkill(player.Knowledge);
+            _player = _db.GetPlayerByIdIncludePositon(id);
         }
-
-        public async Task UpgradeSkill(string name)
+        public async Task<PartialViewResult> OnPostUpgradeSkill(string name, int id)
         {
+            _player = _db.GetPlayerByIdIncludePositon(id);
+
             //check if User has enough money to pay
+
             int skillChanged = -1;
             switch (name)
             {
                 case "Potencial":
-                    player.Potencial = player.Potencial++;
+                    _player.Potencial = _player.Potencial + 1;
                     skillChanged = 1;
                     break;
                 case "Aim":
-                    player.Potencial = player.Aim++;
+                    _player.Aim = _player.Aim + 1;
                     skillChanged = 2;
                     break;
 
                 case "Knowledge":
-                    player.Potencial = player.Knowledge++;
+                    _player.Knowledge = _player.Knowledge + 1;
                     skillChanged = 3;
                     break;
             }
             int result = await _db.SaveChangesAsync();
-            if(result <= 0)
+            if (result <= 0)
             {
                 switch (skillChanged)
                 {
                     case 1:
-                        player.Potencial = player.Potencial--;
+                        _player.Potencial = _player.Potencial - 1;
                         break;
                     case 2:
-                        player.Potencial = player.Aim--;
+                        _player.Aim = _player.Aim - 1;
                         break;
                     case 3:
-                        player.Potencial = player.Knowledge--;
+                        _player.Knowledge = _player.Knowledge - 1;
                         break;
                 }
+                StatusCode(500);
             }
             else
             {
                 //Charge User for skill upgrade
             }
-            Response.Redirect(Request.Path + "?id=" + player.PlayerID);
+            return Partial("~/Pages/Shared/PartialViews/_PlayerProfileHeader.cshtml", _player);
         }
     }
 }

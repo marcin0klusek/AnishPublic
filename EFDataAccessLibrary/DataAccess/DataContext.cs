@@ -51,6 +51,8 @@ namespace EFDataAccessLibrary.DataAccess
             return Player.OrderBy(p => p.PlayerLevel).ToList();
         }
 
+        public Player GetPlayerByIdIncludePositon(int id) =>Player.Where(p => p.PlayerID == id).Include(p => p.PlayerPosition).FirstOrDefault();
+
         public PlayerPosition GetPlayerPosition(string name)
         {
             return PlayerPosition.Where(p => p.Name == name).FirstOrDefault();

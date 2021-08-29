@@ -1,0 +1,85 @@
+﻿@model EFDataAccessLibrary.Models.Player
+@using EFDataAccessLibrary.Models
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@{
+    Player player = Model;
+    int PtnlPrice = Player.GetSkillsPrice(player.Potencial);
+    int AimPrice = Player.GetSkillsPrice(player.Aim);
+    int KnwlPrice = Player.GetSkillsPrice(player.Knowledge);
+    bool singedIn = true;
+}
+<div class="playerInfo">
+    <div class="playerInfo--top">
+        <h1 class="playerName">@player.NickName</h1>
+        <img class="player-photo blank" src="~/images/players/navi/5.png" />
+    </div>
+    <div class="skills--container">
+        //TODO: chnage to if User has the Player in team
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <div class="skillBox">
+                @if (PtnlPrice != -1)
+                {
+                    <p class="skill">Potencial: @player.Potencial</p> <p class="upgrade">Upgrade cost: @PtnlPrice$</p>
+                    <a onclick="UpgradeSkill(this)" class="upgradeBtn" data-custom-value="Potencial">UPGRADE</a>
+                }
+                else
+                {
+                    <p class="skill">Potencial: @player.Potencial</p><p class="full">Skill can not be upgraded.</p>
+                }
+            </div>
+            <div class="skillBox">
+                @if (AimPrice != -1)
+                {
+                    <p class="skill">Aim: @player.Aim</p> <p class="upgrade">Upgrade cost: @AimPrice$</p>
+                    <a onclick="UpgradeSkill(this)" class="upgradeBtn" data-custom-value="Aim">UPGRADE</a>
+                }
+                else
+                {
+                    <p class="skill">Aim: @player.Aim</p><p class="full">Skill can not be upgraded.</p>
+                }
+            </div>
+            <div class="skillBox">
+                @if (KnwlPrice != -1)
+                {
+                    <p class="skill">Knowledge: @player.Knowledge</p> <p class="upgrade">Upgrade cost: @KnwlPrice$</p>
+                    <a onclick="UpgradeSkill(this)" class="upgradeBtn" data-custom-value="Knowledge">UPGRADE</a>
+                }
+                else
+                {
+                    <p class="skill">Knowledge: @player.Knowledge</p><p class="full">Skill can not be upgraded.</p>
+                }
+
+
+
+            </div>
+        }
+        else
+        {
+            <div class="infoBox">
+                <p class="infoHeader">Potencial</p> <p class="infoBody">@(player.Potencial*10)</p>
+            </div>
+
+            <div class="infoBox">
+                <p class="infoHeader">Aim</p> <p class="infoBody">@(player.Aim*10)</p>
+            </div>
+
+            <div class="infoBox">
+                <p class="infoHeader">Knowledge</p> <p class="infoBody">@(player.Knowledge*10)</p>
+            </div>
+        }
+        <div class="infoBox">
+            <p class="infoHeader">Age</p> <p class="infoBody">@player.GetAge()</p>
+        </div>
+
+        <div class="infoBox">
+            <p class="infoHeader">Level</p> <p class="infoBody">@player.PlayerLevel</p>
+        </div>
+
+        <div class="infoBox">
+            <p class="infoHeader">Market value</p> <p class="infoBody">@player.Prize</p>
+        </div>
+    </div>
+</div>
