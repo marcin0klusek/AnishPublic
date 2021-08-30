@@ -63,5 +63,21 @@ namespace EFDataAccessLibrary.Models
             }
             return -10;
         }
+
+        public void RecalcPlayerStats()
+        {
+            RecalcLevel();
+            RecalcPrize();
+        }
+
+        public void RecalcLevel()
+        {
+            this.PlayerLevel = ((int)((this.Aim + this.Potencial + this.Knowledge) * 3.33))+1;
+        }
+
+        public void RecalcPrize()
+        {
+            this.Prize = (int)((Math.Pow(2, this.Aim) * 10) + (Math.Pow(4, this.Knowledge) * 10) + (Math.Pow(3, this.Potencial) * Math.Sqrt(7)));
+        }
     }
 }

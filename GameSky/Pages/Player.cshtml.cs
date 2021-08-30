@@ -68,6 +68,8 @@ namespace GameSky.Pages
             }
             else
             {
+                _player.RecalcPlayerStats();
+                await _db.SaveChangesAsync();
                 //Charge User for skill upgrade
             }
             return Partial("~/Pages/Shared/PartialViews/_PlayerProfileHeader.cshtml", _player);

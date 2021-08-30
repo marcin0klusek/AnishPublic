@@ -16,7 +16,7 @@
         <img class="player-photo blank" src="~/images/players/navi/5.png" />
     </div>
     <div class="skills--container">
-        //TODO: chnage to if User has the Player in team
+        @*TODO: change to if User has the Player in team*@
         @if (SignInManager.IsSignedIn(User))
         {
             <div class="skillBox">
@@ -79,7 +79,7 @@
         </div>
 
         <div class="infoBox">
-            <p class="infoHeader">Market value</p> <p class="infoBody">@player.Prize</p>
+            <p class="infoHeader">Market value</p> <p class="infoBody">@player.Prize$</p>
         </div>
     </div>
 </div>
