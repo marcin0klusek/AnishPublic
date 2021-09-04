@@ -10,6 +10,7 @@ using EFDataAccessLibrary.DataAccess;
 using GameSky.Data;
 using GameSky.Models;
 using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameSky.Pages.Matches
 {
@@ -24,47 +25,69 @@ namespace GameSky.Pages.Matches
             _notyf = new Toaster(notyf);
         }
 
-        // GET: MatchesController
         [Route("results")]
         public ActionResult Results()
         {
-            List<NewsHeader> aktualnosci = _db.NewsHeader.Take(4).ToList();
+        List<Match> _upcomingMatches =
+                _db.Match
+                .Where(x => x.EndDate == null)
+                .OrderBy(x => x.StartDate)
+                .Include(x => x.Team1)
+                .Include(x => x.Team2)
+                .Include(x => x.Map)
+                .ToList();
 
-            if (aktualnosci == null)
-            {
-                Console.WriteLine("Aktualnosci sa puste");
-                return RedirectToPage("./Index");
+            List<Match> _finishedMatches = _db.Match
+                .Where(x => x.EndDate != null)
+                .OrderByDescending(x => x.EndDate)
+                .Include(x => x.Team1)
+                .Include(x => x.Team2)
+                .Include(x => x.Map)
+                .ToList();
+
+            ViewBag.Upcoming = _upcomingMatches;
+            ViewBag.Finished = _finishedMatches;
+
+            if (_upcomingMatches != null && _finishedMatches != null) {
+                _notyf.ShowInformation("Prawidłowo pobrano mecze");
             }
-            Console.WriteLine("Aktualnosci posiadaja: " + aktualnosci.Count);
-            ViewBag.News = aktualnosci;
+            else
+            {
+                _notyf.Warning("Coś poszło nie tak!");
+            }
+
             return View();
         }
 
         [Route("matches/{id}")]
         public ActionResult Match(int id)
         {
-            NewsHeader news = (NewsHeader)_db.NewsHeader.First(a => a.NewsId == id);
-            if (news == null)
+            Match match = (Match)_db.Match
+                .Include(x => x.Team1)
+                .Include(x => x.Team2)
+                .Include(x => x.Map).FirstOrDefault(m => m.MatchID == id);
+            if (match == null)
             {
                 return RedirectToPage("./Index");
             }
-            ViewBag.News = news;
-            if (news.IsPublished)
+            ViewBag.Match = match;
+            if (match.EndDate != null)
             {
-               // _notyf.ShowInformation("Mecz zakonczony");
                 return View("MatchFinished");
             }
             else
             {
-               // _notyf.ShowInformation("Mecz nadchodzacy");
                 return View("MatchUpcoming");
             }
         }
         [Route("matches/matchheaderrefresh")]
         public ActionResult MatchHeaderRefresh(int id)
         {
-            var newNews = (NewsHeader)_db.NewsHeader.First(a => a.NewsId == id);
-            if(newNews != null)
+            var newMatch = (Match)_db.Match
+                .Include(x => x.Team1)
+                .Include(x => x.Team2)
+                .Include(x => x.Map).First(a => a.MatchID == id);
+            if(newMatch != null)
             {
                 _notyf.ShowInformation("Prawidłowo zaktualizowano nagłówek!");
             }
@@ -72,7 +95,7 @@ namespace GameSky.Pages.Matches
             {
                 _notyf.Warning("Nie udało się zaktualizować nagłówka.");
             }
-            return PartialView("~/Views/Shared/Matches/_MatchHeader.cshtml", newNews);
+            return PartialView("~/Views/Shared/Matches/_MatchHeader.cshtml", newMatch);
         }
     }
 }

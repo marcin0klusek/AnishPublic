@@ -1,4 +1,4 @@
-﻿@model EFDataAccessLibrary.Models.NewsHeader
+﻿@model EFDataAccessLibrary.Models.Match
 @using GameSky.Models
 @using EFDataAccessLibrary.Models
 
@@ -6,9 +6,9 @@
     <link rel="stylesheet" href="~/css/matchUpSite.css" />
 }
 @{
-    NewsHeader news = Model;
-    int team1score = 0;
-    int team2score = 2;
+    Match match = Model;
+    var team1score = match.ScoreTeam1;
+    var team2score = match.ScoreTeam2;
 }
 
 <div class="match-headerbar">
@@ -16,7 +16,7 @@
         <div class="match-button">
             <a href="#">Set reminder</a>
         </div>
-        <h1 class="match-title">@news.NewsTitle</h1>
+        <h1 class="match-title">@match.Team1.TeamName vs @match.Team2.TeamName</h1>
     </div>
 </div>
 <div class="match-team1 team">
@@ -26,12 +26,12 @@
         </div>
     </div>
     <div class="team-name fadeRight fadeName">
-        <div class="name">100PG</div>
+        <div class="name">@match.Team1.TeamName</div>
     </div>
     <div class="team-country fadeRight fadeName">
         <img src="@Country.GetCountry()" class="flag">
     </div>
-    @if (news.IsPublished)
+    @if (match.EndDate != null)
     {
         <div class="team-score-container fadeRight fadeScore">
             <div class="team-score score-lost">
@@ -51,7 +51,7 @@
     <div class="event-type">Online</div>
 </div>
 <div class="match-team2 team">
-    @if (news.IsPublished)
+    @if (match.EndDate != null)
     {
         <div class="team-score-container fadeLeft fadeScore">
             <div class="team-score score-won">
@@ -65,7 +65,7 @@
         </div>
     </div>
     <div class="team-name fadeLeft fadeName">
-        <div class="name">Virtus.pro</div>
+        <div class="name">@match.Team2.TeamName</div>
     </div>
     <div class="team-country fadeLeft fadeName">
         <img src="@Country.GetCountry()" class="flag">

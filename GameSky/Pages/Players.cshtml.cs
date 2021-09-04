@@ -43,7 +43,7 @@ namespace GameSky.Pages
             else
             {
                 playersInTeam = _db.Team.Where(t => t.TeamID == teamID)
-                    .SelectMany(t => t.PlayerTeam.Where(x => x.ExitDate == DateTime.MinValue).Select(p => p.Player)).Include(p => p.PlayerPosition)
+                    .SelectMany(t => t.PlayerTeam.Where(x => x.ExitDate == null).Select(p => p.Player)).Include(p => p.PlayerPosition)
                     .ToList();
             }
 

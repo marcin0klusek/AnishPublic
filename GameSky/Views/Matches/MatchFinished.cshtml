@@ -7,8 +7,8 @@
 
 @{
     Layout = "~/Pages/Shared/_Layout.cshtml";
-    NewsHeader news = ViewBag.News;
-    ViewBag.Title = "#" + news.NewsId + " - " + news.NewsTitle;
+    Match match = ViewBag.Match;
+    ViewBag.Title = "#" + match.MatchID + " - " + match.Team1.TeamName + " vs " + match.Team2.TeamName;
 }
 
 <h2 class="text-center">@DateTime.Now</h2>
@@ -16,7 +16,7 @@
 
 <div class="match-container">
     <div class="match-header" id="partialHeader">
-        @Html.Partial("~/Views/Shared/Matches/_MatchHeader.cshtml", news)
+        @Html.Partial("~/Views/Shared/Matches/_MatchHeader.cshtml", match)
     </div>
 
     <div class="clearfix spacer"></div>
@@ -30,7 +30,7 @@
                 <div class="box-headline flex-aling-center">
                     <div class="flex-align-center box-headline-team1">
                         <img src="~/images/100pg.png" class="logo" />
-                        <a class="text-ellipsis">100PG</a>
+                        <a class="text-ellipsis">@match.Team1.TeamName</a>
                     </div>
                 </div>
                 <div class="players">
@@ -61,7 +61,7 @@
                 <div class="box-headline flex-aling-center">
                     <div class="flex-align-center  box-headline-team2">
                         <img src="~/images/virtuspro.svg" class="logo" />
-                        <a class="text-ellipsis">Virtus.pro</a>
+                        <a class="text-ellipsis">@match.Team2.TeamName</a>
                     </div>
                 </div>
                 <div class="players">
@@ -99,7 +99,7 @@
         $.ajax({
             url: "/Matches/MatchHeaderRefresh",
             type: "get",
-            data: { id : @news.NewsId }, //if you need to post Model data, use this
+            data: { id : @match.MatchID }, //if you need to post Model data, use this
             success: function (result) {
                 $("#partialHeader").html(result);
             }

@@ -4,14 +4,16 @@ using EFDataAccessLibrary.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EFDataAccessLibrary.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210904192749_MatchEndDateChangeToNullable")]
+    partial class MatchEndDateChangeToNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,13 +46,16 @@ namespace EFDataAccessLibrary.Migrations
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsFinished")
+                        .HasColumnType("bit");
+
                     b.Property<int?>("MapID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ScoreTeam1")
+                    b.Property<int>("ScoreTeam1")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ScoreTeam2")
+                    b.Property<int>("ScoreTeam2")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("StartDate")
@@ -137,7 +142,7 @@ namespace EFDataAccessLibrary.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
-                    b.Property<bool>("ForSale")
+                    b.Property<bool>("IsForSale")
                         .HasColumnType("bit");
 
                     b.Property<int>("Knowledge")
@@ -197,7 +202,7 @@ namespace EFDataAccessLibrary.Migrations
                     b.Property<int>("TeamID")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("ExitDate")
+                    b.Property<DateTime>("ExitDate")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("JoinDate")

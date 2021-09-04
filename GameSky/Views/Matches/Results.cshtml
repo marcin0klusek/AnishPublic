@@ -13,42 +13,44 @@
 
 @{
     Random rnd = new Random();
+    List<Match> upcoming = ViewBag.Upcoming;
+    List<Match> finished = ViewBag.Finished;
 }
 
 <div class="results">
     <div class="results-all">
         <div class="results-sublist">
-            <div class="standard-headline">Results for June 20th 2021</div>
-            @for (int k = 0; k < 20; k++)
+            <div class="standard-headline">Upcoming matches</div>
+            @foreach(Match match in upcoming)
             {
                 <div class="result-con">
-                    <a asp-controller="Matches" asp-action="Match" asp-route-id="@(rnd.Next(1,5))">
+                    <a asp-controller="Matches" asp-action="Match" asp-route-id="@match.MatchID">
                         <div class="result">
                             <table>
                                 <tbody>
                                     <tr>
                                         <td class="team-cell">
                                             <div class="line-align team1">
-                                                <div class="team">Nazwa1</div>
+                                                <div class="team">@match.Team1.TeamName</div>
                                                 <img src="@Country.GetCountry("PL")">
                                             </div>
                                         </td>
                                         <td class="result-score">
-                                            <span class="score-won">16</span>
+                                            <span class="score-won">@match.ScoreTeam1</span>
                                             -
-                                            <span class="score-lost">11</span>
+                                            <span class="score-lost">@match.ScoreTeam2</span>
                                         </td>
                                         <td class="team-cell">
                                             <div class="line-align team2">
                                                 <img src="@Country.GetCountry("BR")">
-                                                <div class="team">Nazwa2</div>
+                                                <div class="team">@match.Team2.TeamName</div>
                                             </div>
                                         </td>
                                         <td class="event">
                                             <span class="event-name">ESL One Cologne</span>
                                         </td>
                                         <td class="star-cell">
-                                            <div class="map-text">bo3</div>
+                                            <div class="map-text">bo1</div>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -59,37 +61,37 @@
             }
         </div>
         <div class="results-sublist">
-            <div class="standard-headline">Results for June 19th 2021</div>
-            @for (int k = 0; k < 20; k++)
+            <div class="standard-headline">Finished matches</div>
+            @foreach (Match match in finished)
             {
                 <div class="result-con">
-                    <a href="#" class="a-reset">
+                    <a asp-controller="Matches" asp-action="Match" asp-route-id="@match.MatchID">
                         <div class="result">
                             <table>
                                 <tbody>
                                     <tr>
                                         <td class="team-cell">
                                             <div class="line-align team1">
-                                                <div class="team">Nazwa1</div>
+                                                <div class="team">@match.Team1.TeamName</div>
                                                 <img src="@Country.GetCountry("PL")">
                                             </div>
                                         </td>
                                         <td class="result-score">
-                                            <span class="score-won">2</span>
+                                            <span class="score-won">@match.ScoreTeam1</span>
                                             -
-                                            <span class="score-lost">0</span>
+                                            <span class="score-lost">@match.ScoreTeam2</span>
                                         </td>
                                         <td class="team-cell">
                                             <div class="line-align team2">
                                                 <img src="@Country.GetCountry("BR")">
-                                                <div class="team">Nazwa2</div>
+                                                <div class="team">@match.Team2.TeamName</div>
                                             </div>
                                         </td>
                                         <td class="event">
                                             <span class="event-name">ESL One Cologne</span>
                                         </td>
                                         <td class="star-cell">
-                                            <div class="map-text">bo3</div>
+                                            <div class="map-text">@match.Map.Name</div>
                                         </td>
                                     </tr>
                                 </tbody>

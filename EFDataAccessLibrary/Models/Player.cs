@@ -26,6 +26,7 @@ namespace EFDataAccessLibrary.Models
         public int Aim { get; set; }
         public int Knowledge { get; set; }
         public int PlayerLevel { get; set; }
+        public bool IsForSale { get; set; }
         public int PositionID { get; set; }
         public virtual PlayerPosition PlayerPosition { get; set; }
         public virtual ICollection<PlayerTeam> PlayerTeam { get; set; }
