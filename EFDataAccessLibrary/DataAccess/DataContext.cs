@@ -30,6 +30,13 @@ namespace EFDataAccessLibrary.DataAccess
             {
                 x.PlayerID, x.TeamID
             });
+
+            modelBuilder.Entity<EventTeam>().HasKey(x =>
+            new
+            {
+                x.EventID,
+                x.TeamID
+            });
         }
 
         public NewsHeader GetFirstNewsHeader()

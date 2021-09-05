@@ -35,6 +35,7 @@ namespace GameSky.Pages.Matches
                 .Include(x => x.Team1)
                 .Include(x => x.Team2)
                 .Include(x => x.Map)
+                .Include(x => x.Event)
                 .ToList();
 
             List<Match> _finishedMatches = _db.Match
@@ -42,6 +43,7 @@ namespace GameSky.Pages.Matches
                 .OrderByDescending(x => x.EndDate)
                 .Include(x => x.Team1)
                 .Include(x => x.Team2)
+                .Include(x => x.Event)
                 .Include(x => x.Map)
                 .ToList();
 

@@ -14,6 +14,10 @@ namespace EFDataAccessLibrary.Models
         public string TeamName { get; set; }
         [StringLength(8)]
         public string Tag { get; set; }
+        [StringLength(2)]
+        public string Country { get; set; }
         public virtual ICollection<PlayerTeam> PlayerTeam { get; set; }
+        public virtual ICollection<EventTeam> EventTeams { get; set; }
+
     }
 }

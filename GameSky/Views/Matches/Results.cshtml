@@ -32,7 +32,7 @@
                                         <td class="team-cell">
                                             <div class="line-align team1">
                                                 <div class="team">@match.Team1.TeamName</div>
-                                                <img src="@Country.GetCountry("PL")">
+                                                <img src="@Country.GetCountry(match.Team1.Country)">
                                             </div>
                                         </td>
                                         <td class="result-score">
@@ -42,12 +42,12 @@
                                         </td>
                                         <td class="team-cell">
                                             <div class="line-align team2">
-                                                <img src="@Country.GetCountry("BR")">
+                                                <img src="@Country.GetCountry(match.Team2.Country)">
                                                 <div class="team">@match.Team2.TeamName</div>
                                             </div>
                                         </td>
                                         <td class="event">
-                                            <span class="event-name">ESL One Cologne</span>
+                                            <span class="event-name">@match.Event.Name</span>
                                         </td>
                                         <td class="star-cell">
                                             <div class="map-text">bo1</div>
@@ -73,7 +73,7 @@
                                         <td class="team-cell">
                                             <div class="line-align team1">
                                                 <div class="team">@match.Team1.TeamName</div>
-                                                <img src="@Country.GetCountry("PL")">
+                                                <img src="@Country.GetCountry(match.Team1.Country)">
                                             </div>
                                         </td>
                                         <td class="result-score">
@@ -83,56 +83,15 @@
                                         </td>
                                         <td class="team-cell">
                                             <div class="line-align team2">
-                                                <img src="@Country.GetCountry("BR")">
+                                                <img src="@Country.GetCountry(match.Team2.Country)">
                                                 <div class="team">@match.Team2.TeamName</div>
                                             </div>
                                         </td>
                                         <td class="event">
-                                            <span class="event-name">ESL One Cologne</span>
+                                            <span class="event-name">@match.Event.Name</span>
                                         </td>
                                         <td class="star-cell">
-                                            <div class="map-text">@match.Map.Name</div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </a>
-                </div>
-            }
-        </div>
-        <div class="results-sublist">
-            <div class="standard-headline">Results for June 18th 2021</div>
-            @for (int k = 0; k < 20; k++)
-            {
-                <div class="result-con">
-                    <a href="#" class="a-reset">
-                        <div class="result">
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td class="team-cell">
-                                            <div class="line-align team1">
-                                                <div class="team">Nazwa1</div>
-                                                <img src="@Country.GetCountry("PL")">
-                                            </div>
-                                        </td>
-                                        <td class="result-score">
-                                            <span class="score-won">2</span>
-                                            -
-                                            <span class="score-lost">0</span>
-                                        </td>
-                                        <td class="team-cell">
-                                            <div class="line-align team2">
-                                                <img src="@Country.GetCountry("BR")">
-                                                <div class="team">Nazwa2</div>
-                                            </div>
-                                        </td>
-                                        <td class="event">
-                                            <span class="event-name">ESL One Cologne</span>
-                                        </td>
-                                        <td class="star-cell">
-                                            <div class="map-text">bo3</div>
+                                            <div class="map-text">@match.Map.Name.Replace("de_", "")</div>
                                         </td>
                                     </tr>
                                 </tbody>

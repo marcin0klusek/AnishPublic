@@ -20,6 +20,9 @@ namespace EFDataAccessLibrary.Models
         [Required]
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+#nullable enable
         public Map? Map { get; set; }
+#nullable disable
+        public Event Event { get; set; }
     }
 }

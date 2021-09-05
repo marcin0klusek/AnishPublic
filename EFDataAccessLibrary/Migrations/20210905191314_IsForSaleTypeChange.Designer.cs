@@ -4,62 +4,22 @@ using EFDataAccessLibrary.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EFDataAccessLibrary.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210905191314_IsForSaleTypeChange")]
+    partial class IsForSaleTypeChange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.8")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("EFDataAccessLibrary.Models.Event", b =>
-                {
-                    b.Property<int>("EventID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime?>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Location")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("PrizePool")
-                        .HasColumnType("float");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("EventID");
-
-                    b.ToTable("Event");
-                });
-
-            modelBuilder.Entity("EFDataAccessLibrary.Models.EventTeam", b =>
-                {
-                    b.Property<int>("EventID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TeamID")
-                        .HasColumnType("int");
-
-                    b.HasKey("EventID", "TeamID");
-
-                    b.HasIndex("TeamID");
-
-                    b.ToTable("EventTeam");
-                });
 
             modelBuilder.Entity("EFDataAccessLibrary.Models.Map", b =>
                 {
@@ -86,9 +46,6 @@ namespace EFDataAccessLibrary.Migrations
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("EventID")
-                        .HasColumnType("int");
-
                     b.Property<int?>("MapID")
                         .HasColumnType("int");
 
@@ -108,8 +65,6 @@ namespace EFDataAccessLibrary.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("MatchID");
-
-                    b.HasIndex("EventID");
 
                     b.HasIndex("MapID");
 
@@ -264,10 +219,6 @@ namespace EFDataAccessLibrary.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Country")
-                        .HasMaxLength(2)
-                        .HasColumnType("nvarchar(2)");
-
                     b.Property<string>("Tag")
                         .HasMaxLength(8)
                         .HasColumnType("nvarchar(8)");
@@ -280,31 +231,8 @@ namespace EFDataAccessLibrary.Migrations
                     b.ToTable("Team");
                 });
 
-            modelBuilder.Entity("EFDataAccessLibrary.Models.EventTeam", b =>
-                {
-                    b.HasOne("EFDataAccessLibrary.Models.Event", "Event")
-                        .WithMany("EventTeams")
-                        .HasForeignKey("EventID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EFDataAccessLibrary.Models.Team", "Team")
-                        .WithMany("EventTeams")
-                        .HasForeignKey("TeamID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Event");
-
-                    b.Navigation("Team");
-                });
-
             modelBuilder.Entity("EFDataAccessLibrary.Models.Match", b =>
                 {
-                    b.HasOne("EFDataAccessLibrary.Models.Event", "Event")
-                        .WithMany("Matches")
-                        .HasForeignKey("EventID");
-
                     b.HasOne("EFDataAccessLibrary.Models.Map", "Map")
                         .WithMany()
                         .HasForeignKey("MapID");
@@ -316,8 +244,6 @@ namespace EFDataAccessLibrary.Migrations
                     b.HasOne("EFDataAccessLibrary.Models.Team", "Team2")
                         .WithMany()
                         .HasForeignKey("Team2TeamID");
-
-                    b.Navigation("Event");
 
                     b.Navigation("Map");
 
@@ -365,13 +291,6 @@ namespace EFDataAccessLibrary.Migrations
                     b.Navigation("Team");
                 });
 
-            modelBuilder.Entity("EFDataAccessLibrary.Models.Event", b =>
-                {
-                    b.Navigation("EventTeams");
-
-                    b.Navigation("Matches");
-                });
-
             modelBuilder.Entity("EFDataAccessLibrary.Models.Player", b =>
                 {
                     b.Navigation("PlayerTeam");
@@ -379,8 +298,6 @@ namespace EFDataAccessLibrary.Migrations
 
             modelBuilder.Entity("EFDataAccessLibrary.Models.Team", b =>
                 {
-                    b.Navigation("EventTeams");
-
                     b.Navigation("PlayerTeam");
                 });
 #pragma warning restore 612, 618
