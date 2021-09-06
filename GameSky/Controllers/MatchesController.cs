@@ -67,10 +67,13 @@ namespace GameSky.Pages.Matches
             Match match = (Match)_db.Match
                 .Include(x => x.Team1)
                 .Include(x => x.Team2)
-                .Include(x => x.Map).FirstOrDefault(m => m.MatchID == id);
+                .Include(x => x.Map)
+                .Include(x => x.Event)
+                .FirstOrDefault(m => m.MatchID == id);
             if (match == null)
             {
-                return RedirectToPage("./Index");
+                _notyf.ShowInformation("Nie można odnaleźć meczu o id" + id);
+                return RedirectToPage("/Index");
             }
             ViewBag.Match = match;
             if (match.EndDate != null)
@@ -88,7 +91,9 @@ namespace GameSky.Pages.Matches
             var newMatch = (Match)_db.Match
                 .Include(x => x.Team1)
                 .Include(x => x.Team2)
-                .Include(x => x.Map).First(a => a.MatchID == id);
+                .Include(x => x.Map)
+                .Include(x => x.Event)
+                .First(a => a.MatchID == id);
             if(newMatch != null)
             {
                 _notyf.ShowInformation("Prawidłowo zaktualizowano nagłówek!");

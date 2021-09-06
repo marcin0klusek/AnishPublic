@@ -11,6 +11,7 @@
                 "European Development Championship 4", "ESL One Cologne", "IEM Katowice", "ARRMY League Masters",
                 "ARRMY League Rising", "ARRMY League Open", "ESEA Open", "ESEA Advanced", "Sweet Home Spring 3"
             };
+    var results = Model.results;
 }
 
 @section Styles {
@@ -58,29 +59,44 @@
             <div class="matchesResults">
                 <p>Wyniki</p>
                 <ul>
-                    @for (int i = 0; i < 12; i++)@*change to code that generates lastest matches*@
+                    @foreach (Match match in results)
                     {
                         <li>
-                            <a class="eventName" href="#">@(events[(rnd.Next(0, events.Count))])</a>
-                            <a asp-controller="Matches" asp-action="Match" asp-route-id="@(rnd.Next(1,5))">
+                            <a class="eventName" asp-page="/event" asp-route-id="@match.Event.EventID">@match.Event.Name</a>
+                            <a asp-controller="Matches" asp-action="Match" asp-route-id="@match.MatchID">
                                 <div class="teamrows">
                                     <div class="teamrow">
-                                        <img src="@Country.GetCountry()"> @*replace flags with team's country name*@
-                                        <span>@("Not vEry long name but its funn to not trim this string lol".Substring(0, rnd.Next(3, 32)))</span>
+                                        <img src="@Country.GetCountry(match.Team1.Country)">
+                                        <span>@match.Team1.TeamName</span>
                                     </div>
                                     <div class="teamrow">
-                                        <img src="@Country.GetCountry()">
-                                        <span>@("TeamNameVeryLongButNotShort2cpskpreokrepojweioewoiqoweobqowboiwqh".Substring(0, rnd.Next(3, 32)))</span>
+                                        <img src="@Country.GetCountry(match.Team2.Country)">
+                                        <span>@match.Team2.TeamName</span>
                                     </div>
                                 </div>
-                                <div class="twoRowExtra">
-                                    <div class="twoRowExtraRow won">
-                                        1
+                                @if (match.ScoreTeam1 > match.ScoreTeam2)
+                                {
+                                    <div class="twoRowExtra">
+                                        <div class="twoRowExtraRow won">
+                                            @match.ScoreTeam1
+                                        </div>
+                                        <div class="twoRowExtraRow lost">
+                                            @match.ScoreTeam2
+                                        </div>
                                     </div>
-                                    <div class="twoRowExtraRow lost">
-                                        2
+                                }
+                                else
+                                {
+
+                                    <div class="twoRowExtra">
+                                        <div class="twoRowExtraRow lost">
+                                            @match.ScoreTeam1
+                                        </div>
+                                        <div class="twoRowExtraRow won">
+                                            @match.ScoreTeam2
+                                        </div>
                                     </div>
-                                </div>
+                                }
                             </a>
                         </li>
                     }

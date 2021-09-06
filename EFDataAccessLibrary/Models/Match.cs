@@ -24,5 +24,32 @@ namespace EFDataAccessLibrary.Models
         public Map? Map { get; set; }
 #nullable disable
         public Event Event { get; set; }
+
+        public Boolean IsUpcoming()
+        {
+            if(StartDate > DateTime.Now)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public Boolean IsFinished()
+        {
+            if(ScoreTeam1 != null && ScoreTeam2 != null)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public Boolean IsPlaying()
+        {
+            if(!IsUpcoming() && EndDate is null)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

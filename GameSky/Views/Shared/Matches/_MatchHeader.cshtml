@@ -1,6 +1,8 @@
 ﻿@model EFDataAccessLibrary.Models.Match
 @using GameSky.Models
 @using EFDataAccessLibrary.Models
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
 
 @section Styles {
     <link rel="stylesheet" href="~/css/matchUpSite.css" />
@@ -9,8 +11,22 @@
     Match match = Model;
     var team1score = match.ScoreTeam1;
     var team2score = match.ScoreTeam2;
-}
 
+    string team1status;
+    string team2status;
+
+    if (team1score > team2score)
+    {
+        team1status = "score-won";
+        team2status = "score-lost";
+    }
+    else
+    {
+        team2status = "score-won";
+        team1status = "score-lost";
+    }
+
+}
 <div class="match-headerbar">
     <div class="flex">
         <div class="match-button">
@@ -34,7 +50,7 @@
     @if (match.EndDate != null)
     {
         <div class="team-score-container fadeRight fadeScore">
-            <div class="team-score score-lost">
+            <div class="team-score @team1status">
                 <span>@team1score</span>
             </div>
         </div>
@@ -42,23 +58,40 @@
 </div>
 <div class="match-info fadeUp">
     <div class="event-time">
-        <span data-time-format="HH:mm">@DateTime.Now.ToString("HH:mm:ss")</span>
+        @if (match.IsUpcoming())
+        {
+            <span data-time-format="HH:mm">@match.StartDate.ToString("HH:mm")</span>
+        }
+        else if (match.IsFinished())
+        {
+            <span data-time-format="HH:mm">Finished</span>
+        }
+        else
+        {
+            <span data-time-format="HH:mm">LIVE</span>
+        }
     </div>
-    <div class="event-name">StarLadder CIS RMR 2021</div>
+    <div class="event-name">
+        @match.Event.Name
+    </div>
     <div class="event-date">
-        <span data-time-format="do MM yyyy">@DateTime.Now.ToString("dd MMM yyyy")</span>
+        <span data-time-format="do MM yyyy">@match.StartDate.ToString("dd MMM yyyy")</span>
     </div>
-    <div class="event-type">Online</div>
+    @if (match.Event.Location is null)
+    {
+        <div class="event-type">Online</div>
+    }
+    else
+    {
+        <div class="event-type">@match.Event.Location</div>
+    }
 </div>
 <div class="match-team2 team">
-    @if (match.EndDate != null)
-    {
         <div class="team-score-container fadeLeft fadeScore">
-            <div class="team-score score-won">
+            <div class="team-score @team2status">
                 <span>@team2score</span>
             </div>
         </div>
-    }
     <div class="team-logo fadeLeft">
         <div class="team-logo-container">
             <img src="~/images/virtuspro.svg" />

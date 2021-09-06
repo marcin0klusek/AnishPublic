@@ -19,6 +19,8 @@ namespace EFDataAccessLibrary.DataAccess
         public DbSet<PlayerTeam> PlayerTeam { get; set; }
         public DbSet<Map> Map { get; set; }
         public DbSet<Match> Match { get; set; }
+        public DbSet<EventTeam> EventTeam { get; set; }
+        public DbSet<Event> Event { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -15,13 +15,39 @@
     Random rnd = new Random();
     List<Match> upcoming = ViewBag.Upcoming;
     List<Match> finished = ViewBag.Finished;
+
+    string team1status;
+    string team2status;
+
+    void SetScoreStatus(int? team1score, int? team2score)
+    {
+        if (team1score > team2score)
+        {
+            team1status = "score-won";
+            team2status = "score-lost";
+        }
+        else
+        {
+            team2status = "score-won";
+            team1status = "score-lost";
+        }
+    }
+
+    string GetDateOrTime(DateTime StartDate)
+    {
+        if(StartDate.Date == DateTime.Today)
+        {
+            return StartDate.ToString("HH:mm");
+        }
+        return StartDate.ToString("dd MMM");
+    }
 }
 
 <div class="results">
     <div class="results-all">
         <div class="results-sublist">
             <div class="standard-headline">Upcoming matches</div>
-            @foreach(Match match in upcoming)
+            @foreach (Match match in upcoming)
             {
                 <div class="result-con">
                     <a asp-controller="Matches" asp-action="Match" asp-route-id="@match.MatchID">
@@ -36,9 +62,9 @@
                                             </div>
                                         </td>
                                         <td class="result-score">
-                                            <span class="score-won">@match.ScoreTeam1</span>
+                                            <span class="score">@match.ScoreTeam1</span>
                                             -
-                                            <span class="score-lost">@match.ScoreTeam2</span>
+                                            <span class="score">@match.ScoreTeam2</span>
                                         </td>
                                         <td class="team-cell">
                                             <div class="line-align team2">
@@ -50,7 +76,7 @@
                                             <span class="event-name">@match.Event.Name</span>
                                         </td>
                                         <td class="star-cell">
-                                            <div class="map-text">bo1</div>
+                                            <div class="map-text">@GetDateOrTime(match.StartDate)</div>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -64,6 +90,9 @@
             <div class="standard-headline">Finished matches</div>
             @foreach (Match match in finished)
             {
+                {
+                    SetScoreStatus(match.ScoreTeam1, match.ScoreTeam2);
+                }
                 <div class="result-con">
                     <a asp-controller="Matches" asp-action="Match" asp-route-id="@match.MatchID">
                         <div class="result">
@@ -77,9 +106,9 @@
                                             </div>
                                         </td>
                                         <td class="result-score">
-                                            <span class="score-won">@match.ScoreTeam1</span>
+                                            <span class="@team1status">@match.ScoreTeam1</span>
                                             -
-                                            <span class="score-lost">@match.ScoreTeam2</span>
+                                            <span class="@team2status">@match.ScoreTeam2</span>
                                         </td>
                                         <td class="team-cell">
                                             <div class="line-align team2">

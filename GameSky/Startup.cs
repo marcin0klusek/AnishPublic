@@ -44,7 +44,7 @@ namespace GameSky
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddSignalR();
-            services.AddNotyf(config => { config.DurationInSeconds = 10; config.IsDismissable = true; config.Position = NotyfPosition.TopRight; });
+            services.AddNotyf(config => { config.DurationInSeconds = 10; config.IsDismissable = true; config.Position = NotyfPosition.BottomLeft; });
 
 
 

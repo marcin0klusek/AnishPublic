@@ -1,0 +1,73 @@
+﻿@page
+@model GameSky.Pages.EventModel
+@using EFDataAccessLibrary.Models
+@using GameSky.Models
+@section Styles{
+    <link rel="stylesheet" href="~/css/matchesAndResults.css" />
+}
+@{
+    Event _event = Model._event;
+}
+
+<h3><b>@_event.Name</b></h3>
+@if (_event.Location == String.Empty)
+{
+    <p>Online</p>
+}
+else
+{
+    <p>@_event.Location</p>
+}
+<p>@_event.StartDate.ToShortDateString()</p>
+<p>@_event.PrizePool USD</p>
+
+<h3><b>Teams</b></h3>
+@foreach (Team team in @Model._teams)
+{
+    <span>[@team.TeamName] </span>
+}
+<div class="results">
+    <div class="results-all">
+        <div class="results-sublist">
+            <div class="standard-headline">Lastest results</div>
+            @foreach (Match match in Model._matches)
+            {
+                <div class="result-con">
+                    <a asp-controller="Matches" asp-action="Match" asp-route-id="match.MatchID">
+                        <div class="result">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td class="team-cell">
+                                            <div class="line-align team1">
+                                                <div class="team">@match.Team1.TeamName</div>
+                                                <img src="@Country.GetCountry(match.Team1.Country)">
+                                            </div>
+                                        </td>
+                                        <td class="result-score">
+                                            <span class="score-won">@match.ScoreTeam1</span>
+                                            -
+                                            <span class="score-lost">@match.ScoreTeam2</span>
+                                        </td>
+                                        <td class="team-cell">
+                                            <div class="line-align team2">
+                                                <img src="@Country.GetCountry(match.Team2.Country)">
+                                                <div class="team">@match.Team2.TeamName</div>
+                                            </div>
+                                        </td>
+                                        <td class="event">
+                                            <span class="event-name" asp-area="" asp-page="/Event" asp-route-id="@_event.EventID">@_event.Name</span>
+                                        </td>
+                                        <td class="star-cell">
+                                            <div class="map-text">bo1</div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
