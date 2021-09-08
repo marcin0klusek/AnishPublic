@@ -18,13 +18,12 @@ namespace GameSky.Pages
 
         public PostModel(DataContext db)
         {
-
             _db = db;
         }
 
         public IActionResult OnGet(int id)
         {
-            news = (NewsHeader)_db.NewsHeader.Include(e => e.NewsContent).First(a => a.NewsId == id);
+            news = (NewsHeader)_db.GetNewsHeaderIncludeContent(id);
             
             if (!news.IsPublished)
             {

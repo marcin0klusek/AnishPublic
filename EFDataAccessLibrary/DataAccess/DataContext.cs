@@ -11,6 +11,8 @@ namespace EFDataAccessLibrary.DataAccess
     public class DataContext : DbContext
     {
         public DataContext(DbContextOptions options) : base(options) { }
+        
+        #region Entities
         public DbSet<NewsHeader> NewsHeader { get; set; }
         public DbSet<NewsContent> NewsContent { get; set; }
         public DbSet<PlayerPosition> PlayerPosition { get; set; }
@@ -21,6 +23,8 @@ namespace EFDataAccessLibrary.DataAccess
         public DbSet<Match> Match { get; set; }
         public DbSet<EventTeam> EventTeam { get; set; }
         public DbSet<Event> Event { get; set; }
+
+        #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -41,53 +45,172 @@ namespace EFDataAccessLibrary.DataAccess
             });
         }
 
-        public NewsHeader GetFirstNewsHeader()
+        #region Methods
+
+        #region NewsHeader
+        public NewsHeader GetNewsHeaderIncludeContent(int id)
         {
-            return NewsHeader.FirstOrDefault(n => n.NewsId == 1);
+            return NewsHeader.Where(a => a.NewsId == id).Include(e => e.NewsContent).FirstOrDefault();
         }
 
-        public List<NewsHeader> GetNewsHeaderList()
+        public async Task<NewsHeader> GetFirstNewsHeader()
         {
-            return NewsHeader.ToList();
+            return await NewsHeader.FirstOrDefaultAsync(n => n.NewsId == 1);
         }
 
-        public List<NewsHeader> GetNewsHeaderListIncludeContent()
+        public async Task<List<NewsHeader>> GetPublishedNews(int NewsToTake)
         {
-            
-            return NewsHeader.Include(e => e.NewsContent).ToList();
+            List<NewsHeader> news = new List<NewsHeader>();
+            news = await Task.Run(() => NewsHeader
+                .OrderByDescending(d => d.NewsPublishDate)
+                .Where(d => d.IsPublished)
+                .Take(NewsToTake)
+                .ToListAsync());
+            return news;
         }
 
-        public List<Player> GetPlayers()
+        public async Task<List<NewsHeader>> GetNewsHeaderList()
         {
-            return Player.OrderBy(p => p.PlayerLevel).ToList();
+            return await NewsHeader.ToListAsync();
         }
 
-        public Player GetPlayerByIdIncludePositon(int id) =>Player.Where(p => p.PlayerID == id).Include(p => p.PlayerPosition).FirstOrDefault();
-
-        public PlayerPosition GetPlayerPosition(string name)
+        public async Task<NewsHeader> GetNewsHeaderById(int id)
         {
-            return PlayerPosition.Where(p => p.Name == name).FirstOrDefault();
+            return await NewsHeader.FirstOrDefaultAsync(x => x.NewsId == id);
         }
 
-        public List<Player> GetPlayersIncludePosition()
+        public async Task<List<NewsHeader>> GetNewsHeaderListIncludeContent()
         {
-            return Player.OrderBy(p => p.PlayerLevel).Include(p => p.PlayerPosition).ToList();
+            return await NewsHeader.Include(e => e.NewsContent).ToListAsync();
+        }
+        #endregion
+
+        #region NewsContext
+
+        #endregion
+
+        #region PlayerPosition
+        public async Task<PlayerPosition> GetPositionByName(string position)
+        {
+            PlayerPosition pos = await PlayerPosition.Where(x => x.Name == position).SingleOrDefaultAsync();
+            return pos;
+        }
+        #endregion
+
+        #region Player
+        public async Task<List<Player>> GetPlayers()
+        {
+            return await Player.OrderBy(p => p.PlayerLevel).ToListAsync();
         }
 
-        public List<Player> GetPlayersIncludePosition(int skip, int take)
+        public  async Task<Player> GetPlayerByIdIncludePositon(int id) => await Player.Where(p => p.PlayerID == id).Include(p => p.PlayerPosition).FirstOrDefaultAsync();
+
+
+        public async Task<List<Player>> GetPlayersIncludePosition()
         {
-            return Player.OrderBy(p => p.PlayerLevel).Skip(skip).Include(p => p.PlayerPosition).Take(take).ToList();
+            return await Player.OrderBy(p => p.PlayerLevel).Include(p => p.PlayerPosition).ToListAsync();
         }
 
-        public PlayerPosition GetPositionByName(string position)
+        public async Task<List<Player>> GetPlayersIncludePosition(int skip, int take)
         {
-            return PlayerPosition.Where(x => x.Name == position).SingleOrDefault();
+            return await Player.OrderBy(p => p.PlayerLevel).Skip(skip).Include(p => p.PlayerPosition).Take(take).ToListAsync();
+        }
+        #endregion
+
+        #region Team
+        public async Task<List<Team>> GetTeams()
+        {
+            return await Team.ToListAsync();
         }
 
-        public List<Team> GetTeams()
+        public List<Player> GetPlayersFromTeam(int teamid)
         {
-            return Team.ToList();
+            return Team.Where(t => t.TeamID == teamid)
+                    .SelectMany(t => t.PlayerTeam.Where(x => x.ExitDate == null).Select(p => p.Player)).Include(p => p.PlayerPosition)
+                    .ToList();
         }
+
+        #endregion
+
+        #region PlayerTeam
+
+        #endregion
+
+        #region Map
+
+        #endregion
+
+        #region Match
+
+        public async Task<List<Match>> GetResults()
+        {
+            List<Match> results = new List<Match>();
+
+            results = await Task.Run(() => Match.Where(x => x.EndDate != null)
+                .OrderBy(x => x.StartDate)
+                .Include(x => x.Team1)
+                .Include(x => x.Team2)
+                .Include(x => x.Event)
+                .ToListAsync());
+
+            return results;
+        }
+
+        public Match GetMatchById(int id)
+        {
+            return Match
+                 .Include(x => x.Team1)
+                 .Include(x => x.Team2)
+                 .Include(x => x.Map)
+                 .Include(x => x.Event)
+                 .FirstOrDefault(m => m.MatchID == id);
+        }
+
+        public List<Match> GetUpcomingMatches()
+        {
+            return Match.Where(x => x.EndDate == null)
+                .OrderBy(x => x.StartDate)
+                .Include(x => x.Team1)
+                .Include(x => x.Team2)
+                .Include(x => x.Map)
+                .Include(x => x.Event)
+                .ToList();
+        }
+
+        public List<Match> GetFinishedMatches()
+        {
+            return Match.Where(x => x.EndDate != null)
+                .OrderByDescending(x => x.EndDate)
+                .Include(x => x.Team1)
+                .Include(x => x.Team2)
+                .Include(x => x.Event)
+                .Include(x => x.Map)
+                .ToList();
+        }
+        #endregion
+
+        #region EventTeam
+
+        #endregion
+
+        #region Event
+        public Event GetEventById(int id)
+        {
+            return Event.Where(e => e.EventID == id)
+                .Include(x => x.EventTeams)
+                .Include(x => x.Matches)
+                .FirstOrDefault();
+        }
+
+        public List<Team> GetTeamsFromEvent(Event _event)
+        {
+            if(_event is null) { return new List<Team>(); }
+
+            return Event.Where(e => e.EventID == _event.EventID)
+                .SelectMany(x => x.EventTeams).Select(x => x.Team).ToList();
+        }
+        #endregion
+
+        #endregion
     }
-
 }

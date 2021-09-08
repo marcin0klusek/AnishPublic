@@ -23,13 +23,9 @@ namespace GameSky.Pages
         }
         public void OnGet(int id)
         {
-            _event = _db.Event.Where(e => e.EventID == id)
-                .Include(x => x.EventTeams)
-                .Include(x => x.Matches)
-                .FirstOrDefault();
+            _event = _db.GetEventById(id);
 
-            _teams =_db.Event.Where(e => e.EventID == id)
-                .SelectMany(x => x.EventTeams).Select(x => x.Team).ToList();
+            _teams = _db.GetTeamsFromEvent(_event);
 
             _matches = _event.Matches.ToList();
         }

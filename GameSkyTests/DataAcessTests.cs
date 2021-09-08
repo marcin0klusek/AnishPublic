@@ -8,6 +8,7 @@ using Moq;
 using Microsoft.EntityFrameworkCore;
 using System;
 using Autofac.Extras.Moq;
+using System.Threading.Tasks;
 
 namespace GameSkyTests
 {
@@ -52,7 +53,7 @@ namespace GameSkyTests
 
         #region NewsHeader and NewsContent Tests
         [Fact]
-        public void GetFirstNews_ReturnNotNull()
+        public async Task GetFirstNews_ReturnNotNull()
         {
             /* using (var mock = AutoMock.GetLoose())
              {
@@ -72,18 +73,18 @@ namespace GameSkyTests
 
             var context = GetDbContext();
 
-            var result = context.GetFirstNewsHeader();
+            NewsHeader result = await context.GetFirstNewsHeader();
             Assert.NotNull(result);
             Assert.Equal(1, result.NewsId);
         }
 
-        [Fact]
-        public void GetNewsList_ShouldReturnAllNews()
+       [Fact]
+        public async Task GetNewsList_ShouldReturnAllNews()
         {
 
             var context = GetDbContext();
 
-            var result = context.GetNewsHeaderList();
+            List<NewsHeader> result = await context.GetNewsHeaderList();
 
             Assert.Equal(6, result.Count);
         }
@@ -92,7 +93,7 @@ namespace GameSkyTests
         {
             var context = GetDbContext();
 
-            var result = context.GetNewsHeaderListIncludeContent();
+            var result = context.GetNewsHeaderListIncludeContent().Result;
 
             int[] expected = {1,2,3,4,5,6};
 
@@ -126,7 +127,7 @@ namespace GameSkyTests
             var context = GetDbContext();
 
             var expected = "AWP";
-            var actual = context.GetPlayerPosition(expected);
+            PlayerPosition actual = context.GetPositionByName(expected).Result;
 
             Assert.Equal(actual.Name, expected);
 
@@ -139,7 +140,7 @@ namespace GameSkyTests
 
             var expected = 3;
 
-            var result = context.GetPlayers();
+            List<Player> result = context.GetPlayers().Result;
 
             Assert.Equal(expected, result.Count);
         }
@@ -149,7 +150,7 @@ namespace GameSkyTests
         {
             var context = GetDbContext();
 
-            var result = context.GetPlayersIncludePosition();
+            var result = context.GetPlayersIncludePosition().Result;
 
             foreach (var player in result)
             {
@@ -221,11 +222,11 @@ namespace GameSkyTests
             var players = new[]
              {
                 new Player{FirstName = "Marcin", LastName = "Klusek", NickName = "fr0y", BirthDate = DateTime.Now.AddYears(-16), Prize = 100f,
-                                Potencial = 10, Aim = 10, Knowledge = 10, PlayerLevel = 94, PositionID = context.GetPositionByName("AWP").PositionID, PlayerPosition = context.GetPositionByName("AWP")},
+                                Potencial = 10, Aim = 10, Knowledge = 10, PlayerLevel = 94, PositionID = context.GetPositionByName("AWP").Result.PositionID, PlayerPosition = context.GetPositionByName("AWP").Result},
                 new Player{FirstName = "Wojtek", LastName = "Sakowicz", NickName = "sako", BirthDate = DateTime.Now.AddYears(-21), Prize = 300f,  
-                                Potencial = 10, Aim = 10, Knowledge = 10, PlayerLevel = 94, PositionID = context.GetPositionByName("IGL").PositionID, PlayerPosition = context.GetPositionByName("IGL")},
+                                Potencial = 10, Aim = 10, Knowledge = 10, PlayerLevel = 94, PositionID = context.GetPositionByName("IGL").Result.PositionID, PlayerPosition = context.GetPositionByName("IGL").Result},
                 new Player{FirstName = "Tomek", LastName = "Cebulski", NickName = "tikson", BirthDate = DateTime.Now.AddYears(-32), Prize = 452f, 
-                                Potencial = 10, Aim = 10, Knowledge = 10, PlayerLevel = 94,  PositionID = context.GetPositionByName("Rifler").PositionID, PlayerPosition = context.GetPositionByName("Rifler")},
+                                Potencial = 10, Aim = 10, Knowledge = 10, PlayerLevel = 94,  PositionID = context.GetPositionByName("Rifler").Result.PositionID, PlayerPosition = context.GetPositionByName("Rifler").Result},
             };
             context.Player.AddRange(players);
 

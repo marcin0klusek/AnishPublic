@@ -26,8 +26,8 @@ namespace GameSky.Pages
 
         public void OnGet()
         {
-            players = _db.GetPlayersIncludePosition(0, playersPerPage);
-            teams = _db.GetTeams();
+            players = _db.GetPlayersIncludePosition(0, playersPerPage).Result;
+            teams = _db.GetTeams().Result;
             playersCount = _db.Player.Count();
         }
 
@@ -38,13 +38,11 @@ namespace GameSky.Pages
 
             if (teamID == -1) 
             {
-                playersInTeam = _db.GetPlayersIncludePosition();
+                playersInTeam = _db.GetPlayersIncludePosition().Result;
             }
             else
             {
-                playersInTeam = _db.Team.Where(t => t.TeamID == teamID)
-                    .SelectMany(t => t.PlayerTeam.Where(x => x.ExitDate == null).Select(p => p.Player)).Include(p => p.PlayerPosition)
-                    .ToList();
+                playersInTeam = _db.GetPlayersFromTeam(teamID);
             }
 
             this.playersCount = playersInTeam.Count();

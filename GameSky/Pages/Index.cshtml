@@ -12,6 +12,9 @@
                 "ARRMY League Rising", "ARRMY League Open", "ESEA Open", "ESEA Advanced", "Sweet Home Spring 3"
             };
     var results = Model.results;
+    var news = Model.NewsHeaders;
+    if (news is null) { news = new List<NewsHeader>(); }
+    if (results is null) { results = new List<Match>(); }
 }
 
 @section Styles {
@@ -26,6 +29,7 @@
     <div class="hero">
         <div class="titleBar">
             <h1 class="title">@title</h1>
+            <p>@Model.elapsedTime</p>
             <p>Stwórz drużynę i przebij się do światej czołówki! <a class="gettingStart" href="https://docs.microsoft.com/aspnet/core">Zaczynajmy.</a></p>
         </div>
 
@@ -36,15 +40,15 @@
             <div class="newsfeed">
                 <p class="titleBar">AKTUALNOŚCI</p>
                 <ul>
-                    @foreach (NewsHeader news in Model.NewsHeaders)
+                    @foreach (NewsHeader header in news)
                     {
                         <li>
                             <div class="titleNewsBar">
-                                <p>@news.NewsTitle</p>
-                                <p class="newsFeed-date">@news.NewsPublishDate.ToString("dd/MM/yyyy")</p>
+                                <p>@header.NewsTitle</p>
+                                <p class="newsFeed-date">@header.NewsPublishDate.ToString("dd/MM/yyyy")</p>
                             </div>
-                            <span>@news.NewsDesc</span>
-                            <span class="linkRead"><a asp-page="/post" asp-route-id="@news.NewsId">Read more...</a></span>
+                            <span>@header.NewsDesc</span>
+                            <span class="linkRead"><a asp-page="/post" asp-route-id="@header.NewsId">Read more...</a></span>
 
                         </li>
                     }

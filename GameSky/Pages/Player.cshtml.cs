@@ -24,11 +24,11 @@ namespace GameSky.Pages
 
         public void OnGet(int id)
         {
-            _player = _db.GetPlayerByIdIncludePositon(id);
+            _player = _db.GetPlayerByIdIncludePositon(id).Result;
         }
         public async Task<PartialViewResult> OnPostUpgradeSkill(string name, int id)
         {
-            _player = _db.GetPlayerByIdIncludePositon(id);
+            _player = _db.GetPlayerByIdIncludePositon(id).Result;
 
             //check if User has enough money to pay
 
