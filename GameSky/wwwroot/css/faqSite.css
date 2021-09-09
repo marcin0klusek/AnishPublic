@@ -1,0 +1,33 @@
+﻿details {
+    border: 1px solid #a38421;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+    margin: 0.5rem auto;
+    width: 40%;
+    color: #fff;
+}
+
+summary {
+    color: #a38421;
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+
+details[open] {
+    padding: .5em;
+}
+
+    details[open] summary {
+        border-bottom: 1px solid #aaa;
+        margin-bottom: .5em;
+    }
+
+.faq--container{
+    margin: 4.5rem 0;
+}
+
+.faq--dates{
+    display: flex;
+    justify-content: space-around;
+}

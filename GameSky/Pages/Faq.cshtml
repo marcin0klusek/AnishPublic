@@ -1,0 +1,35 @@
+﻿@page
+@model GameSky.Pages.FaqModel
+@using GameSky.Models
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/faqSite.css" />
+}
+
+@{
+    var faq = Model.Faq;
+    var questions = Model.Questions;
+    int count = 0;
+
+    ApplicationUser author = await UserManager.FindByIdAsync(faq.AuthorID);
+    ApplicationUser modifier = await UserManager.FindByIdAsync(faq.LastModifierID);
+}
+
+<div class="faq--container">
+    <h2 style="text-align: center; color: #fff">Frequently Asked Question</h2>
+    <div class="faq--dates">
+        <span>Created at: @faq.CreateDate.ToString("dd MMM yyyy") by @author.UserName</span>
+        <span>Last modified: @faq.LastModifyDate.ToString("dd MMM yyyy") by @modifier.UserName</span>
+    </div>
+    <hr />
+    @foreach (var question in questions)
+    {
+        <details>
+            <summary>#@(++count) @question.Title</summary>
+            @question.Answer
+        </details>
+    }
+</div>

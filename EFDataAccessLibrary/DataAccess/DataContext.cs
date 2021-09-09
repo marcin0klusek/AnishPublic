@@ -11,7 +11,7 @@ namespace EFDataAccessLibrary.DataAccess
     public class DataContext : DbContext
     {
         public DataContext(DbContextOptions options) : base(options) { }
-        
+
         #region Entities
         public DbSet<NewsHeader> NewsHeader { get; set; }
         public DbSet<NewsContent> NewsContent { get; set; }
@@ -24,6 +24,10 @@ namespace EFDataAccessLibrary.DataAccess
         public DbSet<EventTeam> EventTeam { get; set; }
         public DbSet<Event> Event { get; set; }
 
+
+        public DbSet<Faq> Faq { get; set; }
+        public DbSet<Question> Question { get; set; }
+        public DbSet<FaqQuestion> FaqQuestion {get; set;}
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -42,6 +46,20 @@ namespace EFDataAccessLibrary.DataAccess
             {
                 x.EventID,
                 x.TeamID
+            });
+            //only one true value can exist for IsActive
+            modelBuilder.Entity<Faq>().HasIndex(x => 
+            new 
+            { 
+                x.FaqID,
+                x.IsActive 
+            }).IsUnique().HasFilter("[IsActive] != 0");
+
+            modelBuilder.Entity<FaqQuestion>().HasKey(x =>
+            new
+            {
+                x.FaqID,
+                x.QuestionID
             });
         }
 
@@ -251,6 +269,28 @@ namespace EFDataAccessLibrary.DataAccess
             return Event.Where(e => e.EventID == _event.EventID)
                 .SelectMany(x => x.EventTeams).Select(x => x.Team).ToList();
         }
+        #endregion
+
+        #region Faq
+        public Faq GetActiveFaq()
+        {
+            return Faq.OrderByDescending(x => x.LastModifyDate).FirstOrDefault(x => x.IsActive);
+        }
+
+        public List<Question> GetQuestionsForFaq(int id)
+        {
+            return Faq.Where(t => t.FaqID == id)
+                    .SelectMany(t => t.FaqQuestions.Select(p => p.Question))
+                    .ToList();
+        }
+        #endregion
+
+        #region FaqQuestion
+
+        #endregion
+
+        #region Question
+
         #endregion
 
         #endregion
