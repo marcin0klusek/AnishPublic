@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "/event/{id:int}/{_event.Name}"
 @model GameSky.Pages.EventModel
 @using EFDataAccessLibrary.Models
 @using GameSky.Models
@@ -33,7 +33,7 @@ else
             @foreach (Match match in Model._matches)
             {
                 <div class="result-con">
-                    <a asp-controller="Matches" asp-action="Match" asp-route-id="match.MatchID">
+                    <a asp-controller="Matches" asp-action="Match" asp-route-id="@match.MatchID">
                         <div class="result">
                             <table>
                                 <tbody>

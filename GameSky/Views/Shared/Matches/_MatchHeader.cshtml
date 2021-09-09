@@ -42,7 +42,7 @@
         </div>
     </div>
     <div class="team-name fadeRight fadeName">
-        <div class="name">@match.Team1.TeamName</div>
+        <div class="name"><a asp-page="/team" asp-route-id="@match.Team1.TeamID">@match.Team1.TeamName</a></div>
     </div>
     <div class="team-country fadeRight fadeName">
         <img src="@Country.GetCountry()" class="flag">
@@ -98,7 +98,7 @@
         </div>
     </div>
     <div class="team-name fadeLeft fadeName">
-        <div class="name">@match.Team2.TeamName</div>
+        <div class="name"><a asp-page="/team" asp-route-id="@match.Team1.TeamID">@match.Team2.TeamName</a></div>
     </div>
     <div class="team-country fadeLeft fadeName">
         <img src="@Country.GetCountry()" class="flag">

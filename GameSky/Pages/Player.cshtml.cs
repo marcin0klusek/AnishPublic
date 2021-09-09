@@ -21,7 +21,6 @@ namespace GameSky.Pages
         {
             _db = db;
         }
-
         public void OnGet(int id)
         {
             _player = _db.GetPlayerByIdIncludePositon(id).Result;

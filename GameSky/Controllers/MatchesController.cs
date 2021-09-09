@@ -46,13 +46,13 @@ namespace GameSky.Pages.Matches
             return View();
         }
 
-        [Route("matches/{id}")]
+        [Route("match/{id}")]
         public async Task<ActionResult> Match(int id)
         {
             Match match = await Task.Run(() => _db.GetMatchById(id));
             if (match == null)
             {
-                _notyf.ShowInformation("Nie można odnaleźć meczu o id" + id);
+                _notyf.ShowInformation("Nie można odnaleźć meczu o id: " + id);
                 return RedirectToPage("/Index");
             }
             ViewBag.Match = match;

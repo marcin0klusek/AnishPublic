@@ -4,10 +4,8 @@ using EFDataAccessLibrary.Models;
 using System.Linq;
 using Xunit.Abstractions;
 using System.Collections.Generic;
-using Moq;
 using Microsoft.EntityFrameworkCore;
 using System;
-using Autofac.Extras.Moq;
 using System.Threading.Tasks;
 
 namespace GameSkyTests

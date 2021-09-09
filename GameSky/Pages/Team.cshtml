@@ -1,0 +1,44 @@
+﻿@page "/team/{id:int}"
+@model GameSky.Pages.TeamModel
+@using EFDataAccessLibrary.Models
+@using GameSky.Models
+@{
+    var team = Model._Team;
+    var events = Model._Events;
+    var activePlayers = Model._ActivePlayers;
+    var pastPlayers = Model._PastPlayers;
+    var matches = Model._Matches;
+    string evLoc = "Online";
+}
+<hr />
+<h1><b>@team.TeamName</b></h1>
+<hr />
+<br />
+<hr />
+<h3><b>Events</b></h3>
+@foreach (var _event in events)
+{
+    @if(_event.Location is not null) { evLoc = _event.Location; } else { evLoc = "Online"; }
+    <p>@_event.Name | @evLoc | @_event.StartDate.ToString("dd MMM yyyy")</p>
+}
+<br />
+<hr />
+<h3><b>Active roster</b></h3>
+@foreach (var player in activePlayers)
+{
+    <p>@player.NickName - @player.PlayerLevel - @player.PlayerPosition.Name </p>
+}
+<br />
+<hr />
+<h3><b>Ex-Players</b></h3>
+@foreach (var player in pastPlayers)
+{
+    <p>@player.NickName @player.PlayerLevel @player.PlayerPosition.Name </p>
+}
+<br />
+<hr />
+<h3><b>Matches</b></h3>
+@foreach (var match in matches)
+{
+    <p>@match.Team1.TeamName @match.ScoreTeam1 - @match.ScoreTeam2 @match.Team2.TeamName | @match.Event.Name</p>
+}

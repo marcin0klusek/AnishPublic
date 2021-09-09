@@ -42,7 +42,7 @@ namespace GameSky.Pages
             }
             else
             {
-                playersInTeam = _db.GetPlayersFromTeam(teamID);
+                playersInTeam = _db.GetActivePlayersForTeam(teamID);
             }
 
             this.playersCount = playersInTeam.Count();

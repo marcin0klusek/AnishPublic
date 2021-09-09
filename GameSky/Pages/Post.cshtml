@@ -1,7 +1,8 @@
 ﻿@page
 @model GameSky.Pages.PostModel
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@using GameSky.Models
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 @{
     string name = "Marcin Klusek";
 

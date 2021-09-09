@@ -123,10 +123,43 @@ namespace EFDataAccessLibrary.DataAccess
             return await Team.ToListAsync();
         }
 
-        public List<Player> GetPlayersFromTeam(int teamid)
+        public Team GetTeamByID(int id)
+        {
+            return Team.FirstOrDefault(t => t.TeamID == id);
+        }
+
+        public List<Event> GetEventsForTeam(Team team)
+        {
+            return GetEventsForTeam(team.TeamID);
+        }
+
+        public List<Event> GetEventsForTeam(int teamid)
         {
             return Team.Where(t => t.TeamID == teamid)
-                    .SelectMany(t => t.PlayerTeam.Where(x => x.ExitDate == null).Select(p => p.Player)).Include(p => p.PlayerPosition)
+                .SelectMany(t => t.EventTeams)
+                .Select(x => x.Event)
+                .OrderBy(e => e.StartDate)
+                .ToList();
+        }
+
+        public List<Player> GetActivePlayersForTeam(Team team)
+        {
+            return GetActivePlayersForTeam(team.TeamID);
+        }
+
+        public List<Player> GetActivePlayersForTeam(int teamid)
+        {
+            return Team.Where(t => t.TeamID == teamid)
+                    .SelectMany(t => t.PlayerTeam.Where(x => x.ExitDate == null).Select(p => p.Player))
+                    .Include(p => p.PlayerPosition)
+                    .ToList();
+        }
+
+        public List<Player> GetPastPlayersForTeam(int teamid)
+        {
+            return Team.Where(t => t.TeamID == teamid)
+                    .SelectMany(t => t.PlayerTeam.Where(x => x.ExitDate < DateTime.Now).OrderByDescending(x => x.ExitDate).Select(p => p.Player))
+                    .Include(p => p.PlayerPosition)
                     .ToList();
         }
 
@@ -185,6 +218,15 @@ namespace EFDataAccessLibrary.DataAccess
                 .Include(x => x.Team2)
                 .Include(x => x.Event)
                 .Include(x => x.Map)
+                .ToList();
+        }
+
+        public List<Match> GetMatchesForTeam(int teamid)
+        {
+            return Match.Include(x => x.Team1)
+                .Include(x => x.Team2)
+                .Where(x => (x.Team1.TeamID == teamid || x.Team2.TeamID == teamid))
+                .Include(x => x.Event)
                 .ToList();
         }
         #endregion
