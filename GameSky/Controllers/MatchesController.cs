@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using EFDataAccessLibrary.Models;
 using EFDataAccessLibrary;
 using EFDataAccessLibrary.DataAccess;
-using GameSky.Data;
 using GameSky.Models;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.EntityFrameworkCore;

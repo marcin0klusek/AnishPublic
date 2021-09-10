@@ -2,6 +2,8 @@
 @model GameSky.Pages.TeamModel
 @using EFDataAccessLibrary.Models
 @using GameSky.Models
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 @{
     var team = Model._Team;
     var events = Model._Events;
@@ -9,9 +11,22 @@
     var pastPlayers = Model._PastPlayers;
     var matches = Model._Matches;
     string evLoc = "Online";
+    string emptyOwner = "-";
+    ApplicationUser owner = null;
+    if(team.OwnerID is not null) { owner = await UserManager.FindByIdAsync(team.OwnerID); }
 }
 <hr />
-<h1><b>@team.TeamName</b></h1>
+<h1><b>@team.TeamName</b></h1>     
+<h5>
+    Owner: @if (owner is not null)
+    {
+        @owner.UserName;
+    }
+    else
+    {
+        @emptyOwner
+    }
+</h5>
 <hr />
 <br />
 <hr />

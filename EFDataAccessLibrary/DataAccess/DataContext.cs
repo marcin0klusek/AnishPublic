@@ -1,4 +1,5 @@
 ﻿using EFDataAccessLibrary.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,11 +9,12 @@ using System.Threading.Tasks;
 
 namespace EFDataAccessLibrary.DataAccess
 {
-    public class DataContext : DbContext
+    public class DataContext : IdentityDbContext<ApplicationUser>
     {
         public DataContext(DbContextOptions options) : base(options) { }
 
         #region Entities
+        public DbSet<ApplicationUser> Users { get; set; }
         public DbSet<NewsHeader> NewsHeader { get; set; }
         public DbSet<NewsContent> NewsContent { get; set; }
         public DbSet<PlayerPosition> PlayerPosition { get; set; }
@@ -23,8 +25,6 @@ namespace EFDataAccessLibrary.DataAccess
         public DbSet<Match> Match { get; set; }
         public DbSet<EventTeam> EventTeam { get; set; }
         public DbSet<Event> Event { get; set; }
-
-
         public DbSet<Faq> Faq { get; set; }
         public DbSet<Question> Question { get; set; }
         public DbSet<FaqQuestion> FaqQuestion {get; set;}
@@ -32,6 +32,8 @@ namespace EFDataAccessLibrary.DataAccess
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Player>().HasKey(q => q.PlayerID);
             modelBuilder.Entity<Team>().HasKey(q => q.TeamID);
 
@@ -64,6 +66,18 @@ namespace EFDataAccessLibrary.DataAccess
         }
 
         #region Methods
+
+        #region Users
+        public int? GetUsersOwningTeamId(string id)
+        {
+            return Users.Where(u => u.Id == id).Select(p => p.OwningTeamId).FirstOrDefault();
+        }
+
+        public ApplicationUser GetUserByName(string name)
+        {
+            return Users.FirstOrDefault(x => x.UserName == name);
+        }
+        #endregion
 
         #region NewsHeader
         public NewsHeader GetNewsHeaderIncludeContent(int id)
@@ -121,7 +135,11 @@ namespace EFDataAccessLibrary.DataAccess
             return await Player.OrderBy(p => p.PlayerLevel).ToListAsync();
         }
 
-        public  async Task<Player> GetPlayerByIdIncludePositon(int id) => await Player.Where(p => p.PlayerID == id).Include(p => p.PlayerPosition).FirstOrDefaultAsync();
+        public  async Task<Player> GetPlayerByIdIncludePositon(int id) 
+            => await Player.Where(p => p.PlayerID == id)
+            .Include(p => p.PlayerPosition)
+            .Include(p => p.PlayerTeam.Where(x => x.ExitDate == null))
+            .FirstOrDefaultAsync();
 
 
         public async Task<List<Player>> GetPlayersIncludePosition()
@@ -132,6 +150,14 @@ namespace EFDataAccessLibrary.DataAccess
         public async Task<List<Player>> GetPlayersIncludePosition(int skip, int take)
         {
             return await Player.OrderBy(p => p.PlayerLevel).Skip(skip).Include(p => p.PlayerPosition).Take(take).ToListAsync();
+        }
+
+        public int GetPlayerTeamId(int playerId)
+        {
+            return Player.Where(p => p.PlayerID == playerId)
+                .SelectMany(p => p.PlayerTeam.Where(x => x.ExitDate == null)
+                .Select(p => p.TeamID))
+                .FirstOrDefault();
         }
         #endregion
 

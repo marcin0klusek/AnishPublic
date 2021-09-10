@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using GameSky.Models;
+using EFDataAccessLibrary.Models;
 
 namespace GameSky.Areas.Identity.Pages.Account.Manage
 {

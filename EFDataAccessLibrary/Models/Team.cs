@@ -16,6 +16,9 @@ namespace EFDataAccessLibrary.Models
         public string Tag { get; set; }
         [StringLength(2)]
         public string Country { get; set; }
+#nullable enable
+        public string? OwnerID { get; set; }
+#nullable disable
         public virtual ICollection<PlayerTeam> PlayerTeam { get; set; }
         public virtual ICollection<EventTeam> EventTeams { get; set; }
 

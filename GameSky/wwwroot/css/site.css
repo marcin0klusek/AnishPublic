@@ -253,3 +253,7 @@ body {
     height: 1.33rem;
     width: 1.33rem;
 }
+
+.gold{
+    min-width: 95px;
+}

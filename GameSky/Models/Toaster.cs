@@ -24,5 +24,10 @@ namespace GameSky.Models
         {
             _notyf.Warning(text, 1);
         }
+
+        public void Error(string text)
+        {
+            _notyf.Error(text, 3);
+        }
     }
 }

@@ -2,10 +2,18 @@
 @model GameSky.Pages.PlayerModel
 @using EFDataAccessLibrary.Models
 @using GameSky.Models
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SingIn
 @{
     Player player = Model._player;
 
     Random rnd = new Random();
+
+    ApplicationUser _user = null;
+    if (SingIn.IsSignedIn(User))
+    {
+        _user = await UserManager.GetUserAsync(User);
+    }
 }
 @section Styles {
     <link rel="stylesheet" href="~/css/matchesAndResults.css" />
@@ -68,14 +76,29 @@
     function UpgradeSkill(skill) {
         var skillname = $(skill).data("custom-value");
         $.ajax({
-            url: "/player?handler=UpgradeSkill",
+            url: "/player/@player.PlayerID?handler=UpgradeSkill",
             type: "post",
-            data: { name: skillname, id: @player.PlayerID },
+            contentType: "application/x-www-form-urlencoded",
+            data: { 'name': skillname, 'id': @player.PlayerID },
             success: function (result) {
+                RefreshGold();
+                setTimeout($("#partial-view").html(result), 700);
                 var audio = document.getElementById('successPayment');
                 audio.play();
-                setTimeout($("#partial-view").html(result), 700);
             }
         });
+    }
+
+    function RefreshGold() {
+        $.ajax({
+            url: "/player/@player.PlayerID?handler=UsersGold",
+            type: "post",
+            dataType: "JSON",
+            success: function (result) {
+                var field = document.getElementById('goldText');
+                field.innerText = result;
+            }
+        });
+
     }
 </script>

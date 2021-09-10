@@ -1,15 +1,29 @@
 ﻿@model EFDataAccessLibrary.Models.Player
 @using EFDataAccessLibrary.Models
 @using Microsoft.AspNetCore.Identity
-@using GameSky.Models 
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 @{
     Player player = Model;
-    int PtnlPrice = Player.GetSkillsPrice(player.Potencial);
-    int AimPrice = Player.GetSkillsPrice(player.Aim);
-    int KnwlPrice = Player.GetSkillsPrice(player.Knowledge);
-    bool singedIn = true;
+    int PtnlPrice = Player.GetSkillPrice(player.Potencial);
+    int AimPrice = Player.GetSkillPrice(player.Aim);
+    int KnwlPrice = Player.GetSkillPrice(player.Knowledge);
+    bool owner = false;
+    PlayerTeam playersTeam = player.PlayerTeam.FirstOrDefault();
+    double gold = 0;
+    if (playersTeam is not null)
+    {
+        int TeamID = playersTeam.TeamID;
+
+        if (SignInManager.IsSignedIn(User))
+        {
+            var _user = UserManager.GetUserAsync(User).Result;
+            gold = _user.Gold;
+            int? owningTeamId = _user.OwningTeamId;
+            if (owningTeamId is not null)
+                owner = owningTeamId == TeamID ? true : false;
+        }
+    }
 }
 <div class="playerInfo">
     <div class="playerInfo--top">
@@ -18,39 +32,59 @@
     </div>
     <div class="skills--container">
         @*TODO: change to if User has the Player in team*@
-        @if (SignInManager.IsSignedIn(User))
+        @if (owner)
         {
-            <div class="skillBox">
-                @if (PtnlPrice != -1)
+        <div class="skillBox">
+            @if (PtnlPrice != -1)
+            {
+                if (PtnlPrice > gold)
+                {
+                    <p class="skill">Potencial: @player.Potencial</p><p class="full">Za mało środków by ulepszyć.</p>
+                }
+                else
                 {
                     <p class="skill">Potencial: @player.Potencial</p> <p class="upgrade">Upgrade cost: @PtnlPrice$</p>
                     <a onclick="UpgradeSkill(this)" class="upgradeBtn" data-custom-value="Potencial">UPGRADE</a>
                 }
-                else
-                {
-                    <p class="skill">Potencial: @player.Potencial</p><p class="full">Skill can not be upgraded.</p>
-                }
-            </div>
+            }
+            else
+            {
+                <p class="skill">Potencial: @player.Potencial</p><p class="full">Osiągnięto maksymalny poziom.</p>
+            }
+        </div>
             <div class="skillBox">
                 @if (AimPrice != -1)
                 {
-                    <p class="skill">Aim: @player.Aim</p> <p class="upgrade">Upgrade cost: @AimPrice$</p>
-                    <a onclick="UpgradeSkill(this)" class="upgradeBtn" data-custom-value="Aim">UPGRADE</a>
+                    if (AimPrice > gold)
+                    {
+                        <p class="skill">Aim: @player.Aim</p><p class="full">Za mało środków by ulepszyć.</p>
+                    }
+                    else
+                    {
+                        <p class="skill">Aim: @player.Aim</p> <p class="upgrade">Upgrade cost: @AimPrice$</p>
+                        <a onclick="UpgradeSkill(this)" class="upgradeBtn" data-custom-value="Aim">UPGRADE</a>}
                 }
                 else
                 {
-                    <p class="skill">Aim: @player.Aim</p><p class="full">Skill can not be upgraded.</p>
+                    <p class="skill">Aim: @player.Aim</p><p class="full">Osiągnięto maksymalny poziom.</p>
                 }
             </div>
             <div class="skillBox">
                 @if (KnwlPrice != -1)
                 {
-                    <p class="skill">Knowledge: @player.Knowledge</p> <p class="upgrade">Upgrade cost: @KnwlPrice$</p>
-                    <a onclick="UpgradeSkill(this)" class="upgradeBtn" data-custom-value="Knowledge">UPGRADE</a>
+                    if (KnwlPrice > gold)
+                    {
+                        <p class="skill">Knowledge: @player.Knowledge</p><p class="full">Za mało środków by ulepszyć.</p>
+                    }
+                    else
+                    {
+                        <p class="skill">Knowledge: @player.Knowledge</p> <p class="upgrade">Upgrade cost: @KnwlPrice$</p>
+                        <a onclick="UpgradeSkill(this)" class="upgradeBtn" data-custom-value="Knowledge">UPGRADE</a>
+                    }
                 }
                 else
                 {
-                    <p class="skill">Knowledge: @player.Knowledge</p><p class="full">Skill can not be upgraded.</p>
+                    <p class="skill">Knowledge: @player.Knowledge</p><p class="full">Osiągnięto maksymalny poziom.</p>
                 }
 
 
