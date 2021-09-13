@@ -273,6 +273,11 @@ namespace EFDataAccessLibrary.DataAccess
                 .Include(x => x.Event)
                 .ToList();
         }
+
+        public List<Match> GetMatchesForPlayer(int id)
+        {
+            return GetMatchesForTeam(GetPlayerTeamId(id)).Where(x => x.StartDate > DateTime.Now).ToList();
+        }
         #endregion
 
         #region EventTeam

@@ -14,6 +14,15 @@
     {
         _user = await UserManager.GetUserAsync(User);
     }
+
+    string GetDateOrTime(DateTime StartDate)
+    {
+        if (StartDate.Date == DateTime.Today)
+        {
+            return StartDate.ToString("HH:mm");
+        }
+        return StartDate.ToString("dd MMM");
+    }
 }
 @section Styles {
     <link rel="stylesheet" href="~/css/matchesAndResults.css" />
@@ -23,40 +32,40 @@
     @Html.Partial("~/Pages/Shared/PartialViews/_PlayerProfileHeader.cshtml", player)
 </div>
 <div class="matchList">
-    <h3 class="text-center">Lastest matches</h3>
+    <h3 class="text-center">Upcoming matches</h3>
     <div class="results" style="margin-top:20px">
         <div class="results-all">
             <div class="results-sublist">
-                @for (int k = 0; k < 20; k++)
+                @foreach(var match in @Model.upcomingMatches)
                 {
                     <div class="result-con">
-                        <a asp-controller="Matches" asp-action="Match" asp-route-id="@(rnd.Next(1,5))">
+                        <a asp-controller="Matches" asp-action="Match" asp-route-id="@match.MatchID">
                             <div class="result">
                                 <table>
                                     <tbody>
                                         <tr>
                                             <td class="team-cell">
                                                 <div class="line-align team1">
-                                                    <div class="team">Nazwa1</div>
-                                                    <img src="@Country.GetCountry("PL")">
+                                                    <div class="team">@match.Team1.TeamName</div>
+                                                    <img src="@Country.GetCountry(match.Team1.Country)">
                                                 </div>
                                             </td>
                                             <td class="result-score">
-                                                <span class="score-won">16</span>
+                                                <span class="score-won">@match.ScoreTeam1</span>
                                                 -
-                                                <span class="score-lost">11</span>
+                                                <span class="score-lost">@match.ScoreTeam2</span>
                                             </td>
                                             <td class="team-cell">
                                                 <div class="line-align team2">
-                                                    <img src="@Country.GetCountry("BR")">
-                                                    <div class="team">Nazwa2</div>
+                                                    <img src="@Country.GetCountry(match.Team2.Country)">
+                                                    <div class="team">@match.Team2.TeamName</div>
                                                 </div>
                                             </td>
                                             <td class="event">
-                                                <span class="event-name">ESL One Cologne</span>
+                                                <span class="event-name">@match.Event.Name</span>
                                             </td>
                                             <td class="star-cell">
-                                                <div class="map-text">bo3</div>
+                                                <div class="map-text">@GetDateOrTime(match.StartDate)</div>
                                             </td>
                                         </tr>
                                     </tbody>

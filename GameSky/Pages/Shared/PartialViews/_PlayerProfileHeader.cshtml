@@ -21,7 +21,9 @@
             gold = _user.Gold;
             int? owningTeamId = _user.OwningTeamId;
             if (owningTeamId is not null)
+            {
                 owner = owningTeamId == TeamID ? true : false;
+            }
         }
     }
 }
@@ -31,7 +33,6 @@
         <img class="player-photo blank" src="~/images/players/navi/5.png" />
     </div>
     <div class="skills--container">
-        @*TODO: change to if User has the Player in team*@
         @if (owner)
         {
         <div class="skillBox">

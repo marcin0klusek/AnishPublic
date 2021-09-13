@@ -1,0 +1,52 @@
+﻿@model GameSky.Models.UsersIndexModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+@section Styles{
+    <link rel="stylesheet" href="~/css/adminDashboard.css" />
+}
+<div class="page-title"><p>Panel administracyjny</p></div>
+
+<div class="information-container">
+    <div class="information-box">
+        <div class="informations">
+            <span class="amount">@Model.usersAmount</span>
+            <span class="title">Użytkownicy</span>
+        </div>
+        <div class="icon">
+            <i class="material-icons">account_circle</i>
+        </div>
+    </div>
+    <div class="information-box">
+        <div class="informations">
+            <span class="amount">@Model.playersAmount</span>
+            <span class="title">Zawodnicy</span>
+        </div>
+        <div class="icon">
+            <i class="material-icons">people</i>
+        </div>
+    </div>
+    <div class="information-box">
+        <div class="informations">
+            <span class="amount">@Model.eventsAmount</span>
+            <span class="title">Wydarzenia</span>
+        </div>
+        <div class="icon">
+            <i class="material-icons">emoji_events</i>
+        </div>
+    </div>
+    <div class="information-box">
+        <div class="informations">
+            <span class="amount">@Model.ticketsAmount</span>
+            <span class="title">Zgłoszenia</span>
+        </div>
+        <div class="icon">
+            <i class="material-icons">
+                help_outline
+            </i>
+        </div>
+    </div>
+</div>

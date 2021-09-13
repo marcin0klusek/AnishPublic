@@ -65,7 +65,7 @@
                     @foreach (Match match in results)
                     {
                         <li>
-                            <a class="eventName" asp-page="/event" asp-route-id="@match.Event.EventID">@match.Event.Name</a>
+                            <a class="eventName" asp-page="/event" asp-route-_event.Name="@match.Event.Name" asp-route-id="@match.Event.EventID" >@match.Event.Name</a>
                             <a asp-controller="Matches" asp-action="Match" asp-route-id="@match.MatchID">
                                 <div class="teamrows">
                                     <div class="teamrow">

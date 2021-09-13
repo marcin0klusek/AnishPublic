@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using EFDataAccessLibrary.DataAccess;
@@ -17,6 +18,7 @@ namespace GameSky.Pages
 
         public Player _player { get; set; }
         public int PlayerID { get; set; }
+        public List<Match> upcomingMatches { get; set; }
         public UserManager<ApplicationUser> UserManager { get; }
 
         public PlayerModel(DataContext db, INotyfService notyf, UserManager<ApplicationUser> userManager, IJSRuntime js)
@@ -29,6 +31,8 @@ namespace GameSky.Pages
         public void OnGet(int id)
         {
             _player = _db.GetPlayerByIdIncludePositon(id).Result;
+            upcomingMatches = _db.GetMatchesForPlayer(id);
+            if (upcomingMatches is null) upcomingMatches = new List<Match>();
         }
         public async Task<PartialViewResult> OnPostUpgradeSkill(string name, int id)
         {

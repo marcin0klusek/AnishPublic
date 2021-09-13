@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@using EFDataAccessLibrary.Models
+@inject SignInManager<ApplicationUser> SignIn
+@inject UserManager<ApplicationUser> UserManager
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -9,6 +15,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="~/css/site.css" />
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
@@ -43,16 +50,60 @@
                 </div>
             </div>
         </nav>
-        <div class="mainAlert">
-            <span class="material-icons">warning</span><span>Wiadomość nagła o problemach z serwerami.</span>
+        <div id="mainAlert" class="mainAlert">
+            <span class="material-icons">warning</span>
+            <span id="alertText">Właśnie dodaliśmy nowy turniej Verification solo cup 2001 - szczegóły w zakładce Turnieje solo!</span>
         </div>
+
+        @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdminRole")).Succeeded)
+        {
+    <div id="mySidebar" class="sidebar" onmouseover="toggleSidebar()" onmouseout="toggleSidebar()">
+        <p id="sidebar-title" class="">P</p>
+        <a asp-area="" asp-controller="Admin" asp-action="User">
+            <i class="material-icons">account_circle</i>
+            <span class="icon-text">użytkownicy</span>
+        </a>
+        <br>
+        <a asp-area="" asp-controller="Admin" asp-action="News">
+            <i class="material-icons">article</i>
+            <span class="icon-text">artykuły</span>
+        </a>
+        <br>
+        <a asp-area="" asp-controller="Admin" asp-action="Match">
+            <i class="material-icons">games</i>
+            <span class="icon-text">mecze</span>
+        </a>
+        <br>
+        <a asp-area="" asp-controller="Admin" asp-action="Event">
+            <i class="material-icons">emoji_events</i>
+            <span class="icon-text">wydarzenia</span>
+        </a>
+        <br>
+        <a asp-area="" asp-controller="Admin" asp-action="Teams">
+            <i class="material-icons">groups</i>
+            <span class="icon-text">drużyny</span>
+        </a>
+        <br>
+        <a asp-area="" asp-controller="Admin" asp-action="Players">
+            <i class="material-icons">people</i>
+            <span class="icon-text">zawodnicy</span>
+        </a>
+        <br>
+        <hr />
+        <a asp-area="" asp-controller="Admin" asp-action="Index">
+            <i class="material-icons">settings</i>
+            <span class="icon-text">zarządzaj</span>
+        </a>
+    </div>
+        }
+
     </header>
-    <div class="body">
+    <div id="body" class="body">
         @RenderBody()
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container">
+        <div class="container" style="z-index: 2;">
             &copy; 2001-2021 - HyperCats - <a asp-area="" asp-page="/Privacy">Privacy</a>
             - <a asp-area="" asp-page="/Faq">FAQ</a>
             - <a asp-area="" asp-page="/Privacy">Report</a>
@@ -67,3 +118,38 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
+<script>
+    function toggleSidebar() {
+        var sidebar = document.getElementById("mySidebar");
+        var sidebarTitle = document.getElementById("sidebar-title");
+        var mini = sidebar.classList.contains("active");
+
+        if (!mini) {
+            //Open Sidebar
+            sidebar.classList.add("active");
+            //sidebarTitle.classList.remove("hide");
+            document.getElementById("sidebar-title").textContent = "Panel";
+            document.getElementById("mySidebar").style.width = "180px";
+        } else {
+            //Close Sidebar
+            sidebar.classList.remove("active");
+            document.getElementById("sidebar-title").textContent = "P";
+            //sidebarTitle.classList.add("hide");
+            document.getElementById("mySidebar").style.width = "50px";
+        }
+    }
+
+    var isAdmin = document.contains(document.getElementById("mySidebar"));
+
+    var isMainAlert = document.getElementById("mainAlert").style.display == 'none' ? false : true;
+    if (isMainAlert && isAdmin) {
+        document.getElementById("body").style.margin = "0px 0px 50px 50px";
+    } else if (isAdmin) {
+        document.getElementById("body").style.margin = "50px 0px 50px 50px";
+    } else if (isMainAlert) {
+        document.getElementById("body").style.margin = "0px 0px 50px 0px";
+    } else {
+        document.getElementById("body").style.margin = "50px 0px 50px 0px";
+    }
+</script>
