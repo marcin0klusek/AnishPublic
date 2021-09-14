@@ -8,6 +8,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GameSky.Models;
+using Hangfire;
+using Hangfire.SqlServer;
+using GameSky.Proccessors;
+using Microsoft.AspNetCore.Http;
+using GameSky.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace GameSky.Controllers
 {
@@ -16,6 +22,9 @@ namespace GameSky.Controllers
     public class AdminController : Controller
     {
         public DataContext Db { get; }
+
+        private IHubContext<ResultsHub> hubContext;
+
         public INotyfService Notyf { get; }
         public AdminController(DataContext db, INotyfService notyf)
         {
@@ -46,8 +55,44 @@ namespace GameSky.Controllers
         [Route("admin/match")]
         public IActionResult Match()
         {
-            List<Match> matches = Db.Match.ToList();
+            List<Match> matches = Db.GetMatches().Result.OrderByDescending(x => x.MatchID).ToList();
             return View("Match/Index", matches);
+
+        }
+        [HttpGet]
+        [Route("admin/match/add")]
+        public IActionResult MatchAdd()
+        {
+            var teams = Db.GetTeams().Result;
+            var events = Db.Event.ToList();
+            ViewBag.Teams = teams;
+            ViewBag.Events = events;
+            return View("Match/Add");
+        }
+        [HttpPost]
+        [Route("admin/match/add")]
+        public async Task<IActionResult> OnPostMatchAdd(IFormCollection form)
+        {
+            Match match = new();
+
+            match.Event = Db.GetEventById(Int32.Parse(form["Event"].ToString()));
+            match.Team1 = Db.GetTeamByID(Int32.Parse(form["Team1.TeamID"].ToString()));
+            match.Team2 = Db.GetTeamByID(Int32.Parse(form["Team2.TeamID"].ToString()));
+            match.StartDate = DateTime.Parse(form["StartDate"].ToString());
+
+            if (ModelState.IsValid)
+            {
+                Db.Add<Match>(match);
+                var result = await Db.SaveChangesAsync();
+                BackgroundJob.Schedule(() => new MatchProccessor(Db).StartMatch(match), match.StartDate);
+            }
+            else
+            {
+                Notyf.Error("Utworzenie meczu nie powiodło się.");
+                return View("Match/Add");
+            }
+            List<Match> matches = Db.GetMatches().Result.OrderByDescending(x => x.MatchID).ToList();
+            return Match();
         }
         #endregion
 
@@ -59,7 +104,6 @@ namespace GameSky.Controllers
             return View("News/Index", news);
         }
         #endregion
-
 
         #region Players
         [Route("admin/players")]
@@ -78,7 +122,6 @@ namespace GameSky.Controllers
             return View("Teams/Index", teams);
         }
         #endregion
-
 
         #region User
         [Route("admin/users")]

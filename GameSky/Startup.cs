@@ -2,6 +2,7 @@ using AspNetCoreHero.ToastNotification;
 using AspNetCoreHero.ToastNotification.Extensions;
 using EFDataAccessLibrary.DataAccess;
 using EFDataAccessLibrary.Models;
+using GameSky.Hubs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -18,6 +19,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Hangfire;
+using Hangfire.SqlServer;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.SignalR;
 
 namespace GameSky
 {
@@ -47,7 +52,25 @@ namespace GameSky
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<DataContext>();
 
+            //Jobs scheduler
+            services.AddHangfire(configuration => configuration
+            .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+            .UseSimpleAssemblyNameTypeSerializer()
+            .UseSerializerSettings(new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore })
+            .UseSqlServerStorage(Configuration.GetConnectionString("DefaultConnection"), new SqlServerStorageOptions
+            {
+                CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                QueuePollInterval = TimeSpan.Zero,
+                UseRecommendedIsolationLevel = true,
+                DisableGlobalLocks = true
+            }));
+            services.AddHangfireServer();
+
+            //Real-time execution code
             services.AddSignalR();
+
+            //Toast maker
             services.AddNotyf(config => { config.DurationInSeconds = 10; config.IsDismissable = true; config.Position = NotyfPosition.BottomLeft; });
 
 
@@ -56,6 +79,7 @@ namespace GameSky
             services.AddRazorPages(options =>
             {
                 options.Conventions.AuthorizePage("/Privacy", "RequireAdminRole");
+                options.Conventions.AuthorizePage("/hangfire", "RequireAdminRole");
                 options.Conventions.ConfigureFilter(new IgnoreAntiforgeryTokenAttribute());
             })
                 .AddRazorRuntimeCompilation();
@@ -84,8 +108,8 @@ namespace GameSky
             else
             {
                 //app.UseExceptionHandler("/Error");
-                app.UseExceptionHandler("/Errors/{0}");
-                app.UseStatusCodePagesWithReExecute("/Errors/{0}");
+                app.UseExceptionHandler("/errors/{0}");
+                app.UseStatusCodePagesWithReExecute("/errors/{0}");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
@@ -93,7 +117,12 @@ namespace GameSky
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            app.UseHangfireDashboard();
+
+
             app.UseRouting();
+
+            ResultsHub.Current = app.ApplicationServices.GetService<IHubContext<ResultsHub>>();
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -104,6 +133,8 @@ namespace GameSky
             {
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
+                endpoints.MapHangfireDashboard("/hangfire");
+                endpoints.MapHub<ResultsHub>("resultsHub");
             });
         }
     }

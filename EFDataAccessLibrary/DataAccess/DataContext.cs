@@ -219,11 +219,11 @@ namespace EFDataAccessLibrary.DataAccess
 
         #region Match
 
-        public async Task<List<Match>> GetResults()
+        public async Task<List<Match>> GetMatches()
         {
             List<Match> results = new List<Match>();
 
-            results = await Task.Run(() => Match.Where(x => x.EndDate != null)
+            results = await Task.Run(() => Match
                 .OrderBy(x => x.StartDate)
                 .Include(x => x.Team1)
                 .Include(x => x.Team2)
@@ -290,6 +290,8 @@ namespace EFDataAccessLibrary.DataAccess
             return Event.Where(e => e.EventID == id)
                 .Include(x => x.EventTeams)
                 .Include(x => x.Matches)
+                .Include(x => x.Matches).ThenInclude(x => x.Team1)
+                .Include(x => x.Matches).ThenInclude(x => x.Team2)
                 .FirstOrDefault();
         }
 

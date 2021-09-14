@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Hangfire;
+using Hangfire.SqlServer;
 
 namespace GameSky.Pages
 {
@@ -33,7 +35,7 @@ namespace GameSky.Pages
         {
             NewsHeaders = await _db.GetPublishedNews(NewsToTake);
 
-            results = await _db.GetResults();
+            results = Task.Run(() => _db.GetFinishedMatches()).Result;
         }
     }
 }

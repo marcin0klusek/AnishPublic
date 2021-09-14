@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<EFDataAccessLibrary.Models.Match>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
     ViewData["Title"] = "Index";
@@ -8,13 +9,19 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-controller="Admin" asp-action="MatchAdd">Create New</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.MatchID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Team1.TeamName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Team2.TeamName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ScoreTeam1)
@@ -28,14 +35,24 @@
             <th>
                 @Html.DisplayNameFor(model => model.EndDate)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Event.Name)
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        @foreach (var item in Model)
+        {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.MatchID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Team1.TeamName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Team2.TeamName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ScoreTeam1)
@@ -50,11 +67,14 @@
                 @Html.DisplayFor(modelItem => item.EndDate)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Event.Name)
+            </td>
+            <td>
                 <a asp-action="Edit" asp-route-id="@item.MatchID">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.MatchID">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.MatchID">Delete</a>
             </td>
         </tr>
-}
+        }
     </tbody>
 </table>

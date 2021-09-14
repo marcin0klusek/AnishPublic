@@ -1,0 +1,70 @@
+﻿@model EFDataAccessLibrary.Models.Match
+@using EFDataAccessLibrary.Models
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@section Styles{
+
+}
+
+@{
+    ViewData["Title"] = "Add";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+    List<Team> teams = ViewBag.Teams;
+    List<Event> events = ViewBag.Events;
+}
+
+<h1>Add</h1>
+
+<h4>Match</h4>
+<hr />
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <form asp-controller="Admin" asp-action="MatchAdd" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Team1.TeamID" class="control-label">Team1</label>
+                <select asp-for="Team1.TeamID"
+                        asp-items="@(new SelectList(teams, "TeamID","TeamName"))"
+                        class="form-control">
+                    <option>Please select one.</option>
+                </select>
+                <span asp-validation-for="Team1.TeamID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Team2.TeamID" class="control-label">Team2</label>
+                <select asp-for="Team2.TeamID"
+                        asp-items="@(new SelectList(teams, "TeamID", "TeamName"))"
+                        class="form-control">
+                    <option>Please select one.</option>
+                </select>
+                <span asp-validation-for="Team2.TeamID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartDate" class="control-label">Match's Start Date</label>
+                <input asp-for="StartDate" class="form-control" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Event" class="control-label">Event</label>
+                <select asp-for="Event"
+                        asp-items="@(new SelectList(events,"EventID", "Name"))"
+                        class="form-control">
+                    <option>Please select one.</option>
+                </select>
+                <span asp-validation-for="Event" class="text-danger"></span>
+            </div>
+            <hr />
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-controller="Admin" asp-action="Match">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
