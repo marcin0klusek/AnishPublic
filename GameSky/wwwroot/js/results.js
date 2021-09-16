@@ -1,39 +1,67 @@
 ﻿"use strict";
 
+var isLiveMatchesEmpty = false;
+if (document.getElementById('nomatches')) {
+    isLiveMatchesEmpty = true;
+}
+
 var connection = new signalR.HubConnectionBuilder()
     .configureLogging(signalR.LogLevel.Debug)
     .withUrl("resultsHub")
     .build();
 
 //Disable send button until connection is established
-//document.getElementById("sendButton").disabled = true;
+//document.getElementById("sendButton").disabled = true; 
+
+connection.on("MatchLive", function (matchId, mapName) {
+    var nomatches = document.getElementById('nomatches')
+    if (nomatches) {
+        nomatches.remove();
+    }
+    //Find match to move and move to live matches table
+    var matchToMove = document.getElementById('match' + matchId);
+    document.getElementById('liveMatches').appendChild(matchToMove);
+
+    //Set score to 0-0
+    document.getElementById('match' + matchId + 'scoreteam1').innerText = 0;
+    document.getElementById('match' + matchId + 'scoreteam2').innerText = 0;
+
+    //Set map name to valid
+    document.getElementById('match' + matchId + 'MapName').innerText = mapName;
+
+    var audio = document.getElementById('matchWentLive');
+    audio.play();
+});
 
 connection.on("UpdateScore", function (matchId, scoreTeam1, scoreTeam2) {
-    document.getElementById(matchId + 'scoreteam1').innerText = scoreTeam1;
-    document.getElementById(matchId + 'scoreteam2').innerText = scoreTeam2;
-    //@(match.MatchID + "scoreteam1")
-    // We can assign user-supplied strings to an element's textContent because it
-    // is not interpreted as markup. If you're assigning in any other way, you 
-    // should be aware of possible script injection concerns.
-    //li.textContent = `${user} says ${message}`;
+    //Find elements responsible for score and replace their text
+    document.getElementById('match' + matchId + 'scoreteam1').innerText = scoreTeam1;
+    document.getElementById('match' + matchId + 'scoreteam2').innerText = scoreTeam2;
+});
+
+connection.on("MatchEnded", function (matchId) {
+    //Find match to move and move to finished matches table
+    //TODO: add style to score
+    var matchToMove = document.getElementById('match' + matchId);
+    var finishedMatches = document.getElementById('finishedMatches');
+    var firstresult = document.getElementById('finished1');
+    finishedMatches.insertBefore(matchToMove, firstresult);
+
+    //Checks if there is no matches left in Live div, if there is no matches add text
+    var liveMatches = document.getElementById('liveMatches');
+    var liveMatchesCount = document.getElementById('liveMatches').children.length;
+    if (liveMatchesCount == 1) {
+        liveMatches.innerHTML += '<h3 style="color: yellow" id="nomatches">Nie ma akutalnie spotkań LIVE.</h3>';
+        isLiveMatchesEmpty = true;
+    }
+
+    var audio = document.getElementById('matchEnds');
+    audio.play();
 });
 
 connection.start().then(function () {
-    //when connected
-    //document.getElementById("sendButton").disabled = false;
-    /*var rereshIntervalId = setInterval(function () {
-        var score1 = document.getElementById('7scoreteam1').textContent == '16' ? true : false;
-        var score2 = document.getElementById('7scoreteam2').textContent == '16' ? true : false;
-        if (score1 || score2) {
-            alert('Zatrzymano interval!');
-            clearInterval(rereshIntervalId);
-        } else {
-            connection.invoke("GetUpdateOnScore", 7).catch(function (err) {
-                return console.error(err.toString());
-            });
-        }
-
-    }, 4000);*/
+   //start connection with resultsHub
+    //put commands to do after connected to the hub
 }).catch(function (err) {
     return console.error(err.toString());
 });

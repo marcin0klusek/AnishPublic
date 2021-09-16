@@ -6,6 +6,7 @@
 @{
     Layout = "~/Pages/Shared/_Layout.cshtml";
     ViewBag.Title = "Results";
+    int childNum = 1;
 }
 @section Styles{
     <link rel="stylesheet" href="~/css/matchesAndResults.css" />
@@ -15,9 +16,10 @@
 
 @{
     Random rnd = new Random();
+    List<Match> live = ViewBag.Live;
     List<Match> upcoming = ViewBag.Upcoming;
     List<Match> finished = ViewBag.Finished;
-
+    bool isAnyMatchLive = live.Count() > 0 ? true : false;
     string team1status;
     string team2status;
 
@@ -44,14 +46,61 @@
         return StartDate.ToString("dd MMM");
     }
 }
-
 <div class="results">
     <div class="results-all">
-        <div class="results-sublist">
-            <div class="standard-headline">Upcoming matches</div>
+        <div class="results-sublist"  id="liveMatches">
+            <div class="standard-headline" id="liveText">TRWAJĄCE</div>
+            @if (isAnyMatchLive)
+            {
+                @foreach (Match match in live)
+                {
+                    <div class="result-con" id="@("match" + match.MatchID)">
+                        <a asp-controller="Matches" asp-action="Match" asp-route-id="@match.MatchID">
+                            <div class="result">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td class="team-cell">
+                                                <div class="line-align team1">
+                                                    <div class="team">@match.Team1.TeamName</div>
+                                                    <img src="@Country.GetCountry(match.Team1.Country)">
+                                                </div>
+                                            </td>
+                                            <td class="result-score">
+                                                <span class="score" id="@("match" + match.MatchID + "scoreteam1")">@match.ScoreTeam1</span>
+                                                -
+                                                <span class="score" id="@("match" + match.MatchID + "scoreteam2")">@match.ScoreTeam2</span>
+                                            </td>
+                                            <td class="team-cell">
+                                                <div class="line-align team2">
+                                                    <img src="@Country.GetCountry(match.Team2.Country)">
+                                                    <div class="team">@match.Team2.TeamName</div>
+                                                </div>
+                                            </td>
+                                            <td class="event">
+                                                <span class="event-name">@match.Event.Name</span>
+                                            </td>
+                                            <td class="star-cell">
+                                                <div class="map-text" id="@("match" + match.MatchID + "MapName")">@GetDateOrTime(match.StartDate)</div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </a>
+                    </div>
+                }
+            }
+            else
+            {
+                <h3 style="color: yellow" id="nomatches">Nie ma akutalnie spotkań LIVE.</h3>
+            }
+        </div>
+        <div class="results-sublist" id="upcomingMatches">
+            <div class="standard-headline">Nadchodzące spotkania</div>
             @foreach (Match match in upcoming)
             {
-                <div class="result-con">
+                <div class="result-con" id="@("match" + match.MatchID)">
                     <a asp-controller="Matches" asp-action="Match" asp-route-id="@match.MatchID">
                         <div class="result">
                             <table>
@@ -64,9 +113,9 @@
                                             </div>
                                         </td>
                                         <td class="result-score">
-                                            <span class="score" id="@(match.MatchID + "scoreteam1")">@match.ScoreTeam1</span>
+                                            <span class="score" id="@("match" + match.MatchID + "scoreteam1")">@match.ScoreTeam1</span>
                                             -
-                                            <span class="score" id="@(match.MatchID + "scoreteam2")">@match.ScoreTeam2</span>
+                                            <span class="score" id="@("match" + match.MatchID + "scoreteam2")">@match.ScoreTeam2</span>
                                         </td>
                                         <td class="team-cell">
                                             <div class="line-align team2">
@@ -78,7 +127,7 @@
                                             <span class="event-name">@match.Event.Name</span>
                                         </td>
                                         <td class="star-cell">
-                                            <div class="map-text">@GetDateOrTime(match.StartDate)</div>
+                                            <div class="map-text" id="@("match" + match.MatchID + "MapName")">@GetDateOrTime(match.StartDate)</div>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -88,14 +137,14 @@
                 </div>
             }
         </div>
-        <div class="results-sublist">
-            <div class="standard-headline">Finished matches</div>
+        <div class="results-sublist"  id="finishedMatches">
+            <div class="standard-headline">Zakończone mecze</div>
             @foreach (Match match in finished)
             {
                 {
                     SetScoreStatus(match.ScoreTeam1, match.ScoreTeam2);
                 }
-                <div class="result-con">
+                <div class="result-con" id="@("finished" + childNum++)">
                     <a asp-controller="Matches" asp-action="Match" asp-route-id="@match.MatchID">
                         <div class="result">
                             <table>
@@ -134,3 +183,5 @@
         </div>
     </div>
 </div>
+<audio id="matchWentLive" src="~/sounds/matchWentLive.mp3" />
+<audio id="matchEnds" src="~/sounds/matchEnds.mp3" />

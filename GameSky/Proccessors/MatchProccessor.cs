@@ -14,7 +14,7 @@ namespace GameSky.Proccessors
     {
         private DataContext db;
         private Match match;
-
+        private Random rnd = new Random();
         public MatchProccessor(DataContext db)
         {
             this.db = db;
@@ -37,8 +37,15 @@ namespace GameSky.Proccessors
             if (match is null) return;
             match.ScoreTeam1 = 0;
             match.ScoreTeam2 = 0;
-            await ResultsHub.Current.Clients.All.SendAsync("UpdateScore", match.MatchID, match.ScoreTeam1, match.ScoreTeam2);
-               
+
+            var mapId = rnd.Next(1, db.Map.Count());
+            match.Map = db.Map.FirstOrDefault(x => x.MapID == mapId);
+            //Change to move match without update score
+            Console.WriteLine("Rozsyłam wiadomości");
+            await ResultsHub.Current.Clients.All.SendAsync("MatchLive", match.MatchID, match.Map.GetSimpleMapName());
+            Console.WriteLine("Usypiam wątek");
+            Thread.Sleep(3000); // just to give time to move LIVE
+            Console.WriteLine("Startuje wątek");
             Console.WriteLine("-----------------------------------");
             Console.WriteLine(String.Format("Rozpoczęto mecz {0} vs {1}.",
                 match.Team1.TeamName, match.Team2.TeamName
@@ -46,13 +53,14 @@ namespace GameSky.Proccessors
             Console.WriteLine("-----------------------------------");
            while (match.ScoreTeam1 < 16 && match.ScoreTeam2 < 16)
             {
-                Thread.Sleep(new Random().Next(1000, 3000));
+                Thread.Sleep(rnd.Next(1000, 3000));
                 PlayRound();
                 await ResultsHub.Current.Clients.All.SendAsync("UpdateScore", match.MatchID, match.ScoreTeam1, match.ScoreTeam2);
+                db.SaveChanges();
             }
-            match.Map = db.Map.FirstOrDefault();
             match.EndDate = DateTime.Now;
            var result = db.SaveChanges();
+            await ResultsHub.Current.Clients.All.SendAsync("MatchEnded", match.MatchID);
         }
 
         private void PlayRound()

@@ -14,5 +14,12 @@ namespace EFDataAccessLibrary.Models
         [Key]
         public int MapID { get; set; }
         public String Name { get; set; }
+        [StringLength(4)]
+        public String Tag { get; set; }
+
+        public string GetSimpleMapName()
+        {
+            return Name[3..];
+        }
     }
 }

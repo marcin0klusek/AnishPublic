@@ -10,7 +10,9 @@ namespace GameSky.Models
         private static Random rnd = new Random();
         private static List<String> countries = new List<string>()
         {
-            "GM", "GN", "PL", "ID", "IE", "IL", "IR", "IS", "GB", "ES", "EH", "DM", "DO", "CZ", "CN", "CI", "CK", "BR", "BE", "BA", "SV", "TD", "TM", "FR", "UA" 
+            "GM", "GN", "PL", "ID", "IE", "IL", "IT", "FR", "PT", 
+            "IR", "IS", "GB", "ES", "EH", "DM", "DO", "CZ", "CN",
+            "CI", "CK", "BR", "BE", "BA", "SV", "TD", "TM", "FR", "UA" 
         };
 
         private static string GenerateString(string kraj)
