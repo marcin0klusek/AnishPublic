@@ -1,0 +1,73 @@
+﻿@model EFDataAccessLibrary.Models.Player
+@using EFDataAccessLibrary.Models
+@using GameSky.Models
+@{
+    var player = Model;
+
+    string GetColorOfCard(PlayerCardQuality pcq)
+    {
+        switch (pcq)
+        {
+            case PlayerCardQuality.Wooden:
+                return "wooden";
+            case PlayerCardQuality.Silver:
+                return "silver";
+            case PlayerCardQuality.Gold:
+                return "gold";
+            case PlayerCardQuality.Diamond:
+                return "diamond";
+            case PlayerCardQuality.Legendary:
+                return "legendary";
+        }
+        return "";
+    }
+
+    string GetPlayerPositionName()
+    {
+        return player.PlayerPosition.Name + ".png";
+    }
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/playerCard.css" />
+}
+
+<div class="card @GetColorOfCard(player.Quality)">
+    <div class="personalData-container">
+        <div class="personalText-container">
+            <span class="personalText" id="NickName">@player.NickName</span>
+        </div>
+    </div>
+    <div class="country">
+        <span class="levelBox">@player.PlayerLevel</span>
+        <img class="countryIcon" src="@Country.GetCountry("PL")">
+        <img class="qualityIcon" src="~/images/playerPositions/@GetPlayerPositionName()" /> @*//replace with quality icons *@
+    </div>
+    <div class="infoBox-container">
+        <div class="infoBox-wrapper">
+            <div class="infoBox">
+                <span class="infoBox-value">@player.Aim</span>
+                <span class="infoBox-title">AIM</span>
+            </div>
+            <div class="infoBox">
+                <span class="infoBox-value">@player.Knowledge</span>
+                <span class="infoBox-title">KNWL</span>
+            </div>
+            <div class="infoBox">
+                <span class="infoBox-value">@player.Potencial</span>
+                <span class="infoBox-title">PTNL</span>
+            </div>
+        </div>
+
+        <div class="infoBox-wrapper">
+            <div class="infoBox">
+                <span class="infoBox-value">@player.GetAge()</span>
+                <span class="infoBox-title">Age</span>
+            </div>
+            <div class="infoBox">
+                <span class="infoBox-value">@((int)player.Prize)</span>
+                <span class="infoBox-title">Prize</span>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,16 @@
+﻿@using System.Linq
+@using EFDataAccessLibrary.Models
+@model IEnumerable<EFDataAccessLibrary.Models.Player>
+@{
+    List<Player> players = Model.ToList();
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/generatorSite.css" />
+}
+<div class="cards-containers">
+    @foreach (var p in players)
+    {
+            @Html.Partial("~/Pages/Shared/PartialViews/_PlayerCard.cshtml", p)
+    }
+</div>

@@ -2,18 +2,10 @@
 @model GameSky.Pages.PlayerModel
 @using EFDataAccessLibrary.Models
 @using GameSky.Models
-@inject UserManager<ApplicationUser> UserManager
-@inject SignInManager<ApplicationUser> SingIn
 @{
     Player player = Model._player;
 
     Random rnd = new Random();
-
-    ApplicationUser _user = null;
-    if (SingIn.IsSignedIn(User))
-    {
-        _user = await UserManager.GetUserAsync(User);
-    }
 
     string GetDateOrTime(DateTime StartDate)
     {

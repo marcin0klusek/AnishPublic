@@ -1,0 +1,159 @@
+﻿.card {
+    max-width: 250px;
+    min-width: 250px;
+    max-height: 380px;
+    min-height: 380px;
+    display: grid;
+    grid-template-columns: 0.66fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 0px 0px;
+    grid-template-areas:
+        "country photo photo"
+        "country photo photo"
+        "infoBox infoBox infoBox";
+    overflow: hidden;
+    padding: 10px 0px 10px 10px;
+    border: 2px solid rgba(27,76,135,0.7);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.personalData-container::before {
+    background: url(/images/players/g2/1.png);
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    content: "";
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+    background-size: cover;
+}
+
+.personalData-container {
+    grid-area: photo;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    letter-spacing: 0.1rem;
+}
+
+.personalText-container {
+    width: 100%;
+    text-align: center;
+    position: relative;
+    background: rgb(2,0,36);
+    background: radial-gradient(circle, rgba(2,0,36,0.72) 50%, rgba(9,9,121,0) 80%);
+    margin-bottom: 5px;
+}
+
+.country {
+    grid-area: country;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: 0.5rem;
+    background: rgb(0,0,0);
+    background: radial-gradient(circle, rgba(0,0,0,0.70) 40%, rgba(9,121,84,0.0) 80%);
+}
+
+.levelBox {
+    font-size: 2rem;
+    margin-bottom: 5px;
+    letter-spacing: -0.01rem;
+    color: #ff6a00;
+}
+
+.qualityIcon {
+    width: 24px;
+    height: 24px;
+    position: relative;
+}
+
+.countryIcon {
+    margin-bottom: 5px;
+}
+
+.personalText {
+    color: #ff6a00;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 1rem;
+    position: relative;
+    z-index: 10;
+    width: 100%;
+}
+
+.infoBox-container {
+    grid-area: infoBox;
+    border-top: 1px solid #aaa;
+    padding-top: 10px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.infoBox-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    padding: 0 20px;
+}
+
+    .infoBox-wrapper:first-child {
+        border-right: 1px solid #aaa;
+    }
+
+.infoBox {
+    display: flex;
+    font-weight: 700;
+    color: #000;
+    justify-content: space-between;
+}
+
+    .infoBox .infoBox-value {
+    }
+
+    .infoBox .infoBox-title {
+        text-transform: uppercase;
+    }
+
+
+.wooden {
+    background: url(https://img.freepik.com/darmowe-zdjecie/streszczenie-gladkie-brazowe-sciany-z-gladkim-kolorem-gradientu-kola_1258-48257.jpg?size=626&ext=jpg&ga=GA1.2.683531930.1629590400) no-repeat scroll 100% 0;
+    -webkit-box-shadow: 6px 6px 24px -7px rgba(88, 60, 22, 1);
+    -moz-box-shadow: 6px 6px 24px -7px rgba(88, 60, 22, 1);
+    box-shadow: 6px 6px 24px -7px rgba(88, 60, 22, 1);
+}
+
+.silver {
+    background: url(https://media.istockphoto.com/photos/silver-metal-texture-background-picture-id982153814?k=20&m=982153814&s=612x612&w=0&h=zG9tK8YqMPmDB4OjYpqmuIc7tA6qu8UyAMJByF6cjOw=) no-repeat scroll 100% 0;
+    -webkit-box-shadow: 8px 8px 24px 0px rgba(66, 68, 90, 1);
+    -moz-box-shadow: 8px 8px 24px 0px rgba(66, 68, 90, 1);
+    box-shadow: 8px 8px 24px 0px rgba(66, 68, 90, 1);
+}
+
+.gold {
+    background: url(https://i.pinimg.com/originals/67/bc/69/67bc6936eb1a43147dc86611c3e1b973.jpg) no-repeat scroll 100% 0;
+    -webkit-box-shadow: 6px 6px 24px -7px rgba(104, 101, 60, 1);
+    -moz-box-shadow: 6px 6px 24px -7px rgba(104, 101, 60, 1);
+    box-shadow: 6px 6px 24px -7px rgba(104, 101, 60, 1);
+}
+
+.diamond {
+    background: url(https://ak.picdn.net/shutterstock/videos/23545738/thumb/1.jpg) no-repeat scroll 100% 0;
+    -webkit-box-shadow: 6px 6px 24px -7px rgba(85, 22, 88, 1);
+    -moz-box-shadow: 6px 6px 24px -7px rgba(85, 22, 88, 1);
+    box-shadow: 6px 6px 24px -7px rgba(85, 22, 88, 1);
+}
+
+.legendary {
+    background: url(https://cutewallpaper.org/21/pokemon-legendary-background/Legendary-Birds-Background-Imgur.jpg) no-repeat scroll 100% 0;
+    -webkit-box-shadow: 6px 6px 24px -7px rgba(60, 60, 104, 1);
+    -moz-box-shadow: 6px 6px 24px -7px rgba(60, 60, 104, 1);
+    box-shadow: 6px 6px 24px -7px rgba(60, 60, 104, 1);
+}

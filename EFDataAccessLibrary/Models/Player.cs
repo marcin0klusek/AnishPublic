@@ -26,6 +26,7 @@ namespace EFDataAccessLibrary.Models
         public int Aim { get; set; }
         public int Knowledge { get; set; }
         public int PlayerLevel { get; set; }
+        public PlayerCardQuality Quality { get; set; }
         public Boolean IsForSale { get; set; }
         public int PositionID { get; set; }
         public virtual PlayerPosition PlayerPosition { get; set; }
@@ -78,7 +79,27 @@ namespace EFDataAccessLibrary.Models
 
         public void RecalcPrize()
         {
-            this.Prize = (int)((Math.Pow(2, this.Aim) * 10) + (Math.Pow(4, this.Knowledge) * 10) + (Math.Pow(3, this.Potencial) * Math.Sqrt(7)));
+            int qualiyValue = (int)Quality;
+            this.Prize =(
+                (Math.Pow(2, this.Aim) * 10) + //Aim
+                (Math.Pow(4, this.Knowledge) * 10) + //Knowledge 
+                (Math.Pow(3, this.Potencial) * Math.Sqrt(7)) + //Potencial
+                (1.0/qualiyValue *40) //Quality
+                );
+        }
+
+        public void PrintPlayersData()
+        {
+            Console.WriteLine("FirstName: " + FirstName);
+            Console.WriteLine("LastName: " + LastName);
+            Console.WriteLine("NickName: " + NickName);
+            Console.WriteLine("BirthDate: " + BirthDate);
+            Console.WriteLine("Aim: " + Aim);
+            Console.WriteLine("Potencial: " + Potencial);
+            Console.WriteLine("Knowledge: " + Knowledge);
+            Console.WriteLine("Level: " + PlayerLevel);
+            Console.WriteLine("Prize: " + Prize);
+            Console.WriteLine("Quality: " + Quality);
         }
     }
 }

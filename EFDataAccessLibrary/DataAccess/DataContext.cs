@@ -127,6 +127,8 @@ namespace EFDataAccessLibrary.DataAccess
             PlayerPosition pos = await PlayerPosition.Where(x => x.Name == position).SingleOrDefaultAsync();
             return pos;
         }
+
+        public List<PlayerPosition> GetPlayerPositions() => PlayerPosition.ToList();
         #endregion
 
         #region Player

@@ -1,0 +1,62 @@
+﻿@page
+@model GameSky.Pages.PlayerGeneratorModel
+@using EFDataAccessLibrary.Models
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SingIn
+@{
+    ApplicationUser _user = null;
+    if (SingIn.IsSignedIn(User))
+    {
+        _user = await UserManager.GetUserAsync(User);
+    }
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/playerCard.css" />
+    <link rel="stylesheet" href="~/css/generatorSite.css" />
+}
+
+<div class="mainContainer">
+    <img id="package" onclick="Open()" src="~/images/card_package.png" />
+    <div class="cardHolder" id="cardHolder"></div>
+    <button id="rollBtn" class="rollBtn" onclick="GetPlayers()">Roll again!</button>
+    @*<button onclick="BuyPlayer(1)">Buy players</button>*@
+</div>
+
+<script>
+    function Open() {
+        document.getElementById('package').classList.add('slide-bottom');
+        setTimeout(function () {
+            document.getElementById('package').classList.remove('slide-bottom')
+        }, 550);
+        setTimeout(function () {
+            GetPlayers();
+        }, 600);
+    }
+
+    function GetPlayers() {
+        $.ajax({
+            url: "/playergenerator?handler=GeneratedPlayers",
+            type: "get",
+            contentType: "application/x-www-form-urlencoded",
+            data: {},
+            success: function (result) {
+                $("#cardHolder").html(result);
+                $("#package").remove();
+                document.getElementById('rollBtn').style.display = 'block';
+            }
+        });
+    }
+
+    function BuyPlayer(viewId) {
+        $.ajax({
+            url: "/playergenerator?handler=BuyPlayer",
+            type: "post",
+            contentType: "application/x-www-form-urlencoded",
+            data: { playerPos: viewId },
+            success: function (result) {
+                alert("Zakupiłeś gracza: " + result);
+            }
+        });
+    }
+</script>

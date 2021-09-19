@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Hangfire;
 using Hangfire.SqlServer;
+using GameSky.Proccessors;
 
 namespace GameSky.Pages
 {

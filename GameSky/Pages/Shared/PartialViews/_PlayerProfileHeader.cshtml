@@ -9,7 +9,9 @@
     int AimPrice = Player.GetSkillPrice(player.Aim);
     int KnwlPrice = Player.GetSkillPrice(player.Knowledge);
     bool owner = false;
-    PlayerTeam playersTeam = player.PlayerTeam.FirstOrDefault();
+    PlayerTeam playersTeam = null;
+    if (player.PlayerTeam is not null)
+        playersTeam = player.PlayerTeam.FirstOrDefault();
     double gold = 0;
     if (playersTeam is not null)
     {
@@ -35,24 +37,24 @@
     <div class="skills--container">
         @if (owner)
         {
-        <div class="skillBox">
-            @if (PtnlPrice != -1)
-            {
-                if (PtnlPrice > gold)
+            <div class="skillBox">
+                @if (PtnlPrice != -1)
                 {
-                    <p class="skill">Potencial: @player.Potencial</p><p class="full">Za mało środków by ulepszyć.</p>
+                    if (PtnlPrice > gold)
+                    {
+                        <p class="skill">Potencial: @player.Potencial</p><p class="full">Za mało środków by ulepszyć.</p>
+                    }
+                    else
+                    {
+                        <p class="skill">Potencial: @player.Potencial</p> <p class="upgrade">Upgrade cost: @PtnlPrice$</p>
+                        <a onclick="UpgradeSkill(this)" class="upgradeBtn" data-custom-value="Potencial">UPGRADE</a>
+                    }
                 }
                 else
                 {
-                    <p class="skill">Potencial: @player.Potencial</p> <p class="upgrade">Upgrade cost: @PtnlPrice$</p>
-                    <a onclick="UpgradeSkill(this)" class="upgradeBtn" data-custom-value="Potencial">UPGRADE</a>
+                    <p class="skill">Potencial: @player.Potencial</p><p class="full">Osiągnięto maksymalny poziom.</p>
                 }
-            }
-            else
-            {
-                <p class="skill">Potencial: @player.Potencial</p><p class="full">Osiągnięto maksymalny poziom.</p>
-            }
-        </div>
+            </div>
             <div class="skillBox">
                 @if (AimPrice != -1)
                 {
@@ -116,6 +118,10 @@
 
         <div class="infoBox">
             <p class="infoHeader">Market value</p> <p class="infoBody">@player.Prize$</p>
+        </div>
+
+        <div class="infoBox">
+            <p class="infoHeader">Quality</p> <p class="infoBody">@player.Quality</p>
         </div>
     </div>
 </div>
