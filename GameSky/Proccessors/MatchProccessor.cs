@@ -42,7 +42,7 @@ namespace GameSky.Proccessors
             match.Map = db.Map.FirstOrDefault(x => x.MapID == mapId);
             //Change to move match without update score
             Console.WriteLine("Rozsyłam wiadomości");
-            await ResultsHub.Current.Clients.All.SendAsync("MatchLive", match.MatchID, match.Map.GetSimpleMapName());
+            await ResultsHub.Current.Clients.All.SendAsync("MatchLive", match.MatchID, match.Map.Tag);
             Console.WriteLine("Usypiam wątek");
             Thread.Sleep(3000); // just to give time to move LIVE
             Console.WriteLine("Startuje wątek");
@@ -60,7 +60,14 @@ namespace GameSky.Proccessors
             }
             match.EndDate = DateTime.Now;
            var result = db.SaveChanges();
-            await ResultsHub.Current.Clients.All.SendAsync("MatchEnded", match.MatchID);
+            string team1result = "won";
+            string team2result = "lost";
+            if(match.ScoreTeam1 < match.ScoreTeam2)
+            {
+                team1result = "lost";
+                team2result = "won";
+            }
+            await ResultsHub.Current.Clients.All.SendAsync("MatchEnded", match.MatchID, team1result, team2result);
         }
 
         private void PlayRound()

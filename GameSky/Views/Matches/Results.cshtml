@@ -81,7 +81,7 @@
                                                 <span class="event-name">@match.Event.Name</span>
                                             </td>
                                             <td class="star-cell">
-                                                <div class="map-text" id="@("match" + match.MatchID + "MapName")">@GetDateOrTime(match.StartDate)</div>
+                                                <div class="map-text" id="@("match" + match.MatchID + "mapTag")">@match.Map.Tag</div>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -93,7 +93,7 @@
             }
             else
             {
-                <h3 style="color: yellow" id="nomatches">Nie ma akutalnie spotkań LIVE.</h3>
+                <h5 style="color: yellow" id="nomatches">Nie ma akutalnie spotkań LIVE.</h5>
             }
         </div>
         <div class="results-sublist" id="upcomingMatches">
@@ -127,7 +127,7 @@
                                             <span class="event-name">@match.Event.Name</span>
                                         </td>
                                         <td class="star-cell">
-                                            <div class="map-text" id="@("match" + match.MatchID + "MapName")">@GetDateOrTime(match.StartDate)</div>
+                                            <div class="map-text" id="@("match" + match.MatchID + "mapTag")">@GetDateOrTime(match.StartDate)</div>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -171,7 +171,7 @@
                                             <span class="event-name">@match.Event.Name</span>
                                         </td>
                                         <td class="star-cell">
-                                            <div class="map-text">@match.Map.Name.Replace("de_", "")</div>
+                                            <div class="map-text" id="@("match" + match.MatchID + "mapTag")">@match.Map.Tag</div>
                                         </td>
                                     </tr>
                                 </tbody>

@@ -30,8 +30,8 @@ namespace GameSky.Pages.Matches
 
             List<Match> _finishedMatches = Task.Run(() => _db.GetFinishedMatches()).Result;
             List<Match> _upcomingMatches = Task.Run(() =>_db.GetUpcomingMatches()).Result;
-            List<Match> _live = _upcomingMatches.Where(x => (x.StartDate < DateTime.Now) && (x.EndDate is null)).ToList();
-            _upcomingMatches = _upcomingMatches.Where(x => x.StartDate > DateTime.Now).ToList();
+            List<Match> _live = _upcomingMatches.Where(x => (x.StartDate < DateTime.Now) && (x.EndDate is null) && (x.Map is not null)).ToList();
+            _upcomingMatches = _upcomingMatches.Where(x => (x.StartDate > DateTime.Now) || x.Map is null).ToList();
 
             ViewBag.Live = _live;
             ViewBag.Upcoming = _upcomingMatches;

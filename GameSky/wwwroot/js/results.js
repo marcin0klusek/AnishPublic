@@ -13,7 +13,7 @@ var connection = new signalR.HubConnectionBuilder()
 //Disable send button until connection is established
 //document.getElementById("sendButton").disabled = true; 
 
-connection.on("MatchLive", function (matchId, mapName) {
+connection.on("MatchLive", function (matchId, mapTag) {
     var nomatches = document.getElementById('nomatches')
     if (nomatches) {
         nomatches.remove();
@@ -27,7 +27,7 @@ connection.on("MatchLive", function (matchId, mapName) {
     document.getElementById('match' + matchId + 'scoreteam2').innerText = 0;
 
     //Set map name to valid
-    document.getElementById('match' + matchId + 'MapName').innerText = mapName;
+    document.getElementById('match' + matchId + 'mapTag').innerText = mapTag;
 
     var audio = document.getElementById('matchWentLive');
     audio.play();
@@ -39,19 +39,28 @@ connection.on("UpdateScore", function (matchId, scoreTeam1, scoreTeam2) {
     document.getElementById('match' + matchId + 'scoreteam2').innerText = scoreTeam2;
 });
 
-connection.on("MatchEnded", function (matchId) {
+connection.on("MatchEnded", function (matchId, team1result, team2result) {
     //Find match to move and move to finished matches table
     //TODO: add style to score
     var matchToMove = document.getElementById('match' + matchId);
     var finishedMatches = document.getElementById('finishedMatches');
     var firstresult = document.getElementById('finished1');
-    finishedMatches.insertBefore(matchToMove, firstresult);
 
+    //Set classes for scores
+    document.getElementById('match' + matchId + 'scoreteam1').classList.add('score-' + team1result);
+    document.getElementById('match' + matchId + 'scoreteam2').classList.add('score-' + team2result);
+
+    finishedMatches.insertBefore(matchToMove, firstresult);
     //Checks if there is no matches left in Live div, if there is no matches add text
     var liveMatches = document.getElementById('liveMatches');
     var liveMatchesCount = document.getElementById('liveMatches').children.length;
     if (liveMatchesCount == 1) {
-        liveMatches.innerHTML += '<h3 style="color: yellow" id="nomatches">Nie ma akutalnie spotkań LIVE.</h3>';
+        var title = document.createElement("H5");
+        title.id = 'nomatches';
+        var t = document.createTextNode('Nie ma akutalnie spotkań LIVE.');
+        title.appendChild(t);
+        title.style.color = 'yellow';
+        liveMatches.appendChild(title);
         isLiveMatchesEmpty = true;
     }
 
