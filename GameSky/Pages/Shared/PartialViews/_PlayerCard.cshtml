@@ -1,6 +1,8 @@
 ﻿@model EFDataAccessLibrary.Models.Player
 @using EFDataAccessLibrary.Models
 @using GameSky.Models
+@using EFDataAccessLibrary.DataAccess 
+@inject DataContext db
 @{
     var player = Model;
 
@@ -8,31 +10,42 @@
     {
         switch (pcq)
         {
-            case PlayerCardQuality.Wooden:
-                return "wooden";
-            case PlayerCardQuality.Silver:
+            case PlayerCardQuality.iron:
+                return "iron";
+            case PlayerCardQuality.bronze:
+                return "bronze";
+            case PlayerCardQuality.silver:
                 return "silver";
-            case PlayerCardQuality.Gold:
+            case PlayerCardQuality.gold:
                 return "gold";
-            case PlayerCardQuality.Diamond:
+            case PlayerCardQuality.platinium:
+                return "platinium";
+            case PlayerCardQuality.diamond:
                 return "diamond";
-            case PlayerCardQuality.Legendary:
-                return "legendary";
+            case PlayerCardQuality.immortal:
+                return "immortal";
         }
         return "";
     }
-
     string GetPlayerPositionName()
     {
         return player.PlayerPosition.Name + ".png";
     }
+
+    string GetPlayerQualityNameIcon()
+    {
+        return GetColorOfCard(player.Quality) + ".png";
+    }
+    var market = db.GetMarketForPlayer(player.PlayerID);
+    string bought = market.IsBought ? "bought" : "";
+    string hidden = market.IsHidden ? "" : "showCard";
 }
 
 @section Styles {
     <link rel="stylesheet" href="~/css/playerCard.css" />
 }
 
-<div class="card @GetColorOfCard(player.Quality)">
+<div class="card @GetColorOfCard(player.Quality) @bought @hidden" id="@("playerCard"+player.PlayerID)" onclick="ShowCard(this)" data-custom-value="@player.PlayerID">
     <div class="personalData-container">
         <div class="personalText-container">
             <span class="personalText" id="NickName">@player.NickName</span>
@@ -40,8 +53,9 @@
     </div>
     <div class="country">
         <span class="levelBox">@player.PlayerLevel</span>
-        <img class="countryIcon" src="@Country.GetCountry("PL")">
-        <img class="qualityIcon" src="~/images/playerPositions/@GetPlayerPositionName()" /> @*//replace with quality icons *@
+        @*<img class="countryIcon" src="@Country.GetCountry("PL")">*@
+        <img class="qualityIcon" src="~/icons/ranks/@GetPlayerQualityNameIcon()" />
+        <span class="iconName shine">@player.Quality.ToString()</span>
     </div>
     <div class="infoBox-container">
         <div class="infoBox-wrapper">
@@ -64,10 +78,20 @@
                 <span class="infoBox-value">@player.GetAge()</span>
                 <span class="infoBox-title">Age</span>
             </div>
-            <div class="infoBox">
-                <span class="infoBox-value">@((int)player.Prize)</span>
+            @*<div class="infoBox">
+                <span class="infoBox-value">@((int)player.Prize)$</span>
                 <span class="infoBox-title">Prize</span>
+            </div>*@
+            <div class="infoBox">
+                <p class="infoBox-value"> </p>
+                <p class="infoBox-title"> </p>
+            </div>
+            <div class="infoBox">
+                <img class="roleIcon" src="~/images/playerPositions/@GetPlayerPositionName()" />
+                <span class="infoBox-title">ROLE</span>
             </div>
         </div>
     </div>
 </div>
+
+<audio src="~/sounds/success_payment.mp3" id="successPayment"></audio>

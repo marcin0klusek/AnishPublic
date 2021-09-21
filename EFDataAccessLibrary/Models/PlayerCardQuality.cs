@@ -8,10 +8,12 @@ namespace EFDataAccessLibrary.Models
 {
     public enum PlayerCardQuality
     {
-        Wooden = 25,
-        Silver = 20,
-        Gold = 15,
-        Diamond = 10,
-        Legendary = 2
+        iron = 33,
+        bronze = 25,
+        silver = 18,
+        gold = 13,
+        platinium = 7,
+        diamond = 2,
+        immortal = 1
     }
 }

@@ -126,16 +126,6 @@ namespace GameSky.Pages
             return ReturnHeader();
         }
 
-        public JsonResult OnPostUsersGold()
-        {
-
-            System.Security.Claims.ClaimsPrincipal currentUser = this.User;
-
-            ApplicationUser user = _db.GetUserByName(currentUser.Identity.Name);
-            if (user is null) return new JsonResult("-1");
-            return new JsonResult(string.Format("{0:N}", user.Gold));
-        }
-
         private bool CanUpgradeSkill(int skill, double gold)
         {
             double price = (double)Player.GetSkillPrice(skill);

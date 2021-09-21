@@ -1,8 +1,27 @@
 ﻿@using System.Linq
 @using EFDataAccessLibrary.Models
+@using EFDataAccessLibrary.DataAccess
+@using AspNetCoreHero.ToastNotification.Abstractions
+@inject DataContext db
+@inject INotyfService Notyf
 @model IEnumerable<EFDataAccessLibrary.Models.Player>
 @{
-    List<Player> players = Model.ToList();
+    List<Player> players = Model.OrderByDescending(x => x.Quality).ThenBy(x => x.PlayerLevel).ToList();
+
+    string response = "";
+
+ string GetBtnStyle(bool isBought, bool isHidden)
+ {
+    @if (isBought)
+    {
+        return "none";
+    }
+    else if (!isHidden)
+    {
+        return "block";
+    }
+    return "none";
+}
 }
 
 @section Styles {
@@ -11,6 +30,56 @@
 <div class="cards-containers">
     @foreach (var p in players)
     {
+        <div class="card-wrapper">
             @Html.Partial("~/Pages/Shared/PartialViews/_PlayerCard.cshtml", p)
+            @{
+                var market = db.GetMarketForPlayer(p.PlayerID);
+                <button class="buyBtn" id="@("cardButton" + p.PlayerID)" style="display: @GetBtnStyle(market.IsBought, market.IsHidden)"
+                        onclick="BuyPlayer(@p.PlayerID)">
+                    Buy for @((int)p.Prize)G
+                </button>
+            }
+        </div>
     }
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.21.0/js/components/notify.min.js"></script>
+<script>
+    function BuyPlayer(playerId) {
+        $.ajax({
+            url: "/market?handler=BuyPlayer",
+            type: "post",
+            contentType: "application/x-www-form-urlencoded",
+            data: { playerId: playerId },
+            dataType: 'json',
+            success: function (data, textStatus, xhr) {
+                //data is Value
+                //xhr has everything: statusText is success; status is 200; responseJSON is Value
+                @*console.log("data " + JSON.stringify(data));
+                console.log("xhr " + JSON.stringify(xhr));
+                console.log("xhr.responseJSON " + xhr.responseJSON);
+                console.log("xhr.statusText " + xhr.statusText);
+                console.log("textStatus with JSON " + JSON.stringify(textStatus));
+                console.log("textStatus " + textStatus);
+                console.log("statusText: " + data.statusText);
+                console.log("response: " + data.responseJSON);*@
+                if (xhr.responseJSON === 'success') {
+                    var card = document.getElementById('playerCard' + playerId);
+                    card.classList.add('bought');
+                    var btnBuy = document.getElementById('cardButton' + playerId);
+                    btnBuy.style.display = 'none';
+                    @*console.log("responseJSON when success " + xhr.responseJSON);*@
+                RefreshGold();
+                } else {
+                    //when is not success
+                    @*console.log("responseJSON when !success " + data.responseJSON);*@
+                }
+            },
+            error: function (data, textStatus, xhr) {
+                @*var output = JSON.stringify(data);*@
+                @*console.log("responseJSON " + data.statusText);*@
+                console.log("Error: " + data.responseJSON);
+
+            }
+        });
+    }
+</script>

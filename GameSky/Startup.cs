@@ -78,6 +78,7 @@ namespace GameSky
             services.AddControllersWithViews();
             services.AddRazorPages(options =>
             {
+                options.Conventions.AuthorizePage("/playergenerator");
                 options.Conventions.AuthorizePage("/Privacy", "RequireAdminRole");
                 options.Conventions.AuthorizePage("/hangfire", "RequireAdminRole");
                 options.Conventions.ConfigureFilter(new IgnoreAntiforgeryTokenAttribute());

@@ -38,5 +38,15 @@ namespace GameSky.Pages
 
             results = Task.Run(() => _db.GetFinishedMatches()).Result;
         }
+
+        public JsonResult OnPostUsersGold()
+        {
+
+            System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+
+            ApplicationUser user = _db.GetUserByName(currentUser.Identity.Name);
+            if (user is null) return new JsonResult("-1");
+            return new JsonResult(string.Format("{0:N}", user.Gold));
+        }
     }
 }

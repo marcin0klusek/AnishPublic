@@ -13,5 +13,6 @@ namespace EFDataAccessLibrary.Models
         public int Dollars { get; set; }
         public int? OwningTeamId { get; set; }
         public virtual Team OwningTeam { get; set; }
+        public virtual ICollection<MarketPlayer> MarketPlayer { get; set; }
     }
 }

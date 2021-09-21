@@ -18,5 +18,6 @@ namespace EFDataAccessLibrary.Models
 
         public DateTime JoinDate { get; set; }
         public DateTime? ExitDate { get; set; }
+        public Boolean isOnTransfer { get; set; }
     }
 }

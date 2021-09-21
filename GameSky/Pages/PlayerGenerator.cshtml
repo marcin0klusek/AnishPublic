@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "/market"
 @model GameSky.Pages.PlayerGeneratorModel
 @using EFDataAccessLibrary.Models
 @inject UserManager<ApplicationUser> UserManager
@@ -9,6 +9,12 @@
     {
         _user = await UserManager.GetUserAsync(User);
     }
+
+    bool isMarketActive = false;
+    if(Model.activeMarket is not null)
+    {
+        isMarketActive = true;
+    }
 }
 
 @section Styles {
@@ -17,13 +23,45 @@
 }
 
 <div class="mainContainer">
-    <img id="package" onclick="Open()" src="~/images/card_package.png" />
-    <div class="cardHolder" id="cardHolder"></div>
-    <button id="rollBtn" class="rollBtn" onclick="GetPlayers()">Roll again!</button>
-    @*<button onclick="BuyPlayer(1)">Buy players</button>*@
+    <div class="legend-container">
+        <img class="qualityIcon" src="~/icons/ranks/immortal.png" />
+        <span class="nextRankIcon">»</span>
+        <img class="qualityIcon" src="~/icons/ranks/diamond.png" />
+        <span class="nextRankIcon">»</span>
+        <img class="qualityIcon" src="~/icons/ranks/platinium.png" />
+        <span class="nextRankIcon">»</span>
+        <img class="qualityIcon" src="~/icons/ranks/gold.png" />
+        <span class="nextRankIcon">»</span>
+        <img class="qualityIcon" src="~/icons/ranks/silver.png" />
+        <span class="nextRankIcon">»</span>
+        <img class="qualityIcon" src="~/icons/ranks/bronze.png" />
+        <span class="nextRankIcon">»</span>
+        <img class="qualityIcon" src="~/icons/ranks/iron.png" />
+    </div>
+    @if (!isMarketActive)
+    {
+        <img id="package" onclick="Open()" src="~/images/card_package.png" />
+        <div class="cardHolder" id="cardHolder"></div>
+    }
+    else
+    {
+        <div class="cardHolder" id="cardHolder">@Html.Partial("~/Pages/Shared/PartialViews/_PlayersGenerator.cshtml", Model.activeMarket)</div>
+    }
+    @if (_user.Gold >= 1500)
+    {
+    <button id="rollBtn" class="rollBtn" onclick="ReRoll()">Roll again for 1500G</button>
+    }
 </div>
 
 <script>
+    CheckGoldToRoll();
+
+    function CheckGoldToRoll() {
+        if (@_user.Gold >= 1500 && @("" +isMarketActive.ToString().ToLower()) === true) {
+            document.getElementById('rollBtn').style.display = 'block';
+        }
+    }
+
     function Open() {
         document.getElementById('package').classList.add('slide-bottom');
         setTimeout(function () {
@@ -36,7 +74,7 @@
 
     function GetPlayers() {
         $.ajax({
-            url: "/playergenerator?handler=GeneratedPlayers",
+            url: "/market?handler=GeneratedPlayers",
             type: "get",
             contentType: "application/x-www-form-urlencoded",
             data: {},
@@ -48,14 +86,47 @@
         });
     }
 
-    function BuyPlayer(viewId) {
+    function ReRoll() {
         $.ajax({
-            url: "/playergenerator?handler=BuyPlayer",
+            url: "/market?handler=RerollMarket",
             type: "post",
             contentType: "application/x-www-form-urlencoded",
-            data: { playerPos: viewId },
+            data: {},
+            success: function (data, textStatus, xhr) {
+                console.log("data " + JSON.stringify(data));
+                console.log("xhr " + JSON.stringify(xhr));
+                console.log("xhr.responseJSON " + xhr.responseJSON);
+                console.log("xhr.statusText " + xhr.statusText);
+                console.log("textStatus with JSON " + JSON.stringify(textStatus));
+                console.log("textStatus " + textStatus);
+                console.log("statusText: " + data.statusText);
+                console.log("response: " + data.responseJSON);
+                if (xhr.responseJSON === 'error') {
+                    //if user doesnt have enought money
+                } else {
+                    $("#cardHolder").html(data);
+                }
+                RefreshGold();
+                if (@_user.Gold < 1500) {
+                    document.getElementById('rollBtn').style.display = 'none';
+                }
+            }
+        });
+    }
+
+    function ShowCard(card) {
+        var playerId = $(card).data("custom-value");
+        $.ajax({
+            url: "/market?handler=ShowCard",
+            type: "post",
+            contentType: "application/x-www-form-urlencoded",
+            data: { 'playerId': playerId },
             success: function (result) {
-                alert("Zakupiłeś gracza: " + result);
+                if (!$(card).hasClass('showCard')) {
+                    $(card).addClass('showCard');
+                    var btn = document.getElementById('cardButton' + playerId);
+                    btn.style.display = 'block';
+                }
             }
         });
     }

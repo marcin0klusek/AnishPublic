@@ -3,7 +3,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 100px auto;
+    margin: 70px auto;
 }
 
 #package{
@@ -19,6 +19,45 @@
     display: flex;
     justify-content: space-evenly;
 }
+
+.card-wrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.buyBtn{
+    padding: 8px 0;
+    border-radius: 12px;
+    width: 50%;
+}
+
+.legend-container {
+    display: flex;
+    width: 40%;
+    background-color: #39404a;
+    border-radius: 5px;
+    border: 1px solid #000;
+    padding: 3px 20px;
+    align-items: center;
+    justify-content: space-around;
+    margin-bottom: 50px;
+    -webkit-box-shadow: 0px 4px 5px -1px rgba(126, 128, 164, 0.4);
+    -moz-box-shadow: 0px 4px 5px -1px rgba(126, 128, 164, 0.4);
+    box-shadow: 0px 4px 5px -1px rgba(126, 128, 164, 0.4);
+}
+
+.nextRankIcon{
+    margin: 0 3px;
+    font-size: 1.5rem;
+}
+
+.nextRankIcon:hover{
+    cursor: default;
+}
+
 .slide-bottom {
     -webkit-animation: slide-bottom 0.5s ease-in-out both;
     animation: slide-bottom 0.5s ease-in-out both;

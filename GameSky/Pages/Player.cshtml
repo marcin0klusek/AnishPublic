@@ -89,17 +89,4 @@
             }
         });
     }
-
-    function RefreshGold() {
-        $.ajax({
-            url: "/player/@player.PlayerID?handler=UsersGold",
-            type: "post",
-            dataType: "JSON",
-            success: function (result) {
-                var field = document.getElementById('goldText');
-                field.innerText = result;
-            }
-        });
-
-    }
 </script>

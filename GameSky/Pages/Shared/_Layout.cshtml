@@ -41,9 +41,12 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-page="/Players">Players</a>
                         </li>
+                        @if (SignIn.IsSignedIn(User))
+                        {
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-page="/PlayerGenerator">Generator</a>
+                            <a class="nav-link" asp-area="" asp-page="/PlayerGenerator">Market</a>
                         </li>
+                        }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
@@ -150,5 +153,17 @@
         document.getElementById("body").style.margin = "0px 0px 50px 0px";
     } else {
         document.getElementById("body").style.margin = "50px 0px 50px 0px";
+    }
+
+    function RefreshGold() {
+        $.ajax({
+            url: "/index?handler=UsersGold",
+            type: "post",
+            dataType: "JSON",
+            success: function (result) {
+                var field = document.getElementById('goldText');
+                field.innerText = result;
+            }
+        });
     }
 </script>

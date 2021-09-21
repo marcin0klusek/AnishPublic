@@ -28,6 +28,7 @@ namespace EFDataAccessLibrary.DataAccess
         public DbSet<Faq> Faq { get; set; }
         public DbSet<Question> Question { get; set; }
         public DbSet<FaqQuestion> FaqQuestion {get; set;}
+        public DbSet<MarketPlayer> MarketPlayers { get; set; }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -48,6 +49,13 @@ namespace EFDataAccessLibrary.DataAccess
             {
                 x.EventID,
                 x.TeamID
+            }); 
+            
+            modelBuilder.Entity<MarketPlayer>().HasKey(x =>
+            new
+            {
+                x.PlayerID,
+                x.UserID
             });
             //only one true value can exist for IsActive
             modelBuilder.Entity<Faq>().HasIndex(x => 
@@ -326,6 +334,45 @@ namespace EFDataAccessLibrary.DataAccess
 
         #region Question
 
+        #endregion
+
+        #region MarketPlayer
+        //Get active Players for Market for logged user
+        public List<Player> GetPlayersForMarket(string userID)
+        {
+            return Users.Where(x => x.Id == userID)
+                .SelectMany(x => x.MarketPlayer.Where(x => x.ExpireDate > DateTime.Now).Select(x => x.Player))
+                .Include(x => x.PlayerPosition).ToList();
+        }
+
+        public List<MarketPlayer> GetMarketPlayersByUserID(string userId)
+        {
+            return MarketPlayers
+                .Where(x => (x.UserID == userId) && (x.ExpireDate > DateTime.Now))
+                .OrderByDescending(x => x.ExpireDate)
+                .ToList();
+        }
+
+        public MarketPlayer GetMarketForPlayer(int playerId)
+        {
+            return MarketPlayers
+                .FirstOrDefault(x => x.PlayerID == playerId);
+        }
+
+        public MarketPlayer GetMarketForPlayer(int playerId, string userId)
+        {
+            return MarketPlayers
+                .Where(x => (x.PlayerID == playerId) && (x.UserID == userId) && (x.ExpireDate > DateTime.Now))
+                .OrderByDescending(x => x.ExpireDate)
+                .FirstOrDefault();
+        }
+
+        public List<Player> GetHistoricPlayersForMarket(string userID)
+        {
+            return Users.Where(x => x.Id == userID)
+                .SelectMany(x => x.MarketPlayer.Where(x => x.ExpireDate < DateTime.Now).Select(x => x.Player))
+                .Include(x => x.PlayerPosition).ToList();
+        }
         #endregion
 
         #endregion
