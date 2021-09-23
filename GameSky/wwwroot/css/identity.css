@@ -1,0 +1,88 @@
+﻿.body{
+    margin: 50px auto;
+}
+
+a {
+    text-decoration: none;
+    color: #fff;
+}
+
+a:hover{
+    text-decoration: none;
+    color: #4cff00;
+}
+
+.title{
+    color: #000;
+    font-weight: 700;
+    margin-bottom: 40px;
+}
+
+.title:hover{
+    cursor: default;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: #596978;
+    max-width: 450px;
+    margin: 150px auto;
+    padding: 10px 40px;
+    border-radius: 20px;
+}
+
+.form-group{
+    margin: 40px 0;
+}
+
+.login-holder {
+    margin: 25px 0;
+}
+
+.buttons-container{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.button-login{
+    padding: 5px 20px;
+    text-transform: uppercase;
+}
+
+.button-login:hover{
+    color: #020440;
+    transform: scale(1.05);
+    font-weight: 900;
+}
+
+p{
+    margin-bottom:0;
+}
+
+.login-actions-container {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 0;
+    border-radius: 6px;
+    background-color: #1b015b;
+}
+
+.action{
+    background: #4800ff;
+    border-radius: 6px;
+    padding: 5px;
+    color: #fff !important;
+    text-align: center;
+    font-weight: 700;
+}
+
+.action:hover{
+    filter: brightness(1.25);
+}
