@@ -4,14 +4,16 @@ using EFDataAccessLibrary.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EFDataAccessLibrary.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210926200236_RemoveTicketSystem")]
+    partial class RemoveTicketSystem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,32 +95,6 @@ namespace EFDataAccessLibrary.Migrations
                     b.HasIndex("OwningTeamId");
 
                     b.ToTable("AspNetUsers");
-                });
-
-            modelBuilder.Entity("EFDataAccessLibrary.Models.Comment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreateAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TicketID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("EFDataAccessLibrary.Models.Event", b =>
@@ -483,68 +459,6 @@ namespace EFDataAccessLibrary.Migrations
                     b.ToTable("Team");
                 });
 
-            modelBuilder.Entity("EFDataAccessLibrary.Models.Ticket", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreateAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("LastModify")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Subject")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("Tickets");
-                });
-
-            modelBuilder.Entity("EFDataAccessLibrary.Models.TicketComment", b =>
-                {
-                    b.Property<int>("TicketID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CommentID")
-                        .HasColumnType("int");
-
-                    b.HasKey("TicketID", "CommentID");
-
-                    b.HasIndex("CommentID");
-
-                    b.ToTable("TicketComments");
-                });
-
-            modelBuilder.Entity("EFDataAccessLibrary.Models.TicketUser", b =>
-                {
-                    b.Property<int>("TicketID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("TicketID", "UserID");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("TicketUsers");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -689,15 +603,6 @@ namespace EFDataAccessLibrary.Migrations
                     b.Navigation("OwningTeam");
                 });
 
-            modelBuilder.Entity("EFDataAccessLibrary.Models.Comment", b =>
-                {
-                    b.HasOne("EFDataAccessLibrary.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserID");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("EFDataAccessLibrary.Models.EventTeam", b =>
                 {
                     b.HasOne("EFDataAccessLibrary.Models.Event", "Event")
@@ -821,53 +726,6 @@ namespace EFDataAccessLibrary.Migrations
                     b.Navigation("Team");
                 });
 
-            modelBuilder.Entity("EFDataAccessLibrary.Models.Ticket", b =>
-                {
-                    b.HasOne("EFDataAccessLibrary.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserID");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("EFDataAccessLibrary.Models.TicketComment", b =>
-                {
-                    b.HasOne("EFDataAccessLibrary.Models.Comment", "Comment")
-                        .WithMany()
-                        .HasForeignKey("CommentID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EFDataAccessLibrary.Models.Ticket", "Ticket")
-                        .WithMany("TicketComments")
-                        .HasForeignKey("TicketID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Comment");
-
-                    b.Navigation("Ticket");
-                });
-
-            modelBuilder.Entity("EFDataAccessLibrary.Models.TicketUser", b =>
-                {
-                    b.HasOne("EFDataAccessLibrary.Models.Ticket", "Ticket")
-                        .WithMany()
-                        .HasForeignKey("TicketID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EFDataAccessLibrary.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Ticket");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -951,11 +809,6 @@ namespace EFDataAccessLibrary.Migrations
                     b.Navigation("EventTeams");
 
                     b.Navigation("PlayerTeam");
-                });
-
-            modelBuilder.Entity("EFDataAccessLibrary.Models.Ticket", b =>
-                {
-                    b.Navigation("TicketComments");
                 });
 #pragma warning restore 612, 618
         }

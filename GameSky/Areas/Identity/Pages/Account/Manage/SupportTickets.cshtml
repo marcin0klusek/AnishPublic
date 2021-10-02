@@ -1,0 +1,116 @@
+﻿@page
+@using EFDataAccessLibrary.Models
+@model GameSky.Areas.Identity.Pages.Account.Manage.SupportTicketsModel
+@{
+    ViewData["Title"] = "Zgłoszenia";
+    List<Ticket> _new = Model._new;
+    List<Ticket> _todo = Model._todo;
+    List<Ticket> _completed = Model._completed;
+
+}
+
+@section Styles{
+    <link rel="stylesheet" href="~/css/tickets.css" />
+}
+
+<div class="tickets">
+    <div class="tickets--table">
+        <div class="tickets--title">
+            New tickets
+        </div>
+        <div class="tickets--container" id="tickets-new">
+            @if (_new is not null)
+            {
+                @foreach (var ticket in _new)
+                {
+                    <a asp-controller="Ticket" asp-action="Ticket" asp-route-id="@ticket.Id" id="@("ticket" + ticket.Id + "row")">
+                        <div class="tickets--row">
+                            <div class="ticket-id" id="@("ticket"  + ticket.Id + "id")">
+                                #@ticket.Id
+                            </div>
+                            <div class="ticket--icon">
+                                <span class="material-icons-outlined" id="@("ticket"  + ticket.Id + "icon")">
+                                    lock_open
+                                </span>
+                            </div>
+                            <div class="ticket--title">
+                                @ticket.Subject
+                            </div>
+                            <div class="ticket-status" id="@("ticket"  + ticket.Id + "status")">
+                                @ticket.Status.ToString()
+                            </div>
+                        </div>
+                    </a>
+                }
+            }
+        </div>
+        <audio id="ticket_new" src="~/sounds/ticket_new.mp3" />
+    </div>
+
+    <div class="tickets--table">
+        <div class="tickets--title">
+            Ongoing tickets
+        </div>
+        <div class="tickets--container" id="tickets-todo">
+            @if (_todo is not null)
+            {
+                @foreach (var ticket in _todo)
+                {
+
+                    <a asp-controller="Ticket" asp-action="Ticket" asp-route-id="@ticket.Id" id="@("ticket" + ticket.Id + "row")">
+                        <div class="tickets--row">
+                            <div class="ticket-id" id="@("ticket"  + ticket.Id + "id")">
+                                #@ticket.Id
+                            </div>
+                            <div class="ticket--icon">
+                                <span class="material-icons-outlined" id="@("ticket" + ticket.Id + "icon")">
+                                    lock
+                                </span>
+                            </div>
+                            <div class="ticket--title">
+                                @ticket.Subject
+                            </div>
+                            <div class="ticket-status" id="@("ticket" + ticket.Id + "status")">
+                                @ticket.Status.ToString()
+                            </div>
+                        </div>
+                    </a>
+                }
+            }
+        </div>
+        <audio id="beep" src="~/sounds/beep.mp3" />
+    </div>
+
+    <div class="tickets--table">
+        <div class="tickets--title">
+            Completed tickets
+        </div>
+        <div class="tickets--container" id="tickets-completed">
+            @if (_completed is not null)
+            {
+                @foreach (var ticket in _completed)
+                {
+                    <a asp-controller="Ticket" asp-action="Ticket" asp-route-id="@ticket.Id" id="@("ticket" + ticket.Id + "row")">
+                        <div class="tickets--row">
+                            <div class="ticket-id" id="@("ticket"  + ticket.Id + "id")">
+                                #@ticket.Id
+                            </div>
+                            <div class="ticket--icon">
+                                <span class="material-icons-outlined" id="@("ticket" + ticket.Id + "icon")">
+                                    task_alt
+                                </span>
+                            </div>
+                            <div class="ticket--title">
+                                @ticket.Subject
+                            </div>
+                            <div class="ticket-status" id="@("ticket" + ticket.Id + "status")">
+                                @ticket.Status.ToString()
+                            </div>
+                        </div>
+                    </a>
+                }
+            }
+        </div>
+        <audio id="ticket_ended" src="~/sounds/ticket_ended.mp3" />
+    </div>
+</div>

@@ -29,6 +29,10 @@ namespace EFDataAccessLibrary.DataAccess
         public DbSet<Question> Question { get; set; }
         public DbSet<FaqQuestion> FaqQuestion {get; set;}
         public DbSet<MarketPlayer> MarketPlayers { get; set; }
+        public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<TicketUser> TicketUsers { get; set; }
+        public DbSet<TicketComment> TicketComments { get; set; }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -57,6 +61,22 @@ namespace EFDataAccessLibrary.DataAccess
                 x.PlayerID,
                 x.UserID
             });
+
+            modelBuilder.Entity<TicketUser>().HasKey(x =>
+            new
+            {
+                x.TicketID,
+                x.UserID
+            });
+
+            modelBuilder.Entity<TicketComment>().HasKey(x =>
+            new
+            {
+                x.TicketID,
+                x.CommentID
+            });
+
+
             //only one true value can exist for IsActive
             modelBuilder.Entity<Faq>().HasIndex(x => 
             new 
@@ -373,6 +393,49 @@ namespace EFDataAccessLibrary.DataAccess
                 .SelectMany(x => x.MarketPlayer.Where(x => x.ExpireDate < DateTime.Now).Select(x => x.Player))
                 .Include(x => x.PlayerPosition).ToList();
         }
+        #endregion
+
+        #region Ticket
+        public List<Ticket> GetTickets()
+        {
+            return Tickets
+                .Include(x => x.User)
+                .Include(x => x.TicketComments).ThenInclude(x => x.Comment).ThenInclude(x => x.User)
+                .ToList();
+        }
+
+        public Ticket GetTicketById(int id)
+        {
+            return Tickets.Where(x => x.Id == id)
+                .Include(x => x.User)
+                .Include(x => x.TicketComments.Where(x => x.TicketID == id)).ThenInclude(x => x.Comment).ThenInclude(x => x.User)
+                .First();
+        }
+
+        public List<Ticket> GetTicketsForUser(string userId)
+        {
+            return Tickets.Where(x => x.UserID == userId)
+                .Include(x => x.User)
+                .Include(x => x.TicketComments).ThenInclude(x => x.Comment).ThenInclude(x => x.User)
+                .ToList();
+        }
+        #endregion
+
+        #region Comment
+        public List<Comment> GetCommentsForTicketId(int ticketId)
+        {
+            return Comments.Where(x => x.TicketID == ticketId).ToList();
+        }
+        #endregion
+
+        #region TicketUser
+
+
+
+        #endregion
+
+        #region TicketComment
+
         #endregion
 
         #endregion

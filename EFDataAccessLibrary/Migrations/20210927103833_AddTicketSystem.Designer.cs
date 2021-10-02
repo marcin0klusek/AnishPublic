@@ -4,14 +4,16 @@ using EFDataAccessLibrary.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EFDataAccessLibrary.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210927103833_AddTicketSystem")]
+    partial class AddTicketSystem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,9 +109,6 @@ namespace EFDataAccessLibrary.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TicketID")
-                        .HasColumnType("int");
 
                     b.Property<string>("UserID")
                         .HasColumnType("nvarchar(450)");
@@ -496,12 +495,6 @@ namespace EFDataAccessLibrary.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("LastModify")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
                     b.Property<string>("Subject")
                         .HasColumnType("nvarchar(max)");
 
@@ -839,7 +832,7 @@ namespace EFDataAccessLibrary.Migrations
                         .IsRequired();
 
                     b.HasOne("EFDataAccessLibrary.Models.Ticket", "Ticket")
-                        .WithMany("TicketComments")
+                        .WithMany()
                         .HasForeignKey("TicketID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -951,11 +944,6 @@ namespace EFDataAccessLibrary.Migrations
                     b.Navigation("EventTeams");
 
                     b.Navigation("PlayerTeam");
-                });
-
-            modelBuilder.Entity("EFDataAccessLibrary.Models.Ticket", b =>
-                {
-                    b.Navigation("TicketComments");
                 });
 #pragma warning restore 612, 618
         }

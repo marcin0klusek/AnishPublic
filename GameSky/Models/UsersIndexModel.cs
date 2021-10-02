@@ -21,7 +21,7 @@ namespace GameSky.Models
             usersAmount = db.Users.Count();
             playersAmount = db.Player.Count();
             eventsAmount = db.Event.Count();
-            ticketsAmount = db.GetUpcomingMatches().Count();
+            ticketsAmount = db.Tickets.Count();
         }
     }
 }

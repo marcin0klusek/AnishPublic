@@ -14,6 +14,9 @@ using GameSky.Proccessors;
 using Microsoft.AspNetCore.Http;
 using GameSky.Hubs;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace GameSky.Controllers
 {
@@ -22,14 +25,13 @@ namespace GameSky.Controllers
     public class AdminController : Controller
     {
         public DataContext Db { get; }
-
-        private IHubContext<ResultsHub> hubContext;
-
         public INotyfService Notyf { get; }
-        public AdminController(DataContext db, INotyfService notyf)
+        private UserManager<ApplicationUser> userManager { get; set; }
+        public AdminController(DataContext db, INotyfService notyf, UserManager<ApplicationUser> userManager)
         {
             Db = db;
             Notyf = notyf;
+            this.userManager = userManager;
         }
         #region AdminController
         [Route("admin")]
@@ -132,5 +134,75 @@ namespace GameSky.Controllers
         }
         #endregion
 
+        #region Ticket
+        [Route("admin/tickets")]
+        public IActionResult Tickets()
+        {
+            var tickets = Db.GetTickets();
+            TicketsPackage package = new(
+                //new tickets
+                tickets.Where(x => x.Status == TicketStatus.New).ToList(),
+                //tickets todo
+                tickets.Where(x => (x.Status == TicketStatus.Taken)
+                || (x.Status == TicketStatus.Responded)
+                || (x.Status == TicketStatus.Needs_Attention)).ToList(),
+                //tickets completed
+                tickets.Where(x => x.Status == TicketStatus.Closed).ToList()
+
+                );
+            return View("Ticket/Index", package);
+        }
+        [Route("admin/ChangeTicketStatus")]
+        public async Task<ActionResult> OnPostChangeTicketStatus(string Status, int ticketId)
+        {
+            TicketStatus myStatus = (TicketStatus)Enum.Parse(typeof(TicketStatus), Status, true);
+            var ticket = Db.GetTicketById(ticketId);
+
+            if(ticket.Status == TicketStatus.Taken && myStatus == TicketStatus.Taken)
+            {
+                Notyf.Error("Zgłoszenie jest już obsługiwane.");
+                return new JsonResult(new { })
+                {
+                    StatusCode = 200,
+                    Value = "" + TicketStatus.Taken
+                };
+            }
+
+            ticket.Status = myStatus;
+            ticket.LastModify = DateTime.Now;
+            var result = Db.SaveChanges();
+
+            //changes saved
+            if (result > 0)
+            {
+                await CallTicketStatusChanges(ticket);
+                Notyf.Information("Zmieniono status zgłoszenia.");
+                return new JsonResult(new { })
+                {
+                    StatusCode = 200,
+                    Value = ticket.LastModify.ToString("dd MMMM yyyy, HH:mm")
+                };
+            }
+            else
+            {
+                Notyf.Error("Nie udało się zmienić statusu zgłoszenia.");
+                return new JsonResult(new { })
+                {
+                    StatusCode = 200,
+                    Value = "error"
+                };
+            }
+        }
+        private async Task CallTicketStatusChanges(Ticket ticket)
+        {
+            TicketHub.UpdateStatus(ticket.Id, ticket.Status);
+            if(ticket.Status == TicketStatus.Closed)
+            {
+                TicketHub.CompleteTicket(ticket.Id);
+            }
+        }
+        #endregion
+
     }
+
 }

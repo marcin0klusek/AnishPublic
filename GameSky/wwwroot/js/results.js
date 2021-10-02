@@ -10,9 +10,6 @@ var connection = new signalR.HubConnectionBuilder()
     .withUrl("resultsHub")
     .build();
 
-//Disable send button until connection is established
-//document.getElementById("sendButton").disabled = true; 
-
 connection.on("MatchLive", function (matchId, mapTag) {
     var nomatches = document.getElementById('nomatches')
     if (nomatches) {

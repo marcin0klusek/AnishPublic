@@ -1,0 +1,157 @@
+﻿@page "/ticket/{id:int}"
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model EFDataAccessLibrary.Models.Ticket
+@using EFDataAccessLibrary.Models
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+    Ticket ticket = ViewBag.Ticket;
+    bool IsAdmin = ViewBag.Admin;
+
+    List<Comment> comments = ticket.TicketComments.Select(x => x.Comment).ToList();
+}
+
+@section Styles{
+    <link rel="stylesheet" href="~/css/tickets.css" type="text/css"></link>
+}
+
+<div class="row row--flex ticket">
+    <div class="column ticket-top">
+        <div class="ticket-box">
+            @if (IsAdmin)
+            {
+                <a asp-controller="Admin" asp-action="Tickets" class="ticket-see-all"> &lt;  Zobacz wszystkie zgłoszenia</a>
+            }
+            else
+            {
+                <a asp-area="Identity" asp-page="/Account/Manage/SupportTickets" class="ticket-see-all"> &lt;  Zobacz wszystkie zgłoszenia</a>
+            }
+        </div>
+    </div>
+    <div class="column ticket-sidebar">
+        <ul class="ticket-info">
+            <li>
+                <div class="ticket-info__title">ID zgłoszenia</div>
+                <div class="ticket-info__text">#@ticket.Id</div>
+            </li>
+            <li>
+                <div class="ticket-info__title">Utworzono</div>
+                <div class="ticket-info__text">@ticket.CreateAt.ToString("dd MMMM yyyy, HH:mm")</div>
+            </li>
+            <li>
+                <div class="ticket-info__title">Ostatnia aktywność</div>
+                <div class="ticket-info__text" id="lastmodify">@ticket.LastModify.ToString("dd MMMM yyyy, HH:mm")</div>
+            </li>
+            <li>
+                <div class="ticket-info__title">Status</div>
+                @if (IsAdmin)
+                {
+                    <select name="statuses" id="status-select" class="ticket--status-select">
+                        @foreach (TicketStatus item in Enum.GetValues(typeof(TicketStatus)).Cast<TicketStatus>())
+                        {
+                            if (item == ticket.Status)
+                            {
+                                <option value="@item" selected>@item.ToString()</option>
+                            }
+                            else
+                            {
+                                <option value="@item">@item.ToString()</option>
+                            }
+                        }
+                    </select>
+                }
+                else
+                {
+                    <div class="ticket-info__text" id="status">@ticket.Status.ToString()</div>
+                }
+            </li>
+            @if (IsAdmin)
+            {
+                <li>
+                    <button class="btn btn-primary" onclick="SaveChanges()">Zapisz zmiany</button>
+                </li>
+            }
+        </ul>
+    </div>
+    <div class="column ticket-content">
+        <div class="ticket--meta">
+            <div class="ticket--header">
+                <div class="ticket-subject">
+                    @ticket.Subject
+                </div>
+                <div class="ticket--description">
+                    <div class="ticket--description-text">
+                        @ticket.Description
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ticket--description-comments">
+            @if (comments is not null)
+            {
+                @foreach (var comment in comments)
+                {
+                    <div class="ticket--comment">
+                        <div class="ticket--comment__meta">
+                            <div class="ticket--header-user-avatar">
+                                <img src="~/images/blankplayer.svg" class="user-avatar" />
+                            </div>
+                            <div class="ticket--header">
+                                <div class="ticket--header-user-name">
+                                    @comment.User.UserName
+                                </div>
+                                <div class="ticket--header-date">
+                                    @comment.CreateAt.ToString("dd/MM/yyyy HH:mm")
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ticket--description">
+                            <div class="ticket--description-text">
+                                @comment.Description
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+        @if ((User.IsInRole("User") && ticket.Status != TicketStatus.Closed) || User.IsInRole("Admin"))
+        {
+        <form asp-controller="Ticket" asp-action="AddComment" method="post">
+            <div class="form-group">
+                <label class="control-label">Odpowiedz</label>
+                <textarea class="form-control" required type="text" name="comment" id="comment" autocomplete="off" rows="5"></textarea>
+                <input type="hidden" name="ticketId" hidden value="@ticket.Id"/>
+                <span class="text-danger"></span>
+            </div>
+            <div class="form-group d-flex align-items-end justify-content-end">
+                <input type="submit" value="Wyślij" class="btn btn-primary " />
+            </div>
+        </form>
+        }
+    </div>
+</div>
+
+<script>
+    function SaveChanges() {
+        var select = document.getElementById('status-select');
+        var status = select.options[select.selectedIndex].value;
+
+        $.ajax({
+            url: "/admin/ChangeTicketStatus",
+            type: "post",
+            contentType: "application/x-www-form-urlencoded",
+            data: { 'status': status, 'ticketId': @ticket.Id },
+            success: function (data, textStatus, xhr) {
+                var response = xhr.responseJSON;
+                if (response === 'error') {
+                } else if (response === 'Taken') { }
+                else {
+                    document.getElementById('lastmodify').innerText = response;
+                }
+            }
+        });
+    }
+</script>

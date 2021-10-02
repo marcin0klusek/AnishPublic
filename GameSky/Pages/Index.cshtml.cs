@@ -36,7 +36,7 @@ namespace GameSky.Pages
         {
             NewsHeaders = await _db.GetPublishedNews(NewsToTake);
 
-            results = Task.Run(() => _db.GetFinishedMatches()).Result;
+            results = Task.Run(() => _db.GetFinishedMatches().TakeLast(15).ToList()).Result;
         }
 
         public JsonResult OnPostUsersGold()

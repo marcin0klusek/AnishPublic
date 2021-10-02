@@ -15,7 +15,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="~/css/site.css" />
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
@@ -91,6 +91,11 @@
             <span class="icon-text">zawodnicy</span>
         </a>
         <br>
+        <a asp-area="" asp-controller="Admin" asp-action="Tickets">
+            <i class="material-icons">task</i>
+            <span class="icon-text">zgłoszenia</span>
+        </a>
+        <br>
         <hr />
         <a asp-area="" asp-controller="Admin" asp-action="Index">
             <i class="material-icons">settings</i>
@@ -106,9 +111,12 @@
 
     <footer class="border-top footer text-muted">
         <div class="container" style="z-index: 2;">
-            &copy; 2001-2021 - HyperCats - <a asp-area="" asp-page="/Privacy">Privacy</a>
-            - <a asp-area="" asp-page="/Faq">FAQ</a>
-            - <a asp-area="" asp-page="/Privacy">Report</a>
+            <a asp-area="" asp-page="/Faq">FAQ</a>
+            &minus;
+            @if (SignIn.IsSignedIn(User))
+            {
+                <a asp-controller="Ticket" asp-action="TicketCreate">Support Ticket</a>
+            }
         </div>
     </footer>
 

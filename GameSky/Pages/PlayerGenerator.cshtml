@@ -93,14 +93,14 @@
             contentType: "application/x-www-form-urlencoded",
             data: {},
             success: function (data, textStatus, xhr) {
-                console.log("data " + JSON.stringify(data));
+                @*console.log("data " + JSON.stringify(data));
                 console.log("xhr " + JSON.stringify(xhr));
                 console.log("xhr.responseJSON " + xhr.responseJSON);
                 console.log("xhr.statusText " + xhr.statusText);
                 console.log("textStatus with JSON " + JSON.stringify(textStatus));
                 console.log("textStatus " + textStatus);
                 console.log("statusText: " + data.statusText);
-                console.log("response: " + data.responseJSON);
+                console.log("response: " + data.responseJSON);*@
                 if (xhr.responseJSON === 'error') {
                     //if user doesnt have enought money
                 } else {

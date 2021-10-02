@@ -52,7 +52,7 @@ namespace GameSky
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<DataContext>();
 
-            //Jobs scheduler
+            //Jobs scheduler - Hangfire
             services.AddHangfire(configuration => configuration
             .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
             .UseSimpleAssemblyNameTypeSerializer()
@@ -79,7 +79,7 @@ namespace GameSky
             services.AddRazorPages(options =>
             {
                 options.Conventions.AuthorizePage("/playergenerator");
-                options.Conventions.AuthorizePage("/Privacy", "RequireAdminRole");
+                options.Conventions.AuthorizePage("/ticket/create", "RequireUserRole");
                 options.Conventions.AuthorizePage("/hangfire", "RequireAdminRole");
                 options.Conventions.ConfigureFilter(new IgnoreAntiforgeryTokenAttribute());
             })
@@ -87,6 +87,8 @@ namespace GameSky
 
             services.AddAuthorization(options =>
             {
+                options.AddPolicy("RequireUserRole",
+                        policy => policy.RequireRole("User"));
                 options.AddPolicy("RequireAdminRole",
                      policy => policy.RequireRole("Admin"));
             });
@@ -124,6 +126,7 @@ namespace GameSky
             app.UseRouting();
 
             ResultsHub.Current = app.ApplicationServices.GetService<IHubContext<ResultsHub>>();
+            TicketHub.Current = app.ApplicationServices.GetService<IHubContext<TicketHub>>();
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -136,6 +139,7 @@ namespace GameSky
                 endpoints.MapControllers();
                 endpoints.MapHangfireDashboard("/hangfire");
                 endpoints.MapHub<ResultsHub>("resultsHub");
+                endpoints.MapHub<TicketHub>("ticketHub");
             });
         }
     }

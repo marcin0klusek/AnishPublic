@@ -4,14 +4,16 @@ using EFDataAccessLibrary.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EFDataAccessLibrary.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210923204813_AddTickets")]
+    partial class AddTickets
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,32 +95,6 @@ namespace EFDataAccessLibrary.Migrations
                     b.HasIndex("OwningTeamId");
 
                     b.ToTable("AspNetUsers");
-                });
-
-            modelBuilder.Entity("EFDataAccessLibrary.Models.Comment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreateAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TicketID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("EFDataAccessLibrary.Models.Event", b =>
@@ -490,57 +466,67 @@ namespace EFDataAccessLibrary.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("CreateAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("LastModify")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
 
                     b.Property<string>("Subject")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserID")
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserID");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Tickets");
                 });
 
             modelBuilder.Entity("EFDataAccessLibrary.Models.TicketComment", b =>
                 {
-                    b.Property<int>("TicketID")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TicketId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CommentID")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("TicketID", "CommentID");
+                    b.HasKey("Id");
 
-                    b.HasIndex("CommentID");
+                    b.HasIndex("TicketId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("TicketComments");
                 });
 
             modelBuilder.Entity("EFDataAccessLibrary.Models.TicketUser", b =>
                 {
-                    b.Property<int>("TicketID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserID")
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("TicketID", "UserID");
+                    b.Property<int>("TicketId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("UserID");
+                    b.Property<DateTime>("CreateAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LastActivity")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "TicketId");
+
+                    b.HasIndex("TicketId");
 
                     b.ToTable("TicketUsers");
                 });
@@ -689,15 +675,6 @@ namespace EFDataAccessLibrary.Migrations
                     b.Navigation("OwningTeam");
                 });
 
-            modelBuilder.Entity("EFDataAccessLibrary.Models.Comment", b =>
-                {
-                    b.HasOne("EFDataAccessLibrary.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserID");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("EFDataAccessLibrary.Models.EventTeam", b =>
                 {
                     b.HasOne("EFDataAccessLibrary.Models.Event", "Event")
@@ -825,41 +802,39 @@ namespace EFDataAccessLibrary.Migrations
                 {
                     b.HasOne("EFDataAccessLibrary.Models.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserID");
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("EFDataAccessLibrary.Models.TicketComment", b =>
                 {
-                    b.HasOne("EFDataAccessLibrary.Models.Comment", "Comment")
-                        .WithMany()
-                        .HasForeignKey("CommentID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("EFDataAccessLibrary.Models.Ticket", "Ticket")
-                        .WithMany("TicketComments")
-                        .HasForeignKey("TicketID")
+                        .WithMany("Comments")
+                        .HasForeignKey("TicketId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Comment");
+                    b.HasOne("EFDataAccessLibrary.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Ticket");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("EFDataAccessLibrary.Models.TicketUser", b =>
                 {
                     b.HasOne("EFDataAccessLibrary.Models.Ticket", "Ticket")
                         .WithMany()
-                        .HasForeignKey("TicketID")
+                        .HasForeignKey("TicketId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("EFDataAccessLibrary.Models.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserID")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -955,7 +930,7 @@ namespace EFDataAccessLibrary.Migrations
 
             modelBuilder.Entity("EFDataAccessLibrary.Models.Ticket", b =>
                 {
-                    b.Navigation("TicketComments");
+                    b.Navigation("Comments");
                 });
 #pragma warning restore 612, 618
         }
