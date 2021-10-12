@@ -25,7 +25,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index"><img src="~/images/hypercats.png" class="brand-logo" /></a>
+                <a class="navbar-brand" asp-area="" asp-page="/Index"><img src="~/images/sygnet.png" class="brand-logo" /></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -39,13 +39,13 @@
                             <a class="nav-link" asp-area="" asp-controller="Matches" asp-action="Results">Results</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-page="/Players">Players</a>
+                            <a class="nav-link" asp-area="" asp-page="/Players">Marketplace</a>
                         </li>
                         @if (SignIn.IsSignedIn(User))
                         {
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-page="/PlayerGenerator">Market</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-page="/PlayerGenerator">Market</a>
+                            </li>
                         }
                     </ul>
                     <partial name="_LoginPartial" />
@@ -96,6 +96,11 @@
             <span class="icon-text">zgłoszenia</span>
         </a>
         <br>
+        <a asp-area="" asp-controller="Admin" asp-action="UpdateCreate">
+            <i class="material-icons">article</i>
+            <span class="icon-text">blog</span>
+        </a>
+        <br>
         <hr />
         <a asp-area="" asp-controller="Admin" asp-action="Index">
             <i class="material-icons">settings</i>
@@ -111,12 +116,14 @@
 
     <footer class="border-top footer text-muted">
         <div class="container" style="z-index: 2;">
-            <a asp-area="" asp-page="/Faq">FAQ</a>
-            &minus;
+            <img style="width: auto; height: 40px" src="~/images/sygnet.png" class="brand-logo" />
             @if (SignIn.IsSignedIn(User))
             {
                 <a asp-controller="Ticket" asp-action="TicketCreate">Support Ticket</a>
-            }
+            } &minus;
+            <a asp-area="" asp-page="/Faq">FAQ</a>
+            &minus;
+            <a asp-area="" asp-page="/Changelogs">Blog</a>
         </div>
     </footer>
 

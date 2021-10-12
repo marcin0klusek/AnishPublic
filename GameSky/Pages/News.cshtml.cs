@@ -33,7 +33,7 @@ namespace GameSky.Pages
                 newsToAdd.Clear();
                 newsToAdd = _db.NewsHeader
                     .OrderByDescending(n => n.NewsPublishDate)
-                    .Where(n => n.IsPublished == true)
+                    .Where(n => n.IsPublished == true && n.NewsContent != null)
                     .Skip(newsToTake * step)
                     .Take(newsToTake)
                     .ToList();

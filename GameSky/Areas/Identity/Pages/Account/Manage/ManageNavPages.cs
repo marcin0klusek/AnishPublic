@@ -21,6 +21,8 @@ namespace GameSky.Areas.Identity.Pages.Account.Manage
         public static string ExternalLogins => "ExternalLogins";
 
         public static string PersonalData => "PersonalData";
+        public static string SupportTickets => "SupportTickets";
+        public static string UserTeam => "UserTeam";
 
         public static string TwoFactorAuthentication => "TwoFactorAuthentication";
 
@@ -37,6 +39,8 @@ namespace GameSky.Areas.Identity.Pages.Account.Manage
         public static string ExternalLoginsNavClass(ViewContext viewContext) => PageNavClass(viewContext, ExternalLogins);
 
         public static string PersonalDataNavClass(ViewContext viewContext) => PageNavClass(viewContext, PersonalData);
+        public static string SupportTicketsNavClass(ViewContext viewContext) => PageNavClass(viewContext, SupportTickets);
+        public static string UserTeamNavClass(ViewContext viewContext) => PageNavClass(viewContext, UserTeam);
 
         public static string TwoFactorAuthenticationNavClass(ViewContext viewContext) => PageNavClass(viewContext, TwoFactorAuthentication);
 

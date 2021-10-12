@@ -1,0 +1,36 @@
+﻿@model EFDataAccessLibrary.Models.NewsUpdate
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using EFDataAccessLibrary.Models
+@using System.Text.Json 
+@{
+    ViewData["Title"] = "UpdateCreate";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+    NewsHeader n = ViewBag.NewsHeader;
+    var j = JsonSerializer.Serialize(n);
+}
+
+<h1>UpdateCreate</h1>
+
+<h4>NewsUpdate</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <h4>@n.NewsTitle</h4>
+        <form asp-controller="Admin" asp-action="CreateUpdateChanges" method="post" runat="server">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <input name="Header" id="Header" type="hidden" data="@j" class="form-control" value="@j" />
+            </div>
+            <div class="form-group">
+                <textarea name="UpdateChanges" id="UpdateChanges" class="form-control" ></textarea>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -32,11 +32,22 @@ namespace GameSky.Pages
             _db = db;
         }
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
+            /*if (User.Identity.IsAuthenticated)
+            {
+                System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+
+                ApplicationUser user = _db.GetUserByName(currentUser.Identity.Name);
+                if (user.OwningTeamId is null)
+                {
+                    return RedirectToPage("~/Areas/Identity/Pages/Account/Manage/UserTeam");
+                }
+            }*/
             NewsHeaders = await _db.GetPublishedNews(NewsToTake);
 
-            results = Task.Run(() => _db.GetFinishedMatches().TakeLast(15).ToList()).Result;
+            results = Task.Run(() => _db.GetFinishedMatches().Take(15).ToList()).Result;
+            return Page();
         }
 
         public JsonResult OnPostUsersGold()

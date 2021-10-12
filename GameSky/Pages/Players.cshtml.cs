@@ -26,9 +26,9 @@ namespace GameSky.Pages
 
         public void OnGet()
         {
-            players = _db.GetPlayersIncludePosition(0, playersPerPage).Result;
+            players = _db.GetPlayersIncludePosition(0, playersPerPage).Result.Where(x => x.IsForSale == true).ToList();
             teams = _db.GetTeams().Result;
-            playersCount = _db.Player.Count();
+            playersCount = _db.Player.Where(x => x.IsForSale == true).Count();
         }
 
         public PartialViewResult OnGetPlayersWithFilters(int pageNum, int pageSize, int teamID, string query)

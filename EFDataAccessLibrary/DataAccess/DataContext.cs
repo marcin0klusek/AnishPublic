@@ -33,6 +33,10 @@ namespace EFDataAccessLibrary.DataAccess
         public DbSet<Comment> Comments { get; set; }
         public DbSet<TicketUser> TicketUsers { get; set; }
         public DbSet<TicketComment> TicketComments { get; set; }
+
+        public DbSet<NewsUpdate> NewsUpdate { get; set; }
+        public DbSet<Change> Change { get; set; }
+        public DbSet<ChangeElement> ChangeElement { get; set; }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -110,7 +114,7 @@ namespace EFDataAccessLibrary.DataAccess
         #region NewsHeader
         public NewsHeader GetNewsHeaderIncludeContent(int id)
         {
-            return NewsHeader.Where(a => a.NewsId == id).Include(e => e.NewsContent).FirstOrDefault();
+            return NewsHeader.Where(a => (a.NewsId == id) && (a.NewsUpdateID == null)).Include(e => e.NewsContent).FirstOrDefault();
         }
 
         public async Task<NewsHeader> GetFirstNewsHeader()
@@ -123,7 +127,7 @@ namespace EFDataAccessLibrary.DataAccess
             List<NewsHeader> news = new List<NewsHeader>();
             news = await Task.Run(() => NewsHeader
                 .OrderByDescending(d => d.NewsPublishDate)
-                .Where(d => d.IsPublished)
+                .Where(d => (d.IsPublished) && (d.NewsContent != null))
                 .Take(NewsToTake)
                 .ToListAsync());
             return news;
@@ -131,7 +135,8 @@ namespace EFDataAccessLibrary.DataAccess
 
         public async Task<List<NewsHeader>> GetNewsHeaderList()
         {
-            return await NewsHeader.ToListAsync();
+            return await NewsHeader
+                .Where(x => x.NewsContent != null).ToListAsync();
         }
 
         public async Task<NewsHeader> GetNewsHeaderById(int id)
@@ -141,7 +146,47 @@ namespace EFDataAccessLibrary.DataAccess
 
         public async Task<List<NewsHeader>> GetNewsHeaderListIncludeContent()
         {
-            return await NewsHeader.Include(e => e.NewsContent).ToListAsync();
+            return await NewsHeader
+                .Where(x => x.NewsUpdateID == null)
+                .Include(e => e.NewsContent).ToListAsync();
+        }
+        #endregion
+
+        #region NewsUpdate
+        public List<NewsHeader> GetPublishedNewsUpdates()
+        {
+            return NewsHeader.Where(x => (x.NewsUpdateID != null) && (x.IsPublished))
+                .Include(x => x.NewsUpdate)
+                .ThenInclude(x => x.Changes)
+                .ThenInclude(x => x.Elements)
+                .ToList();
+        }
+
+        public List<NewsHeader> GetNewsUpdatesHeaders()
+        {
+            return NewsHeader.Where(x => (x.NewsUpdateID != null))
+                .Include(x => x.NewsUpdate)
+                .OrderByDescending(x => x.NewsPublishDate)
+                .ToList();
+        }
+
+        public List<NewsHeader> GetAllNewsUpdates()
+        {
+            return NewsHeader.Where(x => (x.NewsUpdateID != null))
+                .Include(x => x.NewsUpdate)
+                .ThenInclude(x => x.Changes)
+                .ThenInclude(x => x.Elements)
+                .ToList();
+        }
+
+        public NewsHeader GetNewsUpdateById(int id)
+        {
+            return NewsHeader.Where(x => (x.NewsUpdateID == id) && (x.IsPublished))
+                  .Include(x => x.NewsUpdate)
+                  .ThenInclude(x => x.Changes)
+                  .ThenInclude(x => x.Elements)
+                  .FirstOrDefault();
+
         }
         #endregion
 
@@ -200,6 +245,16 @@ namespace EFDataAccessLibrary.DataAccess
         public Team GetTeamByID(int id)
         {
             return Team.FirstOrDefault(t => t.TeamID == id);
+        }
+
+        public Team GetTeamByName(string name)
+        {
+            return Team.FirstOrDefault(t => t.TeamName == name);
+        }
+
+        public Team GetTeamByNameAndTag(string name, string tag)
+        {
+            return Team.FirstOrDefault(t => (t.TeamName == name) && (t.Tag == tag));
         }
 
         public List<Event> GetEventsForTeam(Team team)

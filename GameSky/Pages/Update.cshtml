@@ -1,0 +1,59 @@
+﻿@page
+@using EFDataAccessLibrary.Models
+@model GameSky.Pages.UpdateModel
+@{
+    NewsHeader news = Model.update;
+    NewsUpdate update = Model.update.NewsUpdate;
+}
+@section Styles{
+    <link href="~/css/blog.css" rel="stylesheet" />
+}
+
+<div class="update-hero">
+    <img  id="update-hero" src="~/images/update-banner-vector.jpg" />
+</div>
+
+<div class="changes-container">
+    <div class="update-meta single-data">
+        <p>@news.NewsPublishDate.ToString("dd'/'M'/'yy") • <a asp-page="/Changelogs">SITE UPDATES</a></p>
+    </div>
+    <h3 class="update-list-title news-update-title">@news.NewsTitle</h3>
+    <h5 class="update-description">@news.NewsDesc</h5>
+    @foreach (Change item in update.Changes)
+    {
+        <h2 class="category-title">@item.Title</h2>
+        <ul class="category-changes-list">
+            @foreach (ChangeElement el in item.Elements)
+            {
+                <li class="change-list-element">@el.Text</li>
+            }
+        </ul>
+    }
+</div>
+
+<div class="news-author-container">
+   <div class="news-author-card">
+       <img src="~/images/logo.png" />
+   </div>
+   <div class="news-author-details">
+       <span class="news-author-details-name">Marcin Klusek</span>
+       <p class="news-author-details-desc">Fan gier FPS, od 2010 roku wielbiciel Counter-Strike'a. Przestrzega zasady "Pracuj ciężko w ciszy, niech Twój sukces będzie głośny".
+       Zapalony marzyciel, często lubi eksperymentować.</p>
+   </div>
+</div>
+
+<script>
+    function HeroScroll() {
+        var hero = document.getElementById('update-hero');
+        var top = (window.pageYOffset || document.scrollTop) - (document.clientTop || 0);
+        var value = -24.231;
+        if (!isNaN(top)) {
+            hero.style.transform = "translateY(" + (value + (value * top / 100)) + "px)";
+            console.log('change to: ' + (value + (value * top / 100)));
+        } else {
+            hero.style.transform = "translateY(" + value + "px)";
+        }
+    }
+
+    window.onscroll = HeroScroll;
+</script>

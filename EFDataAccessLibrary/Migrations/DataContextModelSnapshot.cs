@@ -95,6 +95,46 @@ namespace EFDataAccessLibrary.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("EFDataAccessLibrary.Models.Change", b =>
+                {
+                    b.Property<int>("ChangeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("NewsUpdateUpdateId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ChangeId");
+
+                    b.HasIndex("NewsUpdateUpdateId");
+
+                    b.ToTable("Change");
+                });
+
+            modelBuilder.Entity("EFDataAccessLibrary.Models.ChangeElement", b =>
+                {
+                    b.Property<int>("ChangeElementID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ChangeID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ChangeElementID");
+
+                    b.HasIndex("ChangeID");
+
+                    b.ToTable("ChangeElement");
+                });
+
             modelBuilder.Entity("EFDataAccessLibrary.Models.Comment", b =>
                 {
                     b.Property<int>("Id")
@@ -321,7 +361,7 @@ namespace EFDataAccessLibrary.Migrations
                     b.Property<bool>("IsPublished")
                         .HasColumnType("bit");
 
-                    b.Property<int>("NewsContentID")
+                    b.Property<int?>("NewsContentID")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("NewsCreateDate")
@@ -336,11 +376,28 @@ namespace EFDataAccessLibrary.Migrations
                     b.Property<string>("NewsTitle")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("NewsUpdateID")
+                        .HasColumnType("int");
+
                     b.HasKey("NewsId");
 
                     b.HasIndex("NewsContentID");
 
+                    b.HasIndex("NewsUpdateID");
+
                     b.ToTable("NewsHeader");
+                });
+
+            modelBuilder.Entity("EFDataAccessLibrary.Models.NewsUpdate", b =>
+                {
+                    b.Property<int>("UpdateId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.HasKey("UpdateId");
+
+                    b.ToTable("NewsUpdate");
                 });
 
             modelBuilder.Entity("EFDataAccessLibrary.Models.Player", b =>
@@ -689,6 +746,22 @@ namespace EFDataAccessLibrary.Migrations
                     b.Navigation("OwningTeam");
                 });
 
+            modelBuilder.Entity("EFDataAccessLibrary.Models.Change", b =>
+                {
+                    b.HasOne("EFDataAccessLibrary.Models.NewsUpdate", null)
+                        .WithMany("Changes")
+                        .HasForeignKey("NewsUpdateUpdateId");
+                });
+
+            modelBuilder.Entity("EFDataAccessLibrary.Models.ChangeElement", b =>
+                {
+                    b.HasOne("EFDataAccessLibrary.Models.Change", null)
+                        .WithMany("Elements")
+                        .HasForeignKey("ChangeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("EFDataAccessLibrary.Models.Comment", b =>
                 {
                     b.HasOne("EFDataAccessLibrary.Models.ApplicationUser", "User")
@@ -786,11 +859,15 @@ namespace EFDataAccessLibrary.Migrations
                 {
                     b.HasOne("EFDataAccessLibrary.Models.NewsContent", "NewsContent")
                         .WithMany()
-                        .HasForeignKey("NewsContentID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("NewsContentID");
+
+                    b.HasOne("EFDataAccessLibrary.Models.NewsUpdate", "NewsUpdate")
+                        .WithMany()
+                        .HasForeignKey("NewsUpdateID");
 
                     b.Navigation("NewsContent");
+
+                    b.Navigation("NewsUpdate");
                 });
 
             modelBuilder.Entity("EFDataAccessLibrary.Models.Player", b =>
@@ -924,6 +1001,11 @@ namespace EFDataAccessLibrary.Migrations
                     b.Navigation("MarketPlayer");
                 });
 
+            modelBuilder.Entity("EFDataAccessLibrary.Models.Change", b =>
+                {
+                    b.Navigation("Elements");
+                });
+
             modelBuilder.Entity("EFDataAccessLibrary.Models.Event", b =>
                 {
                     b.Navigation("EventTeams");
@@ -934,6 +1016,11 @@ namespace EFDataAccessLibrary.Migrations
             modelBuilder.Entity("EFDataAccessLibrary.Models.Faq", b =>
                 {
                     b.Navigation("FaqQuestions");
+                });
+
+            modelBuilder.Entity("EFDataAccessLibrary.Models.NewsUpdate", b =>
+                {
+                    b.Navigation("Changes");
                 });
 
             modelBuilder.Entity("EFDataAccessLibrary.Models.Player", b =>

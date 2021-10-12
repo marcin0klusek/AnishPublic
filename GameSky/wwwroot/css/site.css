@@ -39,9 +39,13 @@ div {
 }
 
 .a-default, a {
-    text-decoration: none;
-    color: #87a3bf;
+    text-decoration: none !important;
+    color: #87a3bf !important;
 }
+
+    a:hover {
+        color: #fcfcfc !important;
+    }
 
 .navbar-expand-sm > .container, .navbar-expand-sm > .container-fluid {
     top: 0;
@@ -111,11 +115,6 @@ a.navbar-brand {
     text-align: center;
     word-break: break-all;
     color: #fff !important;
-}
-
-/* Provide sufficient contrast against white background */
-a {
-    color: #0366d6;
 }
 
 .btn-primary {

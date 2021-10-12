@@ -1,0 +1,28 @@
+﻿@page "/blog"
+@using EFDataAccessLibrary.Models
+@model GameSky.Pages.ChangelogsModel
+@{
+    List<NewsHeader> updates = Model.Updates;
+}
+
+@section Styles{
+    <link href="~/css/blog.css" rel="stylesheet" />
+}
+<section class="section light">
+    <div class="update-container">
+        <h3 class="update-list-title">ANISH UPDATES</h3>
+        <br />
+        <div class="update-cards-wrapper">
+                @foreach (NewsHeader item in updates)
+                {<a asp-page="/update" asp-route-id="@item.NewsUpdateID">
+                        <div class="update-card">
+                            <img src="https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/blt0480f0a7046c4e56/612fd6fa8faa7a6bbfbfe5fc/Ep3_ActII_Gameplay_Trailer_Thumbnail_Final_notext.jpg?auto=webp&amp;disable=upscale&amp;width=780" alt="Turn up the Pressure // New VALORANT Act Kickoff Trailer" width="1920" height="1080" class="update-banner">
+                            <span class="update-meta">@item.NewsPublishDate.ToString("dd'/'M'/'yy") • SITE UPDATES</span>
+                            <h3 class="update-title">@item.NewsTitle</h3>
+                            <p>@item.NewsDesc.Split('.')[0].</p>
+                        </div>
+                    </a>
+                }
+        </div>
+    </div>
+</section>

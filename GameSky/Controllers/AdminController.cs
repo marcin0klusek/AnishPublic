@@ -17,6 +17,10 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Text.Json;
+using System.Text;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace GameSky.Controllers
 {
@@ -203,6 +207,126 @@ namespace GameSky.Controllers
         }
         #endregion
 
+
+        #region NewsHeaderUpdate
+        [Route("/admin/update/create")]
+        public IActionResult UpdateCreate()
+        {
+            return View("Updates/Create");
+        }
+        [Route("/admin/CreateNewsHeaderUpdate")]
+        public IActionResult CreateNewsHeaderUpdate(NewsHeader news)
+        {
+            if(news is null)
+            {
+                Console.WriteLine("News jest pusty");
+                Notyf.Error("Coś poszło nie tak. Kod błędu: 1");
+            }
+            if(news.NewsTitle is null || news.NewsTitle == String.Empty)
+            {
+                Console.WriteLine("Zawartość NEWS jest pusta...");
+                Notyf.Error("Coś poszło nie tak. Kod błędu: 2");
+            }
+            else
+            {
+                Console.WriteLine("Zawartosć NEWS jest gitarka! :)))");
+                Notyf.Success($"Poprawnie stworzono aktualizacje: {news.NewsTitle}");
+                ViewBag.NewsHeader = news;
+                return View("Updates/UpdateCreate");
+            }
+            return RedirectToAction("UpdateCreate");
+        }
+
+        [HttpPost]
+        [Route("/admin/CreateUpdateChanges")]
+        public IActionResult CreateUpdateChanges(IFormCollection form)
+        {
+            NewsHeader n = JsonConvert.DeserializeObject<NewsHeader>(Request.Form["Header"]);
+            var changesToParse = Request.Form["UpdateChanges"].ToString();
+            NewsUpdate update = new NewsUpdate { Changes = ParseChanges(changesToParse) };
+            n.NewsUpdate = update;
+
+            Db.Add<NewsHeader>(n);
+
+            var result = Db.SaveChanges();
+            if(result > 0)
+            {
+                Notyf.Success("Dodano nowy wpis do bloga!");
+                return RedirectToPage("/Changelogs");
+            }else if(result == 0)
+            {
+                Notyf.Warning("Nie wykryto zmian!");
+            }
+            else
+            {
+                Notyf.Error("Coś poszło nie tak!");
+            }
+
+            return RedirectToAction("UpdateCreate");
+        }
+
+        private List<Change> ParseChanges(string text)
+        {
+            text = text.Trim();
+            using (StringReader reader = new StringReader(text))
+            {
+                var changes = new List<Change>();
+                int changeIndex = -1;
+                bool isChange = false;
+
+                var elements = new List<ChangeElement>();
+                int elIndex = -1;
+                bool isEl = false;
+
+                Change lastChange = new Change();
+
+                string line;
+                while((line = reader.ReadLine()) != null)
+                {
+                    if (line.StartsWith("/"))
+                    {
+                        if(elements.Count > 0)
+                        {
+                            lastChange.Elements = elements;
+                            changes.Add(lastChange);
+                            elements = new List<ChangeElement>();
+                        }
+                        changeIndex++;
+                        isChange = true;
+                        isEl = false;
+                        lastChange = new Change { Title = line[1..] };
+                    }else if (line.StartsWith("-"))
+                    {
+                        elIndex++;
+                        isChange = false;
+                        isEl = true;
+                        elements.Add(new ChangeElement { Text = line[1..] });
+                    }
+                    else
+                    {
+                        try
+                        {
+                            if (isChange)
+                            {
+                                changes.ElementAt(changeIndex).Title += line;
+                            }
+                            if (isEl)
+                            {
+                                elements.ElementAt(elIndex).Text += line;
+                            }
+                        }
+                        catch (IndexOutOfRangeException outOfRangeEx)
+                        {
+                            //do nothing
+                        }
+                    }
+                }
+                lastChange.Elements = elements;
+                changes.Add(lastChange);
+                return changes;
+            }
+        }
+        #endregion
     }
 
 }

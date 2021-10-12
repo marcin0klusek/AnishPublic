@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using EFDataAccessLibrary.DataAccess;
 using EFDataAccessLibrary.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -24,17 +25,20 @@ namespace GameSky.Areas.Identity.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly DataContext _db;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            DataContext db)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _db = db;
         }
 
         [BindProperty]
@@ -61,6 +65,16 @@ namespace GameSky.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            [StringLength(100, ErrorMessage = "Must be unique and at least {2} charactes long.", MinimumLength = 5)]
+            [Display(Name = "Team name")]
+            public string TeamName { get; set; }
+
+            [Required]
+            [StringLength(5, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 3)]
+            [Display(Name = "Team Tag")]
+            public string Tag { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -73,7 +87,7 @@ namespace GameSky.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && _db.GetTeamByName(Input.TeamName) is null)
             {
                 var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email };
 
@@ -92,7 +106,13 @@ namespace GameSky.Areas.Identity.Pages.Account
 
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
+                    user = _db.GetUserByName(user.UserName);
+                    var userTeam = new Team { TeamName = Input.TeamName, Tag = Input.Tag, OwnerID = user.Id, Country = "PL" };
+                    _db.Team.Add(userTeam);
+                    user.OwningTeam = userTeam;
+                    await _userManager.AddToRoleAsync(user, "User");
+                    _db.SaveChanges();
+                    
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
                         return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
@@ -108,6 +128,7 @@ namespace GameSky.Areas.Identity.Pages.Account
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
+            ModelState.AddModelError(string.Empty, "Taka drużyna już istnieje");
 
             // If we got this far, something failed, redisplay form
             return Page();

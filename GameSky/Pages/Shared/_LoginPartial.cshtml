@@ -29,7 +29,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" title="Free currency">
+            <a class="nav-link" title="Free currency" onclick="Payment()">
                 <img src="~/icons/euro_symbol.png" class="icon" /> <span id="goldText">@string.Format("{0:N}", _user.Gold)</span>
             </a>
         </li>
@@ -53,3 +53,16 @@
         </li>
     }
 </ul>
+<script>
+    function Payment() {
+        $.ajax({
+            url: "/user/PaymentDollars",
+            type: "post",
+            contentType: "application/x-www-form-urlencoded",
+            data: { 'amount': 5000 },
+            success: function (data, textStatus, xhr) {
+                RefreshGold();
+            }
+        });
+    }
+</script>

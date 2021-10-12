@@ -9,25 +9,35 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h4>Create a new account.</h4>
+            <h4>Utwórz nowe konto.</h4>
             <hr />
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Input.Email"></label>
-                <input asp-for="Input.Email" class="form-control" />
+                <input asp-for="Input.Email" class="form-control"  placeholder="adres@email.com"/>
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Input.Password"></label>
-                <input asp-for="Input.Password" class="form-control" />
+                <input asp-for="Input.Password" class="form-control" placeholder="Hasło" />
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Input.ConfirmPassword"></label>
-                <input asp-for="Input.ConfirmPassword" class="form-control" />
+                <input asp-for="Input.ConfirmPassword" class="form-control" placeholder="Potwierdź hasło"/>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-            <button type="submit" class="btn btn-primary">Register</button>
+            <div class="form-group">
+                <label asp-for="Input.TeamName">Nazwa Twojej drużyny</label>
+                <input asp-for="Input.TeamName" class="form-control" placeholder="Nazwa drużyny" autocomplete="off"/>
+                <span asp-validation-for="Input.TeamName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Tag">Skrót nazwy drużyny</label>
+                <input asp-for="Input.Tag" class="form-control" placeholder="Skrót drużyny" autocomplete="off"/>
+                <span asp-validation-for="Input.Tag" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Zarejestruj się</button>
         </form>
     </div>
     <div class="col-md-6 col-md-offset-2">

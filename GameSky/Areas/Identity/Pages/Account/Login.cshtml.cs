@@ -89,6 +89,7 @@ namespace GameSky.Areas.Identity.Pages.Account
                     Input.RememberMe, 
                     lockoutOnFailure: false);
 
+
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");

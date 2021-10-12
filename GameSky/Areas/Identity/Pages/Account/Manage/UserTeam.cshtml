@@ -1,0 +1,50 @@
+﻿@page
+@model UserTeamModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{ if (!Model.HasTeam)
+    {
+        ViewData["Title"] = "Create";
+    }
+}
+@if (!Model.HasTeam)
+{
+    <h1>Stwórz</h1>
+
+    <h4>Drużyna</h4>
+    <hr />
+    <div class="row text-center m-auto">
+        <div class="col-md-4">
+            <form asp-page="UserTeam" asp-page-handler="CreateTeam" method="post">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label class="control-label">Nazwa drużyny</label>
+                    <input name="TeamName" id="TeamName" class="form-control" />
+                    <span name="TeamName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Skrót drużyny</label>
+                    <input name="Tag" id="Tag" class="form-control" />
+                    <span class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Utwórz" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+}
+else
+{
+    <h1>Twoja drużyna</h1>
+    <h4>
+    <a asp-page="/team" asp-route-id="@Model.userTeam.TeamID">
+        @Model.userTeam.TeamName
+        </a>
+        | @Model.userTeam.Tag
+    </h4>
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
