@@ -14,24 +14,24 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.NewsTitle)
+                Tytuł artykułu
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NewsDesc)
+                Opis artykułu
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NewsCreateDate)
+                Data utworzenia
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NewsPublishDate)
+                Data opublikowania
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsPublished)
+                Opublikowano
             </th>
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(model => model.NewsContent)
-            </th>
-            <th></th>
+            </th>*@
+            <th>Akcje</th>
         </tr>
     </thead>
     <tbody>
@@ -52,13 +52,13 @@
             <td>
                 @Html.DisplayFor(modelItem => item.IsPublished)
             </td>
-            <td>
+            @*<td>
                 @Html.DisplayFor(modelItem => item.NewsContent.Content)
-            </td>
+            </td>*@
             <td>
-                <a asp-action="Edit" asp-route-id="@item.NewsId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.NewsId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.NewsId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.NewsId">Edytuj</a> |
+                <a asp-action="Details" asp-route-id="@item.NewsId">Szczegóły</a> |
+                <a asp-action="Delete" asp-route-id="@item.NewsId">Usuń</a>
             </td>
         </tr>
 }

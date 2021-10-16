@@ -57,56 +57,57 @@
             <span id="alertText">Właśnie dodaliśmy nowy turniej Verification solo cup 2001 - szczegóły w zakładce Turnieje solo!</span>
         </div>
 
+        @* Admin sidebar *@
         @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdminRole")).Succeeded)
         {
-    <div id="mySidebar" class="sidebar" onmouseover="toggleSidebar()" onmouseout="toggleSidebar()">
-        <p id="sidebar-title" class="">P</p>
-        <a asp-area="" asp-controller="Admin" asp-action="User">
-            <i class="material-icons">account_circle</i>
-            <span class="icon-text">użytkownicy</span>
-        </a>
-        <br>
-        <a asp-area="" asp-controller="Admin" asp-action="News">
-            <i class="material-icons">article</i>
-            <span class="icon-text">artykuły</span>
-        </a>
-        <br>
-        <a asp-area="" asp-controller="Admin" asp-action="Match">
-            <i class="material-icons">games</i>
-            <span class="icon-text">mecze</span>
-        </a>
-        <br>
-        <a asp-area="" asp-controller="Admin" asp-action="Event">
-            <i class="material-icons">emoji_events</i>
-            <span class="icon-text">wydarzenia</span>
-        </a>
-        <br>
-        <a asp-area="" asp-controller="Admin" asp-action="Teams">
-            <i class="material-icons">groups</i>
-            <span class="icon-text">drużyny</span>
-        </a>
-        <br>
-        <a asp-area="" asp-controller="Admin" asp-action="Players">
-            <i class="material-icons">people</i>
-            <span class="icon-text">zawodnicy</span>
-        </a>
-        <br>
-        <a asp-area="" asp-controller="Admin" asp-action="Tickets">
-            <i class="material-icons">task</i>
-            <span class="icon-text">zgłoszenia</span>
-        </a>
-        <br>
-        <a asp-area="" asp-controller="Admin" asp-action="UpdateCreate">
-            <i class="material-icons">article</i>
-            <span class="icon-text">blog</span>
-        </a>
-        <br>
-        <hr />
-        <a asp-area="" asp-controller="Admin" asp-action="Index">
-            <i class="material-icons">settings</i>
-            <span class="icon-text">zarządzaj</span>
-        </a>
-    </div>
+            <div id="mySidebar" class="sidebar" onmouseover="toggleSidebar()" onmouseout="toggleSidebar()">
+                <p id="sidebar-title" class="">P</p>
+                <a asp-area="" asp-controller="Admin" asp-action="User">
+                    <i class="material-icons">account_circle</i>
+                    <span class="icon-text">użytkownicy</span>
+                </a>
+                <br>
+                <a asp-area="" asp-controller="Admin" asp-action="News">
+                    <i class="material-icons">article</i>
+                    <span class="icon-text">artykuły</span>
+                </a>
+                <br>
+                <a asp-area="" asp-controller="Admin" asp-action="Match">
+                    <i class="material-icons">games</i>
+                    <span class="icon-text">mecze</span>
+                </a>
+                <br>
+                <a asp-area="" asp-controller="Admin" asp-action="Event">
+                    <i class="material-icons">emoji_events</i>
+                    <span class="icon-text">wydarzenia</span>
+                </a>
+                <br>
+                <a asp-area="" asp-controller="Admin" asp-action="Teams">
+                    <i class="material-icons">groups</i>
+                    <span class="icon-text">drużyny</span>
+                </a>
+                <br>
+                <a asp-area="" asp-controller="Admin" asp-action="Players">
+                    <i class="material-icons">people</i>
+                    <span class="icon-text">zawodnicy</span>
+                </a>
+                <br>
+                <a asp-area="" asp-controller="Admin" asp-action="Tickets">
+                    <i class="material-icons">task</i>
+                    <span class="icon-text">zgłoszenia</span>
+                </a>
+                <br>
+                <a asp-area="" asp-controller="Admin" asp-action="IndexUpdate">
+                    <i class="material-icons">article</i>
+                    <span class="icon-text">blog</span>
+                </a>
+                <br>
+                <hr />
+                <a asp-area="" asp-controller="Admin" asp-action="Index">
+                    <i class="material-icons">settings</i>
+                    <span class="icon-text">zarządzaj</span>
+                </a>
+            </div>
         }
 
     </header>

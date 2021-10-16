@@ -181,7 +181,7 @@ namespace EFDataAccessLibrary.DataAccess
 
         public NewsHeader GetNewsUpdateById(int id)
         {
-            return NewsHeader.Where(x => (x.NewsUpdateID == id) && (x.IsPublished))
+            return NewsHeader.Where(x => (x.NewsId == id) && (x.IsPublished))
                   .Include(x => x.NewsUpdate)
                   .ThenInclude(x => x.Changes)
                   .ThenInclude(x => x.Elements)

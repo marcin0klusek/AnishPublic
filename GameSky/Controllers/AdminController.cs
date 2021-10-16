@@ -207,8 +207,14 @@ namespace GameSky.Controllers
         }
         #endregion
 
-
         #region NewsHeaderUpdate
+        [Route("admin/update")]
+        public IActionResult IndexUpdate()
+        {
+            var news = Db.GetNewsUpdatesHeaders();
+            return View("Updates/List", news);
+        }
+
         [Route("/admin/update/create")]
         public IActionResult UpdateCreate()
         {
@@ -229,8 +235,9 @@ namespace GameSky.Controllers
             }
             else
             {
+                news.NewsCreateDate = DateTime.Now;
                 Console.WriteLine("Zawartosć NEWS jest gitarka! :)))");
-                Notyf.Success($"Poprawnie stworzono aktualizacje: {news.NewsTitle}");
+                Notyf.Success($"Poprawnie stworzono aktualizację: {news.NewsTitle}");
                 ViewBag.NewsHeader = news;
                 return View("Updates/UpdateCreate");
             }
@@ -304,20 +311,23 @@ namespace GameSky.Controllers
                     }
                     else
                     {
-                        try
+                        if (line.Trim() != String.Empty || line.Trim() != "")
                         {
-                            if (isChange)
+                            try
                             {
-                                changes.ElementAt(changeIndex).Title += line;
+                                if (isChange)
+                                {
+                                    changes.ElementAt(changeIndex).Title += line;
+                                }
+                                if (isEl)
+                                {
+                                    elements.ElementAt(elIndex).Text += line;
+                                }
                             }
-                            if (isEl)
+                            catch (IndexOutOfRangeException outOfRangeEx)
                             {
-                                elements.ElementAt(elIndex).Text += line;
+                                //do nothing
                             }
-                        }
-                        catch (IndexOutOfRangeException outOfRangeEx)
-                        {
-                            //do nothing
                         }
                     }
                 }
@@ -325,6 +335,27 @@ namespace GameSky.Controllers
                 changes.Add(lastChange);
                 return changes;
             }
+
+        }
+        [HttpPost]
+        [Route("admin/DeleteUpdate")]
+        public IActionResult DeleteUpdate(int id)
+        {
+            var news = Db.GetNewsUpdateById(id);
+            if(news != null)
+            {
+                Db.Remove(news);
+                var result = Db.SaveChanges();
+                if(result > 0)
+                {
+                    Notyf.Success($"Usunięto akutalizację: {news.NewsTitle}");
+                }
+            }
+            else
+            {
+                Notyf.Error("Nie odnaleziono aktualizacji do usunięcia");
+            }
+            return RedirectToAction("IndexUpdate");
         }
         #endregion
     }

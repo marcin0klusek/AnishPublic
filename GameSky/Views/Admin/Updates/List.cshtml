@@ -1,0 +1,65 @@
+﻿@model IEnumerable<EFDataAccessLibrary.Models.NewsHeader>
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "List";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>List</h1>
+
+<p>
+    <a asp-controller="Admin" asp-action="UpdateCreate">Dodaj nową aktualizację</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Tytuł aktualizacji
+            </th>
+            <th>
+                Opis aktualizacji
+            </th>
+            <th>
+                Data utworzenia
+            </th>
+            <th>
+                Data publikacji
+            </th>
+            <th>
+                Opublikowano
+            </th>
+            <th>Akcje</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NewsTitle)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NewsDesc)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NewsCreateDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NewsPublishDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsPublished)
+                </td>
+                <td>
+                    <a asp-area="" asp-controller="" asp-action="" asp-route-id="@item.NewsId">Edit</a> |
+                    <a asp-area="" asp-controller="" asp-action="" asp-route-id="@item.NewsId">Details</a> |
+                    <form asp-area="" asp-controller="Admin" asp-action="DeleteUpdate" asp-route-id="@item.NewsId" method="post"
+                          onclick="return confirm('Are you sure you want to delete this?')">
+                        <button type="submit" class="btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

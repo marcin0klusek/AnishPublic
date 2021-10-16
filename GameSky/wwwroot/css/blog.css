@@ -33,8 +33,9 @@
     margin-bottom: 0.66rem;
 }
 
-.update-banner:hover{
-}
+    .update-banner:hover {
+        box-shadow: rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px;
+    }
 
 .update-cards-wrapper{
     display: grid;
@@ -46,16 +47,13 @@
     flex-direction: column;
     filter: grayscale(0.5);
     margin: 10px;
+    transition: .5s ease-in-out;
 }
 
-.update-card:hover{    
-    filter: brightness(1.05) contrast(1);
-
-}
-
-.update-card:hover{
-    transform: scale(1.05);
-}
+    .update-card:hover {
+        filter: brightness(1.05) contrast(1);
+        transform: scale(1.05);
+    }
 
 .update-meta {
     font-weight: 600;

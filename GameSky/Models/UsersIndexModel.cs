@@ -14,6 +14,7 @@ namespace GameSky.Models
         public int playersAmount { get; set; }
         public int eventsAmount { get; set; }
         public int ticketsAmount { get; set; }
+        public int blogUpdates { get; set; }
 
         public UsersIndexModel(DataContext db)
         {
@@ -22,6 +23,7 @@ namespace GameSky.Models
             playersAmount = db.Player.Count();
             eventsAmount = db.Event.Count();
             ticketsAmount = db.Tickets.Count();
+            blogUpdates = db.GetNewsUpdatesHeaders().Count;
         }
     }
 }
