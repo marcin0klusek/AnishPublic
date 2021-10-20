@@ -64,7 +64,18 @@
                             </div>
                             <div class="ticket--icon">
                                 <span class="material-icons-outlined" id="@("ticket" + ticket.Id + "icon")">
-                                    lock
+                                    @if (ticket.Status == TicketStatus.Needs_Attention)
+                                    {
+                                        <text>priority_high</text>
+                                    }
+                                    else if (ticket.Status == TicketStatus.Taken)
+                                    {
+                                        <text>lock</text>
+                                    }
+                                    else
+                                    {
+                                        <text>lock_open</text>
+                                    }
                                 </span>
                             </div>
                             <div class="ticket--title">

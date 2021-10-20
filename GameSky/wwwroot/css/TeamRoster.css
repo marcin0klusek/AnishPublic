@@ -1,0 +1,41 @@
+﻿.roster-container {
+    /* main container */
+    position: relative;
+}
+
+.roster-card-wrapper {
+    /* cards wrapper*/
+    position: relative;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.roster-player-card {
+    /*controll card*/
+    padding: 10px;
+    position: relative;
+    transition: .5s ease-in-out;
+}
+
+.roster-player-card:hover{
+    transform: scale(1.05);
+}
+
+.team-player-actions {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #7f04fb;
+    z-index: 5;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    text-align: center;
+    background-color: #000;
+    border: 1px solid #410381;
+}
+
+.team-player-actions:hover{
+    cursor: pointer;
+}

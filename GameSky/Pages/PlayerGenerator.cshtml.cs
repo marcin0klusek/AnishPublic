@@ -179,7 +179,8 @@ namespace GameSky.Pages
                     TeamID = (int)_user.OwningTeamId,
                     JoinDate = DateTime.Now,
                     ExitDate = null,
-                    isOnTransfer = true
+                    IsOnTransfer = true,
+                    IsInActiveRoster = false
                 };
                 db.Add(pt);
 

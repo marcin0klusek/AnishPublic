@@ -1,0 +1,24 @@
+﻿@model EFDataAccessLibrary.Models.Player
+@{
+    string fastSell = "Szybka sprzedaż za ";
+    string auction = "Wystaw na aukcję od ";
+    string cancelAuction = "Anuluj licytację";
+    string statusTakeOnAuction = "block";
+    string statusTakeOffAuction = "none";
+    if (Model.IsForSale)
+    {
+        statusTakeOnAuction = "none";
+        statusTakeOffAuction = "block";
+    }
+}
+
+<div class="additional-player-details-card" id="detail-card">
+    @await Html.PartialAsync("/Pages/Shared/PartialViews/_PlayerCard.cshtml", Model)
+</div>
+<div class="additional-player-details-actions">
+    <button id="@($"ActivePlayer{Model.PlayerID}")" onclick="ChangePlayerActiveStatus(@Model.PlayerID, true)" class="btn-action-manage">Przenieś do aktywnego składu</button>
+    <button id="@($"quick-sell{Model.PlayerID}")" onclick="QuickSell(@Model.PlayerID)" class="btn-action-manage">@fastSell @Model.GetPrize()G</button>
+    <button id="@($"auctionOn{Model.PlayerID}")" onclick="AuctionPlayer(@Model.PlayerID, true)" style="display: @statusTakeOnAuction" class="btn-action-manage">@auction @Model.GetPrize()G</button>
+    <button id="@($"auctionOff{Model.PlayerID}")" onclick="AuctionPlayer(@Model.PlayerID, false)" style="display: @statusTakeOffAuction" class="btn-action-manage">@cancelAuction</button>
+
+</div>

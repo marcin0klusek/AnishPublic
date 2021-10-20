@@ -1,0 +1,74 @@
+﻿.team-header{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+    margin-bottom: 50px;
+}
+
+    .team-header .team-name{
+        font-weight: 700;
+        text-align: center;
+        background: #1d1a2a;
+        width: 80%;
+        padding: 10px 0;
+        border-radius: 8px;
+        border: 3px solid #0d0d0d;
+        color: #8952ff;
+    }
+
+
+.active-roster {
+    position: relative;
+    margin-bottom: 50px;
+    padding-inline: 10px;
+}
+
+.manage-active-roster {
+    position: absolute;
+    top: -25px;
+    right: 20px;
+}
+
+.event-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+    .event-container table {
+        width: 30%;
+        color: #a3e5fe;
+        border-collapse: separate;
+        border-spacing: 0 5px;
+    }
+
+.event-row {
+    background: #2d3844;
+    font-weight: 600;
+    color: #607a96;
+    transition: .25s ease-in-out;
+}
+
+    tr {
+        min-height: 10px;
+        max-height: 10px;
+    }
+
+.event-container table tr, event-container table td {
+    min-height: 10px;
+    max-height: 10px;
+}
+
+.event-container table th {
+    font-size: 1rem;
+}
+.event-container table td, .event-container table th {
+   padding: 3px 10px;
+}
+
+        .event-container-title {
+            font-weight: 700;
+        }

@@ -33,7 +33,6 @@ namespace EFDataAccessLibrary.DataAccess
         public DbSet<Comment> Comments { get; set; }
         public DbSet<TicketUser> TicketUsers { get; set; }
         public DbSet<TicketComment> TicketComments { get; set; }
-
         public DbSet<NewsUpdate> NewsUpdate { get; set; }
         public DbSet<Change> Change { get; set; }
         public DbSet<ChangeElement> ChangeElement { get; set; }
@@ -155,11 +154,12 @@ namespace EFDataAccessLibrary.DataAccess
         #region NewsUpdate
         public List<NewsHeader> GetPublishedNewsUpdates()
         {
-            return NewsHeader.Where(x => (x.NewsUpdateID != null) && (x.IsPublished))
+            var news = NewsHeader.Where(x => (x.NewsUpdateID != null) && (x.IsPublished))
                 .Include(x => x.NewsUpdate)
                 .ThenInclude(x => x.Changes)
                 .ThenInclude(x => x.Elements)
                 .ToList();
+            return news;
         }
 
         public List<NewsHeader> GetNewsUpdatesHeaders()
@@ -181,11 +181,12 @@ namespace EFDataAccessLibrary.DataAccess
 
         public NewsHeader GetNewsUpdateById(int id)
         {
-            return NewsHeader.Where(x => (x.NewsId == id) && (x.IsPublished))
+            var n = NewsHeader.Where(x => (x.NewsId == id) && (x.IsPublished))
                   .Include(x => x.NewsUpdate)
                   .ThenInclude(x => x.Changes)
-                  .ThenInclude(x => x.Elements)
+                  .ThenInclude(x => x.Elements.OrderBy(child => child.ChangeElementID))
                   .FirstOrDefault();
+            return n;
 
         }
         #endregion
@@ -222,9 +223,14 @@ namespace EFDataAccessLibrary.DataAccess
             return await Player.OrderBy(p => p.PlayerLevel).Include(p => p.PlayerPosition).ToListAsync();
         }
 
-        public async Task<List<Player>> GetPlayersIncludePosition(int skip, int take)
+        public List<Player> GetPlayersForMarket()
         {
-            return await Player.OrderBy(p => p.PlayerLevel).Skip(skip).Include(p => p.PlayerPosition).Take(take).ToListAsync();
+            return Player
+                .Where(p => p.IsForSale)
+                .OrderBy(p => p.Quality)
+                .ThenBy(p => p.PlayerLevel)
+                .Include(p => p.PlayerPosition)
+                .ToList();
         }
 
         public int GetPlayerTeamId(int playerId)
@@ -244,7 +250,10 @@ namespace EFDataAccessLibrary.DataAccess
 
         public Team GetTeamByID(int id)
         {
-            return Team.FirstOrDefault(t => t.TeamID == id);
+            return Team.Where(t => t.TeamID == id)
+                .Include(t => t.PlayerTeam).ThenInclude(pt => pt.Player).ThenInclude(p => p.PlayerPosition)
+                .Include(t => t.EventTeams).ThenInclude(et => et.Event).ThenInclude(e => e.Matches)
+                .FirstOrDefault();
         }
 
         public Team GetTeamByName(string name)
@@ -271,6 +280,14 @@ namespace EFDataAccessLibrary.DataAccess
                 .ToList();
         }
 
+        public List<Player> GetPlayersForTeamID(int teamid)
+        {
+            return PlayerTeam.Where(pt => pt.TeamID == teamid && pt.IsInActiveRoster)
+                .Include(p => p.Player).ThenInclude(pp => pp.PlayerPosition)
+                .Select(p => p.Player)
+                .ToList();
+        }
+
         public List<Player> GetActivePlayersForTeam(Team team)
         {
             return GetActivePlayersForTeam(team.TeamID);
@@ -278,10 +295,10 @@ namespace EFDataAccessLibrary.DataAccess
 
         public List<Player> GetActivePlayersForTeam(int teamid)
         {
-            return Team.Where(t => t.TeamID == teamid)
-                    .SelectMany(t => t.PlayerTeam.Where(x => x.ExitDate == null).Select(p => p.Player))
-                    .Include(p => p.PlayerPosition)
-                    .ToList();
+            return PlayerTeam.Where(x => x.TeamID == teamid && x.IsInActiveRoster)
+                .Include(p => p.Player).ThenInclude(p => p.PlayerPosition)
+                .Select(x => x.Player).ToList();
+
         }
 
         public List<Player> GetPastPlayersForTeam(int teamid)
@@ -356,6 +373,7 @@ namespace EFDataAccessLibrary.DataAccess
                 .Include(x => x.Team2)
                 .Where(x => (x.Team1.TeamID == teamid || x.Team2.TeamID == teamid))
                 .Include(x => x.Event)
+                .Include(x => x.Map)
                 .ToList();
         }
 

@@ -4,6 +4,7 @@
 @{
     NewsHeader news = Model.update;
     NewsUpdate update = Model.update.NewsUpdate;
+    ViewData["Title"] = $"{news.NewsTitle}";
 }
 @section Styles{
     <link href="~/css/blog.css" rel="stylesheet" />

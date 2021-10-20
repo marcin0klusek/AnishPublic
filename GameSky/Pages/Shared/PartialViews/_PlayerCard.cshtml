@@ -37,8 +37,18 @@
         return GetColorOfCard(player.Quality) + ".png";
     }
     var market = db.GetMarketForPlayer(player.PlayerID);
-    string bought = market.IsBought ? "bought" : "";
-    string hidden = market.IsHidden ? "" : "showCard";
+    string bought;
+    string hidden;
+    if (market is null)
+    {
+        bought = "bought";
+        hidden = "showCard";
+    }
+    else
+    {
+        bought = market.IsBought ? "bought" : "";
+        hidden = market.IsHidden ? "" : "showCard";
+    }
 }
 
 @section Styles {

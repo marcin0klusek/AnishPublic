@@ -297,6 +297,7 @@ namespace GameSky.Controllers
                             lastChange.Elements = elements;
                             changes.Add(lastChange);
                             elements = new List<ChangeElement>();
+                            elIndex = -1;
                         }
                         changeIndex++;
                         isChange = true;

@@ -14,7 +14,7 @@ namespace GameSky.Pages
     {
         private readonly DataContext _db;
         public Event _event { get;set; }
-        public List<Team> _teams { get; set; }
+        public List<EFDataAccessLibrary.Models.Team> _teams { get; set; }
         public List<Match> _matches { get; set; }
 
         public EventModel(DataContext db)

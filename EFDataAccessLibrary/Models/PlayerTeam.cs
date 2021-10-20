@@ -17,7 +17,17 @@ namespace EFDataAccessLibrary.Models
         public virtual Team Team { get; set; }
 
         public DateTime JoinDate { get; set; }
-        public DateTime? ExitDate { get; set; }
-        public Boolean isOnTransfer { get; set; }
+        public DateTime? ExitDate
+        {
+            get; set;
+        }
+        public Boolean IsOnTransfer
+        {
+            get; set;
+        }
+        public Boolean IsInActiveRoster
+        {
+            get; set;
+        }
     }
 }

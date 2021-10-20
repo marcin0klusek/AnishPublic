@@ -5,7 +5,7 @@
 @inject UserManager<ApplicationUser> UserManager
 @{
     string name = "Marcin Klusek";
-
+    ViewData["Title"] = $"{Model.news.NewsTitle}";
     if (SignInManager.IsSignedIn(User))
     {
         name = @User.Identity.Name;

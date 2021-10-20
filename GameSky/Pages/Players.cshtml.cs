@@ -15,7 +15,7 @@ namespace GameSky.Pages
     {
         private readonly DataContext _db;
         public List<Player> players;
-        public List<Team> teams;
+        public List<EFDataAccessLibrary.Models.Team> teams;
         public int playersPerPage = 6;
         public int playersCount = 0;
 
@@ -26,9 +26,9 @@ namespace GameSky.Pages
 
         public void OnGet()
         {
-            players = _db.GetPlayersIncludePosition(0, playersPerPage).Result.Where(x => x.IsForSale == true).ToList();
+            players = _db.GetPlayersForMarket();
             teams = _db.GetTeams().Result;
-            playersCount = _db.Player.Where(x => x.IsForSale == true).Count();
+            playersCount = _db.Player.Where(x => x.IsForSale).Count();
         }
 
         public PartialViewResult OnGetPlayersWithFilters(int pageNum, int pageSize, int teamID, string query)

@@ -6,54 +6,140 @@
 @inject UserManager<ApplicationUser> UserManager
 @{
     var team = Model._Team;
+    ViewData["Title"] = $"{team.TeamName}";
     var events = Model._Events;
     var activePlayers = Model._ActivePlayers;
-    var pastPlayers = Model._PastPlayers;
+    var pastPlayers = Model._PastPlayers; //ex-players
     var matches = Model._Matches;
-    string evLoc = "Online";
     string emptyOwner = "-";
     ApplicationUser owner = null;
-    if(team.OwnerID is not null) { owner = await UserManager.FindByIdAsync(team.OwnerID); }
-}
-<hr />
-<h1><b>@team.TeamName</b></h1>     
-<h5>
-    Owner: @if (owner is not null)
+    if (team.OwnerID is not null) { owner = await UserManager.FindByIdAsync(team.OwnerID); }
+
+    string team1status = "";
+    string team2status = "";
+
+    void SetScoreStatus(int? team1score, int? team2score)
     {
-        @owner.UserName;
+        if (team1score > team2score)
+        {
+            team1status = "score-won";
+            team2status = "score-lost";
+        }
+        else
+        {
+            team2status = "score-won";
+            team1status = "score-lost";
+        }
     }
-    else
+    ViewData["Manage"] = false;
+}
+
+@section Styles{
+    <link href="~/css/team.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/playerCard.css" />
+    <link rel="stylesheet" href="~/css/TeamRoster.css" />
+    <link rel="stylesheet" href="~/css/matchesAndResults.css" />
+}
+<hr />
+<div class="team-header">
+    <h1 class="team-name">@team.TeamName</h1>
+</div>
+<div class="active-roster">
+    @await Html.PartialAsync("/Pages/Shared/PartialViews/_ActiveRoster.cshtml", activePlayers)
+    
+    @if (SignInManager.IsSignedIn(User) && owner?.UserName == User.Identity.Name)
     {
-        @emptyOwner
+        <a class="manage-active-roster" asp-page="/TeamPages/Manage" asp-route-TeamName="@team.TeamName" asp-route-id="@team.TeamID">Manage</a>
     }
-</h5>
-<hr />
-<br />
-<hr />
-<h3><b>Events</b></h3>
-@foreach (var _event in events)
-{
-    @if(_event.Location is not null) { evLoc = _event.Location; } else { evLoc = "Online"; }
-    <p>@_event.Name | @evLoc | @_event.StartDate.ToString("dd MMM yyyy")</p>
-}
-<br />
-<hr />
-<h3><b>Active roster</b></h3>
-@foreach (var player in activePlayers)
-{
-    <p>@player.NickName - @player.PlayerLevel - @player.PlayerPosition.Name </p>
-}
-<br />
-<hr />
-<h3><b>Ex-Players</b></h3>
-@foreach (var player in pastPlayers)
-{
-    <p>@player.NickName @player.PlayerLevel @player.PlayerPosition.Name </p>
-}
-<br />
-<hr />
-<h3><b>Matches</b></h3>
-@foreach (var match in matches)
-{
-    <p>@match.Team1.TeamName @match.ScoreTeam1 - @match.ScoreTeam2 @match.Team2.TeamName | @match.Event.Name</p>
-}
+</div>
+
+<div class="event-container">
+    <table>
+        <thead>
+            <tr>
+                <th><h3 class="event-container-title">Wydarzenia</h3></th>
+            </tr>
+            <tr>
+                <th>Nazwa</th>
+                <th>Lokalizacja</th>
+                <th>Data rozpoczęcia</th>
+                <th>Data zakończenia</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var _event in events)
+            {
+                <tr class="event-row">
+                    <td>@_event.Name</td>
+                    <td>@(_event.Location?.ToString()??"Online")</td>
+                    <td>@(_event.StartDate.ToString("dd MMM yyyy"))</td>
+                    <td>@(_event.EndDate?.ToString("dd MMM yyyy") ?? "TRWA")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="results">
+    <h3><b>Ostatnie spotkania</b></h3>
+    <div class="results-sublist">
+        @foreach (var match in matches.OrderByDescending(x => x.EndDate).Take(10))
+        {
+            SetScoreStatus(match.ScoreTeam1, match.ScoreTeam2);
+            <div class="result-con" id="@("match" + match.MatchID)">
+                <a asp-controller="Matches" asp-action="Match" asp-route-id="@match.MatchID">
+                    <div class="result">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td class="team-cell">
+                                        <div class="line-align team1">
+                                            <div class="team">@match.Team1.TeamName</div>
+                                            <img src="@Country.GetCountry(match.Team1.Country)">
+                                        </div>
+                                    </td>
+                                    <td class="result-score">
+                                        <span class="score @team1status" id="@("match" + match.MatchID + "scoreteam1")">@match.ScoreTeam1</span>
+                                        -
+                                        <span class="score @team2status" id="@("match" + match.MatchID + "scoreteam2")">@match.ScoreTeam2</span>
+                                    </td>
+                                    <td class="team-cell">
+                                        <div class="line-align team2">
+                                            <img src="@Country.GetCountry(match.Team2.Country)">
+                                            <div class="team">@match.Team2.TeamName</div>
+                                        </div>
+                                    </td>
+                                    <td class="event">
+                                        <span class="event-name">@match.Event.Name</span>
+                                    </td>
+                                    <td class="star-cell">
+                                        <div class="map-text" id="@("match" + match.MatchID + "mapTag")">@match.Map?.Tag</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    const cards = [].slice.call(document.getElementsByClassName('bought'));
+    (function () {
+        RemoveBoughtAndShow(cards);
+    })();
+
+    function RemoveBoughtAndShow(cards) {
+        for (var i = 0; i < cards.length; i++) {
+            var el = cards[i];
+            console.log(el.classList.contains('bought'));
+            console.log(cards.length);
+            if (!el.classList.contains('showCard')) {
+                el.classList.add('showCard');
+            }
+            el.classList.remove('bought');
+        }
+    }
+</script>

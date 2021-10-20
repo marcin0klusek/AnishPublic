@@ -14,7 +14,7 @@ namespace GameSky.Pages
     public class TeamModel : PageModel
     {
         public DataContext _db { get; private set; }
-        public Team _Team { get; set; }
+        public EFDataAccessLibrary.Models.Team _Team { get; set; }
         public List<Event> _Events { get; set; }
         public List<Player> _ActivePlayers { get; set; }
         public List<Player> _PastPlayers { get; set; }
@@ -35,7 +35,8 @@ namespace GameSky.Pages
                 return RedirectToPage("/Index"); 
             }
             _Events = _db.GetEventsForTeam(_Team.TeamID);
-            _ActivePlayers = _db.GetActivePlayersForTeam(_Team.TeamID);
+            //_ActivePlayers = _db.GetActivePlayersForTeam(_Team.TeamID);
+            _ActivePlayers = _Team.GetActiveRoster();
             _PastPlayers = _db.GetPastPlayersForTeam(_Team.TeamID);
             _Matches = _db.GetMatchesForTeam(_Team.TeamID);
 

@@ -7,6 +7,7 @@
 }
 @{
     Event _event = Model._event;
+    ViewData["Title"] = $"{_event.Name}";
 }
 
 <h3><b>@_event.Name</b></h3>
@@ -22,7 +23,7 @@ else
 <p>@_event.PrizePool USD</p>
 
 <h3><b>Teams</b></h3>
-@foreach (Team team in @Model._teams)
+@foreach (var team in @Model._teams)
 {
     <span>[@team.TeamName] </span>
 }

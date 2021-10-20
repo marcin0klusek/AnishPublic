@@ -8,7 +8,7 @@
 @{
     Layout = "~/Pages/Shared/_Layout.cshtml";
     Match match = ViewBag.Match;
-    ViewBag.Title = "#" + match.MatchID + " - " + match.Team1.TeamName + " vs " + match.Team2.TeamName;
+    ViewBag.Title = $"{match.Team1.TeamName} vs {match.Team2.TeamName}";
 }
 
 <h2 class="text-center">@DateTime.Now</h2>

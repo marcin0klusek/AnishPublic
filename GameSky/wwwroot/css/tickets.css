@@ -65,7 +65,8 @@
 }
 
 .tickets--row {
-    display: flex;
+    display: grid;
+    grid-template-columns: 0.05fr 0.05fr 0.8fr 0.15fr;
     background-color: #141414;
     border-radius: 3px;
     justify-content: space-between;
@@ -94,14 +95,17 @@
 
 .ticket--title {
     display: flex;
-    text-align: center;
-    width: 60%;
-    justify-content:center;
+    text-align: start;
+    width: 100%;
+    padding-inline: 15px;
+    overflow-y: hidden;
+    text-overflow: ellipsis;
 }
 
 .ticket-status {
     text-transform: uppercase;
     font-weight: 700;
+    text-align: end;
 }
 
 /* Ticket view */

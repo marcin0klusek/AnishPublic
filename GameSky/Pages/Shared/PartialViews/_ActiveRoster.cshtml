@@ -1,0 +1,44 @@
+﻿@model IEnumerable<EFDataAccessLibrary.Models.Player>
+@using EFDataAccessLibrary.Models
+@{
+    List<Player> players = Model as List<Player>;
+    bool IsManage = true;
+    if(ViewData["Manage"] is not null)
+    {
+        IsManage = (bool)ViewData["Manage"];
+    }
+}
+@section Styles{
+    <link rel="stylesheet" href="~/css/TeamRoster.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+}
+
+<div class="roster-container">
+    <div class="roster-card-wrapper">
+        @if (players is not null || players.Count > 0)
+        {
+            foreach (var player in players)
+            {
+        <div class="roster-player-card">
+            <a asp-page="/player" asp-route-id="@player.PlayerID">
+                @await Html.PartialAsync("~/Pages/Shared/PartialViews/_PlayerCard.cshtml", player)
+            </a>
+            @if (IsManage)
+            {
+                <div class="team-player-actions" onclick="ChangePlayerActiveStatus(@player.PlayerID, false)" title="Przenieś na rezerwę" style="display: block;">
+                    <div class="actions-to-active-player" style="display: block;">
+                        <span class="material-icons-outlined">
+                            expand_more
+                        </span>
+                    </div>
+                </div>
+            }
+        </div>
+            }
+        }
+        else
+        {
+            <text>Brak aktywnego składu</text>
+        }
+    </div>
+</div>

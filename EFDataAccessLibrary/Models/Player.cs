@@ -46,6 +46,11 @@ namespace EFDataAccessLibrary.Models
             return age;
         }
 
+        public int GetPrize()
+        {
+            return (int)Prize;
+        }
+
         public static int GetSkillPrice(int skill)
         {
             switch (skill)

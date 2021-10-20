@@ -2,8 +2,9 @@
 @model GameSky.Pages.PlayersModel
 @using EFDataAccessLibrary.Models;
 @{
+    ViewData["Title"] = $"Rynek";
     List<Player> players = Model.players;
-    List<Team> teams = Model.teams;
+    List<EFDataAccessLibrary.Models.Team> teams = Model.teams;
 
     int itemsPerPage = Model.playersPerPage;
     int pages = Model.playersCount / itemsPerPage;
@@ -24,7 +25,7 @@
                     <option value="-1">---</option>
                     @if (teams != null)
                     {
-                        @foreach (Team team in teams)
+                        @foreach (var team in teams)
                         {
                             <option value="@team.TeamID">@team.TeamName</option>
                         }

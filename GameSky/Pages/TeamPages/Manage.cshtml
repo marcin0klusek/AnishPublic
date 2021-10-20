@@ -1,0 +1,173 @@
+﻿@page "/team/{id:int}/{TeamName}/manage"
+@model GameSky.Pages.Team.ManageModel
+@using EFDataAccessLibrary.Models
+@{
+    Team Team = Model.Team;
+
+    ViewData["Title"] = $"Manage {Team.TeamName}";
+
+    Player firstAdditionalPlayer = Team.GetAdditionalPlayers().FirstOrDefault();
+    ViewData["Manage"] = true;
+}
+@section Styles{
+    <link rel="stylesheet" href="~/css/TeamRoster.css" />
+    <link rel="stylesheet" href="~/css/playerCard.css" />
+    <link rel="stylesheet" href="~/css/ManageTeam.css" />
+}
+<div class="manage-team-hero">
+    <h3 class="manage-team-hero-title">AKTYWNY SKŁAD</h3> <a asp-page="/team" asp-route-id="@Team.TeamID">Wróc do @Team.TeamName</a>
+</div>
+@await Html.PartialAsync("/Pages/Shared/PartialViews/_ActiveRoster.cshtml", Team.GetActiveRoster(), ViewData)
+<hr />
+@if (Team.GetAdditionalPlayers().Count > 0)
+{
+    <h3 class="section-title">Dodatkowi zawodnicy</h3>
+    <div class="additional-players-container">
+        <div class="additional-players-list">
+            <table class="players-table-header">
+                <thead>
+                    <tr>
+                        <th>FirstName</th>
+                        <th>NickName</th>
+                        <th>LastName</th>
+                        <th>Age</th>
+                        <th>Aim</th>
+                        <th>Knowledge</th>
+                        <th>Potencial</th>
+                        <th>Quality</th>
+                        <th>Position</th>
+                    </tr>
+                </thead>
+            </table>
+            @foreach (var player in Team.GetAdditionalPlayers() ?? new List<Player>())
+            {
+                <a class="player-table" onclick="ActivePlayer(@player.PlayerID, this)">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>@player.FirstName</td>
+                                <td>@player.NickName</td>
+                                <td>@player.LastName</td>
+                                <td>@player.GetAge()</td>
+                                <td>@player.Aim</td>
+                                <td>@player.Knowledge</td>
+                                <td>@player.Potencial</td>
+                                <td>@player.Quality.ToString().ToUpper()</td>
+                                <td>@player.PlayerPosition.Name</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </a>
+            }
+        </div>
+        <div class="additional-player-details" id="detail-card">
+            @await Html.PartialAsync("/Pages/Shared/PartialViews/_PlayerManage.cshtml", firstAdditionalPlayer, ViewData)
+        </div>
+    </div>
+}
+<script>
+    RemoveBoughtAndShowCard();
+    var first = document.getElementsByClassName('player-table')[0];
+    if (first != undefined) {
+        SetActive(first);
+    }
+
+    function RemoveBoughtAndShowCard() {
+        const cards = document.getElementsByClassName('bought');
+        while (cards.length > 0) {
+            var el = cards[0];
+            if (!el.classList.contains('showCard')) {
+                el.classList.add('showCard');
+            }
+            el.classList.remove('bought');
+        }
+    }
+
+    function ActivePlayer(playerId, table) {
+        $.ajax({
+            url: "/team/@Team.TeamID/@Team.TeamName/Manage?handler=PlayerDetail",
+            type: "get",
+            contentType: "application/x-www-form-urlencoded",
+            data: { PlayerID: playerId },
+            success: function (result) {
+                $("#detail-card").html(result);
+                RemoveBoughtAndShowCard();
+                SetActive(table);
+            },
+            error: function (error) {
+                alert('Nie można wyświetlić zawodnika. Error Code: Manage 1');
+            }
+        });
+    }
+
+    function SetActive(table) {
+        var row = document.getElementsByClassName('active-table')[0];
+        var atable = document.getElementsByClassName('active-a-table')[0];
+        if (row != undefined) {
+            row.classList.remove('active-table');
+        }
+        if (atable != undefined) {
+            atable.classList.remove('active-a-table');
+        }
+        table.classList.add('active-a-table');
+        table.children[0].classList.add('active-table');
+    }
+
+    function AuctionPlayer(playerId, status) {
+        $.ajax({
+            url: "/team/@Team.TeamID/@Team.TeamName/Manage?handler=PutPlayerOnAuction",
+            type: "post",
+            contentType: "application/x-www-form-urlencoded",
+            data: { PlayerID: playerId, Status: status },
+            success: function (data, textStatus, xhr) {
+                if (xhr.responseJSON === 'error') {
+                    //if user doesnt have enought money
+                } else {
+                    document.getElementById('auctionOn' + playerId).style.display = 'none';
+                    if (status) {
+                        document.getElementById('auctionOn' + playerId).style.display = 'none';
+                        document.getElementById('auctionOff' + playerId).style.display = 'block';
+                    } else {
+                        document.getElementById('auctionOn' + playerId).style.display = 'block';
+                        document.getElementById('auctionOff' + playerId).style.display = 'none';
+                    }
+                }
+            }
+        });
+    }
+
+    function QuickSell(playerId) {
+        $.ajax({
+            url: "/team/@Team.TeamID/@Team.TeamName/Manage?handler=QuickSell",
+            type: "post",
+            contentType: "application/x-www-form-urlencoded",
+            data: { PlayerID: playerId },
+            success: function (data, textStatus, xhr) {
+                if (xhr.responseJSON === 'error') {
+                    //if user doesnt have enought money
+                } else {
+                    console.log('Sprzedano gracza ' + playerId);
+                    window.location.href = xhr.responseJSON;
+                }
+            }
+        });
+    }
+
+    function ChangePlayerActiveStatus(playerId, status) {
+        $.ajax({
+            url: "/team/@Team.TeamID/@Team.TeamName/Manage?handler=ChangePlayerActiveStatus",
+            type: "post",
+            contentType: "application/x-www-form-urlencoded",
+            data: { PlayerID: playerId, Status: status },
+            success: function (data, textStatus, xhr) {
+                if (xhr.responseJSON === 'error') {
+                    //if user doesnt have enought money
+                } else {
+                    setTimeout(function () {
+                        window.location.href = xhr.responseJSON;
+                    }, 1000);
+                }
+            }
+        });
+    }
+</script>
