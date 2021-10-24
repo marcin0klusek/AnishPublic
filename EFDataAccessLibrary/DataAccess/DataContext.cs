@@ -36,6 +36,7 @@ namespace EFDataAccessLibrary.DataAccess
         public DbSet<NewsUpdate> NewsUpdate { get; set; }
         public DbSet<Change> Change { get; set; }
         public DbSet<ChangeElement> ChangeElement { get; set; }
+        public DbSet<WarningBar> WarningBar { get; set; }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -509,6 +510,13 @@ namespace EFDataAccessLibrary.DataAccess
 
         #region TicketComment
 
+        #endregion
+
+        #region WarningBar
+        public WarningBar GetWarningBar()
+        {
+            return WarningBar.Where(w => w.Active).OrderByDescending(w => w.PublishDate).FirstOrDefault();
+        }
         #endregion
 
         #endregion

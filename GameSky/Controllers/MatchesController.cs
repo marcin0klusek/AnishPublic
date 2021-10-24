@@ -10,6 +10,8 @@ using EFDataAccessLibrary.DataAccess;
 using GameSky.Models;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.SignalR;
+using GameSky.Hubs;
 
 namespace GameSky.Pages.Matches
 {
@@ -18,9 +20,13 @@ namespace GameSky.Pages.Matches
     {
         private readonly DataContext _db;
         private static Toaster _notyf;
-        public MatchesController(DataContext db, INotyfService notyf)
+
+        public IHubContext<MatchesHub> Hub;
+
+        public MatchesController(DataContext db, INotyfService notyf, IHubContext<MatchesHub> hub)
         {
             _db = db;
+            Hub = hub;
             _notyf = new Toaster(notyf);
         }
 
@@ -66,21 +72,6 @@ namespace GameSky.Pages.Matches
             {
                 return View("MatchUpcoming");
             }
-        }
-        [Route("matches/matchheaderrefresh")]
-        public async Task<ActionResult> MatchHeaderRefresh(int id)
-        {
-            var newMatch = await Task.Run(() => _db.GetMatchById(id));
-
-            if (newMatch != null)
-            {
-                _notyf.ShowInformation("Prawidłowo zaktualizowano nagłówek!");
-            }
-            else
-            {
-                _notyf.Warning("Nie udało się zaktualizować nagłówka.");
-            }
-            return PartialView("~/Views/Shared/Matches/_MatchHeader.cshtml", newMatch);
         }
     }
 }

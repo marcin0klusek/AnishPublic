@@ -10,10 +10,6 @@
     Match match = ViewBag.Match;
     ViewBag.Title = $"{match.Team1.TeamName} vs {match.Team2.TeamName}";
 }
-
-<h2 class="text-center">@DateTime.Now</h2>
-<div class="text-center"><input type="button" id="refresher" value="Refresh" /></div>
-
 <div class="match-container">
     <div class="match-header" id="partialHeader">
         @Html.Partial("~/Views/Shared/Matches/_MatchHeader.cshtml", match)
@@ -98,18 +94,8 @@
 
     <div class="clearfix spacer"></div>
     <div class="section-spacer"></div>
-
+@* Dodać sekcję statystyk graczy dla każdej drużyny *@
 </div>
 
 <script>
-    $("#refresher").click(function () {
-        $.ajax({
-            url: "/Matches/MatchHeaderRefresh",
-            type: "get",
-            data: { id : @match.MatchID }, //if you need to post Model data, use this
-            success: function (result) {
-                $("#partialHeader").html(result);
-            }
-        })
-    });
 </script>

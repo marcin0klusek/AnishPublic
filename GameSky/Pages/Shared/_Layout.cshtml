@@ -4,6 +4,14 @@
 @using Microsoft.AspNetCore.Authorization
 @inject IAuthorizationService AuthorizationService
 
+@{ 
+    WarningBar warning = null;
+    if (ViewData["Warning"] != null)
+    {
+        warning = (WarningBar)ViewData["Warning"];
+    }
+}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -52,10 +60,13 @@
                 </div>
             </div>
         </nav>
-        <div id="mainAlert" class="mainAlert">
-            <span class="material-icons">warning</span>
-            <span id="alertText">Właśnie dodaliśmy nowy turniej Verification solo cup 2001 - szczegóły w zakładce Turnieje solo!</span>
-        </div>
+        @*@if(warning != null && warning.IsActive())
+        {
+            <div id="mainAlert" class="mainAlert" style="display: normal !important;">
+                <span class="material-icons">warning</span>
+                <span id="alertText">@warning.Text</span>
+            </div>
+       }*@
 
         @* Admin sidebar *@
         @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdminRole")).Succeeded)
@@ -101,11 +112,15 @@
                     <i class="material-icons">article</i>
                     <span class="icon-text">blog</span>
                 </a>
-                <br>
                 <hr />
                 <a asp-area="" asp-controller="Admin" asp-action="Index">
                     <i class="material-icons">settings</i>
                     <span class="icon-text">zarządzaj</span>
+                </a>
+                <br>
+                <a asp-area="" asp-controller="Admin" asp-action="WarningBar">
+                    <i class="material-icons">error</i>
+                    <span class="icon-text">awaria</span>
                 </a>
             </div>
         }

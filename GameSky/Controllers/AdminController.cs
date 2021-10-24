@@ -31,11 +31,13 @@ namespace GameSky.Controllers
         public DataContext Db { get; }
         public INotyfService Notyf { get; }
         private UserManager<ApplicationUser> userManager { get; set; }
-        public AdminController(DataContext db, INotyfService notyf, UserManager<ApplicationUser> userManager)
+        public IHubContext<MatchesHub> MatchesHub { get; }
+        public AdminController(DataContext db, INotyfService notyf, UserManager<ApplicationUser> userManager, IHubContext<MatchesHub> matchesHub)
         {
             Db = db;
             Notyf = notyf;
             this.userManager = userManager;
+            MatchesHub = matchesHub;
         }
         #region AdminController
         [Route("admin")]
@@ -357,6 +359,13 @@ namespace GameSky.Controllers
                 Notyf.Error("Nie odnaleziono aktualizacji do usunięcia");
             }
             return RedirectToAction("IndexUpdate");
+        }
+        #endregion
+
+        #region WarningBar
+        public IActionResult WarningBar()
+        {
+            return null;
         }
         #endregion
     }

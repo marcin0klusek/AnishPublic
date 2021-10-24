@@ -24,6 +24,7 @@ namespace GameSky.Pages
         private int NewsToTake = 15;
         private Stopwatch stopwatch = new Stopwatch();
         public string elapsedTime = "puste";
+        public WarningBar Warning { get; set; }
 
 
         public IndexModel(ILogger<IndexModel> logger, DataContext db)
@@ -35,7 +36,8 @@ namespace GameSky.Pages
         public async Task<IActionResult> OnGetAsync()
         {
             NewsHeaders = await _db.GetPublishedNews(NewsToTake);
-
+            Warning = _db.GetWarningBar();
+            ViewData["Warning"] = Warning;
             results = Task.Run(() => _db.GetFinishedMatches().Take(15).ToList()).Result;
             return Page();
         }

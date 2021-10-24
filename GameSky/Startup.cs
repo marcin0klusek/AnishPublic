@@ -127,6 +127,7 @@ namespace GameSky
 
             ResultsHub.Current = app.ApplicationServices.GetService<IHubContext<ResultsHub>>();
             TicketHub.Current = app.ApplicationServices.GetService<IHubContext<TicketHub>>();
+            MatchesHub.Current = app.ApplicationServices.GetService<IHubContext<MatchesHub>>();
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -140,6 +141,7 @@ namespace GameSky
                 endpoints.MapHangfireDashboard("/hangfire");
                 endpoints.MapHub<ResultsHub>("resultsHub");
                 endpoints.MapHub<TicketHub>("ticketHub");
+                endpoints.MapHub<MatchesHub>("match/matchesHub");
             });
         }
     }
