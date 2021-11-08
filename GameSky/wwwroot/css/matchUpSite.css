@@ -370,12 +370,20 @@ a:hover{
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    cursor: pointer;
+    cursor: pointer;    
+}
+
+.player-image{
+    min-width: 100px;
+    max-width: 100px;
+    min-height: 100px;
+    max-width: 100px;
 }
 
 .lineups .player{
     padding-bottom: 0;
     font-weight: 700;
+    max-height: 10px;
 }
 
 .lineups .player:hover{
@@ -385,12 +393,7 @@ a:hover{
 .lineups .player-photo {
     width: 100%;
     background-color: #334252;
-}
-
-.lineups .player-photo:hover{
-    background-color: #566c85;
-    transform: scale(1.1);
-    border: 0;
+    max-height:100px;
 }
 
 .lineups .lineup-team1{

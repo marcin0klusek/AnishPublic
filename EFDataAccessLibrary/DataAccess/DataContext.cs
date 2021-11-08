@@ -224,13 +224,14 @@ namespace EFDataAccessLibrary.DataAccess
             return await Player.OrderBy(p => p.PlayerLevel).Include(p => p.PlayerPosition).ToListAsync();
         }
 
-        public List<Player> GetPlayersForMarket()
+        public List<Player> GetPlayersForMarket(int amount)
         {
             return Player
                 .Where(p => p.IsForSale)
                 .OrderBy(p => p.Quality)
-                .ThenBy(p => p.PlayerLevel)
+                .ThenByDescending(p => p.PlayerLevel)
                 .Include(p => p.PlayerPosition)
+                .Take(amount)
                 .ToList();
         }
 
@@ -344,6 +345,14 @@ namespace EFDataAccessLibrary.DataAccess
                  .Include(x => x.Map)
                  .Include(x => x.Event)
                  .FirstOrDefault(m => m.MatchID == id);
+        }
+
+        public Match GetMatchByIdIncludePlayers(int id)
+        {
+            Match match = GetMatchById(id);
+            match.Team1 = GetTeamByID(match.Team1.TeamID);
+            match.Team2 = GetTeamByID(match.Team2.TeamID);
+            return match;
         }
 
         public List<Match> GetUpcomingMatches()
@@ -515,7 +524,7 @@ namespace EFDataAccessLibrary.DataAccess
         #region WarningBar
         public WarningBar GetWarningBar()
         {
-            return WarningBar.Where(w => w.Active).OrderByDescending(w => w.PublishDate).FirstOrDefault();
+            return WarningBar.OrderByDescending(w => w.PublishDate).FirstOrDefault();
         }
         #endregion
 

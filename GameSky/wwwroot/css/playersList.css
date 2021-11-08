@@ -23,8 +23,17 @@
         justify-content: flex-end;
     }
 
+.filters-sliders{
+    display: flex;
+
+}
+
 .teamComboBox {
     margin-right: 10px;
+}
+
+.player-card:hover{
+    cursor: pointer !important;
 }
 
 #players-view {
@@ -34,7 +43,7 @@
 
 .players-list--container {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     grid-gap: 40px;
     justify-content: center;
 }

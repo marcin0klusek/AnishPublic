@@ -361,11 +361,28 @@ namespace GameSky.Controllers
             return RedirectToAction("IndexUpdate");
         }
         #endregion
-
         #region WarningBar
+        [Route("admin/warningbar")]
+        [HttpGet]
         public IActionResult WarningBar()
         {
-            return null;
+            ViewBag.Bar = Db.GetWarningBar();
+            return View("WarningBar/Manage");
+        }
+
+        [Route("admin/warningbar")]
+        [HttpPost]
+        public IActionResult WarningBar(WarningBar bar)
+        {
+            bar.PublishDate = DateTime.Now;
+            Db.Update(bar);
+            var result = Db.SaveChanges();
+            if(result < 0)
+            {
+                Notyf.Error("Nie udało się zapisać zmian");
+            }
+            ViewBag.Bar = bar;
+            return View("WarningBar/Manage");
         }
         #endregion
     }

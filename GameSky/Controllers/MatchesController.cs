@@ -57,7 +57,7 @@ namespace GameSky.Pages.Matches
         [Route("match/{id}")]
         public async Task<ActionResult> Match(int id)
         {
-            Match match = await Task.Run(() => _db.GetMatchById(id));
+            Match match = await Task.Run(() => _db.GetMatchByIdIncludePlayers(id));
             if (match == null)
             {
                 _notyf.ShowInformation("Nie można odnaleźć meczu o id: " + id);

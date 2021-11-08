@@ -1,8 +1,8 @@
-﻿@model List<EFDataAccessLibrary.Models.Player>
+﻿@model GameSky.Models.PlayersPageModel
 @using EFDataAccessLibrary.Models
 
 @{
-    List<Player> players = Model;
+    List<Player> players = Model.Players;
 }
 
 @section Styles {
@@ -14,31 +14,67 @@
     {
         @foreach (Player player in players)
         {
-            <div class="player">
-                <div class="playerImg">
-                    <img src="~/images/players/navi/5.png" class="playerImg blank" />
-                </div>
-                <div class="position">
-                    <img src="~/images/playerPositions/@(player.PlayerPosition.Name).png" class="positionImg" />
-                </div>
-                <div class="playerName">
-                    <p class="playerName"><a asp-page="/player" asp-route-id="@player.PlayerID">@player.NickName</a></p>
-                </div>
-                <div class="skills--container">
-                    <div class="skill potencial">
-                        <div class="skill-name">PTNL</div>
-                        <span class="skill-text" style="color: @(PlayersModel.ColorSkillGroup(player.Potencial))">@(@player.Potencial * 10)</span>
-                    </div>
-                    <div class="skill aim">
-                        <div class="skill-name">Aim</div>
-                        <span class="skill-text" style="color: @(PlayersModel.ColorSkillGroup(player.Aim))">@(@player.Aim * 10)</span>
-                    </div>
-                    <div class="skill knowledge">
-                        <div class="skill-name">KNWL</div>
-                        <span class="skill-text" style="color: @(PlayersModel.ColorSkillGroup(player.Knowledge))">@(@player.Knowledge * 10)</span>
-                    </div>
-                </div>
-            </div>
+    <a class="player-card" asp-page="/Player" asp-route-id="@player.PlayerID">
+        @Html.Partial("~/Pages/Shared/PartialViews/_PlayerCard.cshtml", player)
+    </a>
         }
     }
 </div>
+@if (Model.TotalAmount > 0)
+{
+    <div class="pagination" style="margin-top: 40px">
+        <a onclick="ChangePage(1)">&laquo;</a>
+        @if (Model.HasLessThanPrev())
+        {
+            <a class="pageBtn" onclick="ChangePage(1)" id="@($"pageBtn{1}")">1</a>
+            <a class="pageBtn">...</a>
+        }
+        @if (Model.HasPrev())
+        {
+            <a class="pageBtn" onclick="ChangePage(@Model.CurrentPage-1)" id="@($"pageBtn{Model.CurrentPage - 1}")">@(Model.CurrentPage - 1)</a>
+        }
+
+        <a class="pageBtn currentPage" onclick="ChangePage(@Model.CurrentPage)" id="@($"pageBtn{ Model.CurrentPage}")">@Model.CurrentPage</a>
+
+        @if (Model.HasNext())
+        {
+            <a class="pageBtn" onclick="ChangePage(@Model.CurrentPage+1)" id="@($"pageBtn{Model.CurrentPage + 1}")">@(Model.CurrentPage + 1)</a>
+        }
+
+        @if (Model.HasMoreThanNext())
+        {
+            <a class="pageBtn">...</a>
+            <a class="pageBtn" onclick="ChangePage(@Model.GetAmountOfPages())" id="@($"pageBtn{Model.GetAmountOfPages()}")">@Model.GetAmountOfPages()</a>
+        }
+        <a onclick="ChangePage(@Model.GetAmountOfPages())">&raquo;</a>
+    </div>
+}
+<script>
+    function ChangePage(number) {
+        var quality = document.getElementById("qualities").value;
+        var role = document.getElementById("roles").value;
+        var queryVal = document.getElementById("searchInput").value;
+
+        var button = document.getElementById("pageBtn" + number);
+        var activeBtn = document.getElementsByClassName("currentPage")[0];
+
+
+        if (!button.disabled) {
+            activeBtn.classList.remove("currentPage");
+            activeBtn.disabled = false;
+
+            button.classList.add("currentPage");
+            button.disabled = true;
+
+            $.ajax({
+                url: "/players?handler=PlayersWithFilters",
+                type: "get",
+                data: { pageNum: number, pageSize: 5, roleName: role, quality: quality, query: queryVal },
+                success: function (result) {
+                    $("#players-view").html(result);
+                    ClearCards();
+                }
+            });
+        }
+    }
+</script>

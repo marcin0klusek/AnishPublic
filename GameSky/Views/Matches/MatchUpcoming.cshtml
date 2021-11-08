@@ -5,14 +5,8 @@
     Layout = "~/Pages/Shared/_Layout.cshtml";
     Match match = ViewBag.Match;
     ViewBag.Title = $"{match.Team1.TeamName} vs {match.Team2.TeamName}";
-
-
-    MatchAction action = new MatchAction()
-    {
-        Type = MatchActionEnum.Kill,
-        Player1 = "Player1",
-        Player2 = "Player2"
-    };
+    Team team1 = match.Team1;
+    Team team2 = match.Team2;
 }
 @section Styles {
     <link rel="stylesheet" href="~/css/matchUpSite.css" />
@@ -42,18 +36,16 @@
                     <table class="table">
                         <tbody>
                             <tr>
-                                <td class="player player-image"> <img src="~/images/players/navi/1.png" class="player-photo" /></td>
-                                <td class="player player-image"> <img src="~/images/players/navi/2.png" class="player-photo" /></td>
-                                <td class="player player-image"> <img src="~/images/players/navi/3.png" class="player-photo" /></td>
-                                <td class="player player-image"> <img src="~/images/players/navi/4.png" class="player-photo" /></td>
-                                <td class="player player-image"> <img src="~/images/players/navi/5.png" class="player-photo" /></td>
+                                @foreach (var p in team1.GetActiveRoster())
+                                {
+                                    <td class="player player-image"> <img src="~/images/blankplayer.svg" class="player-photo" /></td>
+                                }
                             </tr>
                             <tr>
-                                <td class="player"> <div class="flagAlign"> <img src="@Country.GetCountry("UA")" class="flag" /> <div class="text-ellipsis">Perfecto</div> </div></td>
-                                <td class="player"> <div class="flagAlign"> <img src="@Country.GetCountry("UA")" class="flag" /> <div class="text-ellipsis">boombl4</div> </div></td>
-                                <td class="player"> <div class="flagAlign"> <img src="@Country.GetCountry("UA")" class="flag" /> <div class="text-ellipsis">electronic</div> </div></td>
-                                <td class="player"> <div class="flagAlign"> <img src="@Country.GetCountry("UA")" class="flag" /> <div class="text-ellipsis">b1t</div> </div></td>
-                                <td class="player"> <div class="flagAlign"> <img src="@Country.GetCountry("UA")" class="flag" /> <div class="text-ellipsis">s1mple</div> </div></td>
+                                @foreach (var p in team1.GetActiveRoster())
+                                {
+                                    <td class="player"> <div class="flagAlign"> <img src="@Country.GetCountry(team1.Country)" class="flag" /> <div class="text-ellipsis">@p.NickName</div> </div></td>
+                                }
                             </tr>
                         </tbody>
                     </table>
@@ -73,18 +65,17 @@
                     <table class="table">
                         <tbody>
                             <tr>
-                                <td class="player player-image"> <img src="~/images/players/g2/1.png" class="player-photo" /></td>
-                                <td class="player player-image"> <img src="~/images/players/g2/2.png" class="player-photo" /></td>
-                                <td class="player player-image"> <img src="~/images/players/g2/3.png" class="player-photo" /></td>
-                                <td class="player player-image"> <img src="~/images/players/g2/4.png" class="player-photo" /></td>
-                                <td class="player player-image"> <img src="~/images/players/g2/5.png" class="player-photo" /></td>
+
+                                @foreach (var p in team2.GetActiveRoster())
+                                {
+                                    <td class="player player-image"> <img src="~/images/blankplayer.svg" class="player-photo" /></td>
+                                }
                             </tr>
                             <tr>
-                                <td class="player"> <div class="flagAlign"><img src="@Country.GetCountry("FR")" class="flag" /> <div class="text-ellipsis">Amanek</div> </div></td>
-                                <td class="player"> <div class="flagAlign"><img src="@Country.GetCountry("FR")" class="flag" /> <div class="text-ellipsis">Hunter</div> </div></td>
-                                <td class="player"> <div class="flagAlign"><img src="@Country.GetCountry("FR")" class="flag" /> <div class="text-ellipsis">JackZz</div> </div></td>
-                                <td class="player"> <div class="flagAlign"><img src="@Country.GetCountry("FR")" class="flag" /> <div class="text-ellipsis">nexa</div> </div></td>
-                                <td class="player"> <div class="flagAlign"><img src="@Country.GetCountry("FR")" class="flag" /> <div class="text-ellipsis">niko</div> </div></td>
+                                @foreach (var p in team2.GetActiveRoster())
+                                {
+                                    <td class="player"> <div class="flagAlign"> <img src="@Country.GetCountry(team2.Country)" class="flag" /> <div class="text-ellipsis">@p.NickName</div> </div></td>
+                                }
                             </tr>
                         </tbody>
                     </table>
@@ -106,9 +97,6 @@
                 <div class="score-bot-header-score">0:0</div>
             </div>
             <div class="score-bot-logs" id="logs">
-                @*logs from match*@
-                @*<div class="logs-action">@action.Player1 @action.Type.ToString() @action.Player2 </div>
-                <div class="logs-action">Match started</div>*@
             </div>
         </div>
     </div>

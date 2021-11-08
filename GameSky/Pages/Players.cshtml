@@ -1,35 +1,50 @@
 ﻿@page
 @model GameSky.Pages.PlayersModel
 @using EFDataAccessLibrary.Models;
+@using GameSky.Models;
 @{
     ViewData["Title"] = $"Rynek";
     List<Player> players = Model.players;
-    List<EFDataAccessLibrary.Models.Team> teams = Model.teams;
 
     int itemsPerPage = Model.playersPerPage;
-    int pages = Model.playersCount / itemsPerPage;
-    if (pages % 3 > 0) pages++;
+    var playerspage = new PlayersPageModel()
+    {
+        Players = players,
+        ItemsPerPage = Model.playersPerPage,
+        TotalAmount = Model.playersCount,
+        CurrentPage = 1
+    };
 
 }
 
 @section Styles {
     <link rel="stylesheet" href="~/css/playersList.css" />
+    <link rel="stylesheet" href="~/css/playerCard.css" />
 }
 
 <div class="divs--container">
     <div class="filters-bar">
         <div class="filters-wrapper">
             <div class="teamComboBox">
-                <label for="cars">Drużyna:</label>
-                <select name="teams" id="teams" onchange="findPlayersOfTeam()">
-                    <option value="-1">---</option>
-                    @if (teams != null)
-                    {
-                        @foreach (var team in teams)
-                        {
-                            <option value="@team.TeamID">@team.TeamName</option>
-                        }
-                    }
+                <label>Jakość:</label>
+                <select name="qualities" id="qualities" onchange="findPlayers()">
+                    <option value="Any"></option>
+                    <option value="33">@PlayerCardQuality.iron.ToString().ToUpper()</option>
+                    <option value="25">@PlayerCardQuality.bronze.ToString().ToUpper()</option>
+                    <option value="18">@PlayerCardQuality.silver.ToString().ToUpper()</option>
+                    <option value="13">@PlayerCardQuality.gold.ToString().ToUpper()</option>
+                    <option value="7">@PlayerCardQuality.platinium.ToString().ToUpper()</option>
+                    <option value="2">@PlayerCardQuality.diamond.ToString().ToUpper()</option>
+                    <option value="1">@PlayerCardQuality.immortal.ToString().ToUpper()</option>
+                </select>
+            </div>
+            <div class="teamComboBox">
+                <label>Rola:</label>
+                <select name="roles" id="roles" onchange="findPlayers()">
+                    <option value="Any"></option>
+                    <option value="IGL">IGL</option>
+                    <option value="Rifler">Rifler</option>
+                    <option value="AWP">AWP</option>
                 </select>
             </div>
             <div class="search-bar">
@@ -39,77 +54,47 @@
         </div>
     </div>
     <div id="players-view">
-        @Html.Partial("~/Pages/Shared/PartialViews/_PlayersPage.cshtml", players)
-    </div>
-    <div class="pagination">
-        <a onclick="changePage(1)">&laquo;</a>
-        @for (int pageNum = 1; pageNum < pages + 1; pageNum++)
-        {
-            if (pageNum == 1)
-            {
-                <a class="pageBtn currentPage" onclick="changePage(@pageNum)" id="@("pageBtn" + pageNum)">@pageNum</a>
-            }
-            else
-            {
-                <a class="pageBtn" onclick="changePage(@pageNum)" id="@("pageBtn" + pageNum)">@pageNum</a>
-            }
-        }
-        <a onclick="changePage(@pages)">&raquo;</a>
+        @Html.Partial("~/Pages/Shared/PartialViews/_PlayersPage.cshtml", playerspage)
     </div>
 </div>
 
 <script>
-    function findPlayersOfTeam() {
-        var teamVal = document.getElementById("teams").value;
+    ClearCards();
+    function findPlayers() {
+        var quality = document.getElementById("qualities").value;
+        var role = document.getElementById("roles").value;
         var queryVal = document.getElementById("searchInput").value;
 
         $.ajax({
                 url: "/players?handler=PlayersWithFilters",
             type: "get",
-            data: { pageNum: 1, pageSize: @itemsPerPage, teamID: teamVal, query: queryVal },
+            data: { pageNum: 1, pageSize: @itemsPerPage, roleName: role, quality: quality, query: queryVal },
             success: function (result) {
                 $("#players-view").html(result);
+                ClearCards();
             }
             });
     }
 
-    function changePage(number) {
-        var teamVal = document.getElementById("teams").value;
-        var queryVal = document.getElementById("searchInput").value;
-
-        var button = document.getElementById("pageBtn" + number);
-        var activeBtn = document.getElementsByClassName("currentPage")[0];
-
-
-        if (!button.disabled) {
-            activeBtn.classList.remove("currentPage");
-            activeBtn.disabled = false;
-
-            button.classList.add("currentPage");
-            button.disabled = true;
-
-            $.ajax({
-                url: "/players?handler=PlayersWithFilters",
-                type: "get",
-                data: { pageNum: number, pageSize: @itemsPerPage, teamID: teamVal, query: queryVal},
-                success: function (result) {
-                    $("#players-view").html(result);
-                }
-            });
-        }
-    }
-
     function searchQuery() {
-        var teamVal = document.getElementById("teams").value;
+        var quality = document.getElementById("qualities").value;
+        var role = document.getElementById("roles").value;
         var queryVal = document.getElementById("searchInput").value;
 
         $.ajax({
                 url: "/players?handler=PlayersWithFilters",
                 type: "get",
-                data: { pageNum: 1, pageSize: @itemsPerPage, teamID: teamVal, query: queryVal },
+            data: { pageNum: 1, pageSize: @itemsPerPage, roleName: role, quality: quality, query: queryVal},
                 success: function (result) {
                     $("#players-view").html(result);
+                    ClearCards();
                 }
         });
+    }
+    function ClearCards() {
+        var cards = document.getElementsByClassName('bought');
+        while (cards.length > 0) {
+            cards[0].classList.remove('bought');
+        }
     }
 </script>
