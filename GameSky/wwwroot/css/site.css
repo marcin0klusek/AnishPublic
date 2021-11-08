@@ -380,3 +380,71 @@ main .sidebar {
             font-size: 18px;
         }
 }
+
+.notification-icon{
+    display: flex;
+    flex-direction: column;
+}
+
+.notification-badge{
+    position: relative;
+    top: -15px;
+    right: 15px;
+    background-color: rgb(0 0 0 / 100%);
+    color: #fff;
+    border-radius: 50%;
+    padding: 3px 5px;
+    font-size: 0.6rem;
+    font-weight: 700;
+}
+
+.notifications-container{
+    background-color: #000;
+    position: absolute;
+    top: 40px;
+    padding: 4px 4px;
+    border-radius: 6px;
+    gap: 9px;
+}
+
+.notification {
+    display: flex;
+    flex-direction: column;
+    filter: brightness(0.85);
+}
+
+.notification:hover{
+    filter: brightness(1.4);
+    cursor: pointer;
+}
+
+.notification-text {
+    background-color: #262626;
+    padding: 5px;
+    flex-wrap: wrap;
+    color: #fff;
+    margin-bottom: .3rem;
+}
+
+.notification-date {
+    display: flex;
+    align-items: center;
+}
+
+.notification-data {
+    display: flex;
+    padding-inline: 15px;
+    justify-content: space-between;
+    align-content: center;
+    background-color: #2d3844;
+}
+
+.notification-readed{
+    border-radius: 50%;
+    color: #fff;
+    font-size: 1.33rem;
+}
+
+.notification-readed:hover{
+    cursor: pointer;
+}

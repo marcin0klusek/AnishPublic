@@ -37,6 +37,8 @@ namespace EFDataAccessLibrary.DataAccess
         public DbSet<Change> Change { get; set; }
         public DbSet<ChangeElement> ChangeElement { get; set; }
         public DbSet<WarningBar> WarningBar { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<UserNotification> UserNotifications { get; set; }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -80,6 +82,12 @@ namespace EFDataAccessLibrary.DataAccess
                 x.CommentID
             });
 
+            modelBuilder.Entity<UserNotification>().HasKey(x =>
+            new
+            {
+                x.UserID,
+                x.NotificationID
+            });
 
             //only one true value can exist for IsActive
             modelBuilder.Entity<Faq>().HasIndex(x => 

@@ -31,5 +31,13 @@ namespace GameSky.Controllers
 
             Db.SaveChanges();
         }
+
+        [Route("/user/SetNotificationAsReaded")]
+        public async Task OnPostSetNotificationAsReaded(int NotifId)
+        {
+            var notif = Db.Notifications.Where(n => n.ID == NotifId).FirstOrDefault();
+            notif.Readed = true;
+            Db.SaveChanges();
+        }
     }
 }
