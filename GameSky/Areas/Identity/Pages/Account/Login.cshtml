@@ -11,6 +11,7 @@
 <div class="form-container">
     <div class="flex-column align-middle login-holder">
     <h3 class="title">GameSky</h3>
+    <h5 class="subtitle">Logowanie</h5>
         <div class="">
             <section>
                 <form id="account" method="post">
@@ -38,13 +39,13 @@
                     </div>
                     <div class="form-group login-actions-container">
                         <p class="action">
-                            <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                            <a id="forgot-password"  class="isDisabled" @*asp-page="./ForgotPassword"*@>Forgot your password?</a>
                         </p>
                         <p class="action">
                             <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
                         </p>
                         <p class="action">
-                            <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
+                            <a id="resend-confirmation" asp-controller="User" asp-action="logindemo">Log in as demo user</a>
                         </p>
                     </div>
                 </form>

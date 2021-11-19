@@ -97,15 +97,15 @@
         else
         {
             <div class="infoBox">
-                <p class="infoHeader">Potencial</p> <p class="infoBody">@(player.Potencial*10)</p>
+                <p class="infoHeader">Potencial</p> <p class="infoBody">@(player.Potencial)</p>
             </div>
 
             <div class="infoBox">
-                <p class="infoHeader">Aim</p> <p class="infoBody">@(player.Aim*10)</p>
+                <p class="infoHeader">Aim</p> <p class="infoBody">@(player.Aim)</p>
             </div>
 
             <div class="infoBox">
-                <p class="infoHeader">Knowledge</p> <p class="infoBody">@(player.Knowledge*10)</p>
+                <p class="infoHeader">Knowledge</p> <p class="infoBody">@(player.Knowledge)</p>
             </div>
         }
         <div class="infoBox">
@@ -117,7 +117,7 @@
         </div>
 
         <div class="infoBox">
-            <p class="infoHeader">Market value</p> <p class="infoBody">@player.Prize$</p>
+            <p class="infoHeader">Market value</p> <p class="infoBody">@((int)player.Prize)G</p>
         </div>
 
         <div class="infoBox">

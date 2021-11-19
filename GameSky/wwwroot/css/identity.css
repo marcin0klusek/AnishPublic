@@ -15,11 +15,18 @@ a:hover{
 .title{
     color: #000;
     font-weight: 700;
-    margin-bottom: 40px;
+    margin-bottom: 0px;
 }
 
 .title:hover{
     cursor: default;
+}
+
+.subtitle{
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #2e2d2d;
 }
 
 .form-container {
@@ -39,8 +46,19 @@ a:hover{
     margin: 40px 0;
 }
 
+.form-control {
+    width: 100%;
+    padding: 10px;
+}
+
 .login-holder {
     margin: 25px 0;
+    width: 330px;
+}
+
+.isDisabled {
+    cursor: not-allowed;
+    opacity: 0.5;
 }
 
 .buttons-container{

@@ -4,7 +4,7 @@
 @using GameSky.Models
 @{
     Player player = Model._player;
-
+    ViewData["Title"] = $"Profil zawodnika {player.NickName}";
     Random rnd = new Random();
 
     string GetDateOrTime(DateTime StartDate)

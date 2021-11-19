@@ -65,6 +65,12 @@ namespace GameSky.Controllers
             string desc = form["Description"].ToString();
             var date = DateTime.Now;
 
+            if (subject.Trim() == String.Empty || desc.Trim() == String.Empty)
+            {
+                Notyf.Warning("Musisz umieścić tytuł oraz opis zgłoszenia!");
+                return RedirectToAction("TicketCreate");
+            }
+
             Ticket ticket = new();
             ticket.Subject = subject;
             ticket.Description = desc;
@@ -84,7 +90,7 @@ namespace GameSky.Controllers
                 return RedirectToAction("Ticket", ticket);
             }
             Notyf.Error("Wystąpił problem z dodawaniem zgłoszenia. Spróbuj ponownie za chwilę.");
-            return RedirectToAction("Tickets");
+            return RedirectToAction("TicketCreate");
         }
 
         [HttpPost]

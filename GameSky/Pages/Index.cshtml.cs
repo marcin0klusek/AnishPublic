@@ -21,9 +21,10 @@ namespace GameSky.Pages
         public List<NewsHeader> NewsHeaders { get; set; }
         public List<Match> results { get; set; }
         private readonly DataContext _db;
-        private int NewsToTake = 15;
+        private int NewsToTake = 8;
         private Stopwatch stopwatch = new Stopwatch();
         public string elapsedTime = "puste";
+        public List<Player> BestPlayerOnMarket { get; set; }
         public WarningBar Warning { get; set; }
 
 
@@ -39,6 +40,7 @@ namespace GameSky.Pages
             Warning = _db.GetWarningBar();
             ViewData["Warning"] = Warning;
             results = Task.Run(() => _db.GetFinishedMatches().Take(15).ToList()).Result;
+            BestPlayerOnMarket = _db.GetPlayersForMarket(2).ToList();
             return Page();
         }
 

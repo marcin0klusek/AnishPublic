@@ -1,7 +1,9 @@
 ﻿using EFDataAccessLibrary.DataAccess;
 using EFDataAccessLibrary.Models;
+using GameSky.Areas.Identity.Pages.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +14,17 @@ namespace GameSky.Controllers
     [Controller]
     public class UserController : Controller
     {
-        public UserController(DataContext db, UserManager<ApplicationUser> manager)
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ILogger<LoginModel> _logger;
+
+        public UserController(DataContext db, UserManager<ApplicationUser> manager, 
+            SignInManager<ApplicationUser> signInManager,
+            ILogger<LoginModel> logger)
         {
             Db = db;
             Manager = manager;
+            _signInManager = signInManager;
+            _logger = logger;
         }
 
         public DataContext Db { get; }
@@ -38,6 +47,26 @@ namespace GameSky.Controllers
             var notif = Db.Notifications.Where(n => n.ID == NotifId).FirstOrDefault();
             notif.Readed = true;
             Db.SaveChanges();
+        }
+
+
+        [Route("/user/logindemo")]
+        public async Task<IActionResult> LoginDemo(string returnUrl = null)
+        {
+            returnUrl ??= Url.Content("~/");
+            var result = await _signInManager.PasswordSignInAsync(
+                $"demo@demo.pl",
+                "Demo123;",
+                false,
+                lockoutOnFailure: false);
+
+            if (result.Succeeded)
+            {
+                _logger.LogInformation("User logged in.");
+                return LocalRedirect(returnUrl);
+            }
+            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+            return RedirectToPage("/Account/Login", new { area = "Identity" });
         }
     }
 }

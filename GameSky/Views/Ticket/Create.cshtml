@@ -3,32 +3,45 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Wyślij zgłoszenie";
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
+@section Styles{
+    <link rel="stylesheet" href="~/css/tickets.css" />
+}
 
-<h4>Ticket</h4>
-<hr />
-<div class="row text-center m-auto">
-    <div class="col-md-4">
-        <form asp-controller="Ticket" asp-action="CreateTicket" method="post">
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Subject" class="control-label">Tytuł zgłoszenia</label>
-                <input asp-for="Subject" class="form-control" />
-                <span asp-validation-for="Subject" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label">Opis</label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+<div class="tickerCreator">
+    <div class="ticketHeader">
+        <h1>Wyślij zgłoszenie</h1>
+        <p class="ticketSubtitle">
+            Służymy pomocą w sprawach technicznych i nie tylko!
+            Wyślij zgłoszenie! Jeżeli nie przepadnie w przepastnych czeluściach portalu, to wkrótce skontaktujemy się z tobą.
+        </p>
+    </div>
+    <div class="form-details">
+        <p class="ticket-details-header">SZCZEGÓŁY</p>
+        <hr class="hrdetails"/>
+    </div>
+    <div class="row text-center m-auto">
+        <div class="col-md-4">
+            <form asp-controller="Ticket" asp-action="CreateTicket" method="post">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Subject" class="control-label">TEMAT</label>
+                    <input asp-for="Subject" class="form-control" />
+                    <span asp-validation-for="Subject" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label">OPIS</label>
+                    <textarea asp-for="Description" class="form-control textareadesc" ></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Wyślij" class="btn btn-primary btnCreate" />
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 

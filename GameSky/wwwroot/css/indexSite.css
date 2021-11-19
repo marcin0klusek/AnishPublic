@@ -10,8 +10,9 @@
     }
 .hero {
     display: grid;
+    padding-top: 30px;
     grid-auto-columns: 1fr;
-    grid-template-columns: 15% 70% 15%;
+    grid-template-columns: 20% 70% 15%;
     grid-template-rows: 100px auto;
     grid-gap: 5px 15px;
     grid-template-areas:
@@ -29,6 +30,8 @@
     padding-bottom: 50px;
     max-width: 1250px;
     margin: 0 auto;
+    left: -30px;
+    position: relative;
 }
 
 .gettingStart:hover {
@@ -58,9 +61,33 @@
     }
 
 .colLeft{
-    
+    padding-top: 30px;
+    left: -10px;
+    position: relative;
 }
 
+    .colLeft > p {
+        background: #009FFF !important;
+        color: #fff;
+        width: 100%;
+        padding: .5rem .5rem;
+        font-size: 1.2rem;
+        font-weight: 500;
+        text-align: center;
+        margin-bottom: 0;
+    }
+
+.playerIndexCard{
+    margin-top: 20px;
+    margin-bottom: 50px;
+}
+
+.colMain {
+    padding-top: 30px;
+}
+.colRight {
+    padding-top: 30px;
+}
 .content {
     margin: 2rem 50px;
     display: flex;

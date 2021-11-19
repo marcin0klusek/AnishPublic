@@ -4,12 +4,8 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 @{
-    string name = "Marcin Klusek";
+    string name = "Maciej Petryszyn";
     ViewData["Title"] = $"{Model.news.NewsTitle}";
-    if (SignInManager.IsSignedIn(User))
-    {
-        name = @User.Identity.Name;
-    }
 }
 @section Styles{
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -23,9 +19,9 @@
     </div>
     <div class="dates">
         <h6>
-            <a href="https://www.twitter.com/klusekcs" target="_blank">@name</a>
+            <a href="https://cybersport.pl/author/mpetryszyn/" target="_blank">@name</a>
         </h6>
-        <h6>@Model.news.NewsPublishDate.ToString("dd/MM/yyyy - HH:mm")</h6>
+        <h6>@Model.news.NewsPublishDate.ToString("dd/MM/yyyy HH:mm")</h6>
     </div>
     <div class="desc">
         <h5>@Model.news.NewsDesc</h5>

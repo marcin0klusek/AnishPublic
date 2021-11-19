@@ -15,10 +15,12 @@
     var news = Model.NewsHeaders;
     if (news is null) { news = new List<NewsHeader>(); }
     if (results is null) { results = new List<Match>(); }
+    List<Player> players = Model.BestPlayerOnMarket;
 }
 
 @section Styles {
     <link rel="stylesheet" href="~/css/indexSite.css" />
+    <link rel="stylesheet" href="~/css/playerCard.css" />
 }
 
 <div class="indexBody">
@@ -29,10 +31,27 @@
     <div class="hero">
         <div class="titleBar">
             <h1 class="title">@title</h1>
-            <p>Stwórz drużynę i przebij się do światej czołówki! <a class="gettingStart" href="https://docs.microsoft.com/aspnet/core">Zaczynajmy.</a></p>
+            <p>Stwórz drużynę i przebij się do światej czołówki! <a class="gettingStart" asp-area="Identity" asp-page="/Account/Register">Zaczynajmy.</a></p>
         </div>
 
         <div class="colLeft">
+          @*
+              najlepszy gracz na rynku
+              last blog update
+
+          *@
+          <p>Najlepsi na rynku</p>
+            @if (players != null)
+            {
+                foreach (var player in players)
+                {
+                    <div class="playerIndexCard">
+                        <a class="player-card" asp-page="/Player" asp-route-id="@player.PlayerID">
+                            @Html.Partial("~/Pages/Shared/PartialViews/_PlayerCard.cshtml", player)
+                        </a>
+                    </div>
+                }
+            }
         </div>
 
         <div class="colMain">
@@ -44,9 +63,17 @@
                         <li>
                             <div class="titleNewsBar">
                                 <p>@header.NewsTitle</p>
-                                <p class="newsFeed-date">@header.NewsPublishDate.ToString("dd/MM/yyyy")</p>
+                                @if (header.NewsPublishDate == DateTime.Today)
+                                {
+                                    <p class="newsFeed-date">@header.NewsPublishDate.ToString("HH:mm")</p>
+                                }
+                                else
+                                {
+                                    <p class="newsFeed-date">@header.NewsPublishDate.ToString("dd/MM/yyyy")</p>
+                                }
                             </div>
                             <span>@header.NewsDesc</span>
+                            <br>
                             <span class="linkRead"><a asp-page="/post" asp-route-id="@header.NewsId">Read more...</a></span>
 
                         </li>
@@ -108,3 +135,13 @@
         </div>
     </div>
 </div>
+
+<script>
+    ClearCards();
+    function ClearCards() {
+        var cards = document.getElementsByClassName('bought');
+        while (cards.length > 0) {
+            cards[0].classList.remove('bought');
+        }
+    }
+</script>

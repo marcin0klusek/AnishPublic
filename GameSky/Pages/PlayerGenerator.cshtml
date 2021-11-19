@@ -4,6 +4,7 @@
 @inject UserManager<ApplicationUser> UserManager
 @inject SignInManager<ApplicationUser> SingIn
 @{
+    ViewData["Title"] = $"Market";
     ApplicationUser _user = null;
     if (SingIn.IsSignedIn(User))
     {
