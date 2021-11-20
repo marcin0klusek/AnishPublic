@@ -17,10 +17,24 @@
                 @foreach (NewsHeader item in updates)
                 {<a asp-page="/update" asp-route-id="@item.NewsId">
                         <div class="update-card">
+                        @if (item.NewsTitle.Contains("Aktualizacja"))
+                        {
+                            <img 
+                                 src="~/images/CoversBlog/update.png"
+                                 alt="Update Notes" width="1280" height="720" class="update-banner">
+
+                        }else if (item.NewsTitle.Contains("Pre-Alpha"))
+                        {
+                            <img 
+                                 src="~/images/CoversBlog/prealpha.png"
+                                 alt="Update Notes" width="1280" height="720" class="update-banner">
+                        }
+                        else{
                             <img 
                                  src="https://image.api.playstation.com/cdn/EP3862/CUSA10484_00/yBWNwtzZiTbsRVQtorKYTi06O7iXq5fd.jpg"
                                  alt="Update Notes" width="1920" height="1080" class="update-banner">
-                            <span class="update-meta">@item.NewsPublishDate.ToString("dd'/'M'/'yy") • SITE UPDATES</span>
+                        }
+                        <span class="update-meta">@item.NewsPublishDate.ToString("dd'/'M'/'yy") • SITE UPDATES</span>
                             <h3 class="update-title">@item.NewsTitle</h3>
                             <p>@item.NewsDesc.Split('.')[0].</p>
                         </div>

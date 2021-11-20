@@ -16,7 +16,7 @@ a:hover{
 .results {
     font-size: 12px;
     width: 550px;
-    margin: 80px auto;
+    margin: 30px auto;
     color: #929a9e;
 }
 
@@ -141,7 +141,7 @@ td{
     }
 }
 
-.results .result .event-name{
+.results .result .event-name {
     opacity: .85;
     font-weight: 700;
 }

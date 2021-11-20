@@ -12,26 +12,30 @@
     display: grid;
     padding-top: 30px;
     grid-auto-columns: 1fr;
-    grid-template-columns: 20% 70% 15%;
+    grid-template-columns: 253px 70% 150px;
     grid-template-rows: 100px auto;
     grid-gap: 5px 15px;
     grid-template-areas:
         "titleBar titleBar titleBar"
         "colLeft colMain colRight";
+    justify-content: center;
 }
 
 .hero .titleBar{
     grid-area: titleBar;
     text-align: center;
     justify-content: center;
+    width: 100%;
 }
 
 .indexBody {
     padding-bottom: 50px;
-    max-width: 1250px;
+    max-width: 85%;
     margin: 0 auto;
-    left: -30px;
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .gettingStart:hover {
@@ -62,8 +66,8 @@
 
 .colLeft{
     padding-top: 30px;
-    left: -10px;
     position: relative;
+    max-width: 250px;
 }
 
     .colLeft > p {
@@ -84,13 +88,17 @@
 
 .colMain {
     padding-top: 30px;
+    width: 100%;
 }
 .colRight {
     padding-top: 30px;
+    width: 100%;
+    min-width: 150px;
 }
 .content {
-    margin: 2rem 50px;
+    margin: 2rem auto;
     display: flex;
+    width: 95%;
     justify-content: center;
     align-items: flex-start;
 }
@@ -103,7 +111,6 @@
     flex-wrap: nowrap;
     width: 100%;
     flex-grow: 2;
-    margin-right: 1rem;
 }
 
     .newsfeed .titleBar {
@@ -139,17 +146,24 @@
 
         .newsfeed li p {
             position: relative;
-            padding: .1rem 1rem .1rem 1rem;
+            padding: 5px;
             margin-bottom: 0.5rem;
             font-weight: 700;
             font-size: 1.1rem;
-            background: rgb(0,0,0,.4);
         }
 
         .newsfeed li span {
             display: inline-block;
-            padding: 0 .5rem !important;
+            padding: 5px .5rem !important;
         }
+
+.newsFeed-date{
+    min-width: 68px;
+}
+
+.titleNewsBar{
+    max-width: 100%;
+}
 
 .linkRead {
     text-decoration: underline;
@@ -175,8 +189,8 @@
 .matchesResults {
     display: inline-block;
     height: 100%;
+    width: 100%;
     min-width: 150px;
-    max-width: 150px;
     letter-spacing: .05rem;
 }
 
@@ -272,32 +286,122 @@
     color: #c30404;
 }
 
+@media screen and (max-width: 1440px) {
+    .playerIndexCard {
+        display: none;
+    }
+
+    .colLeft > p {
+        display: none;
+    }
+
+    .hero {
+        display: grid;
+        padding-top: 30px;
+        grid-auto-columns: 1fr;
+        grid-template-columns: 0% 77.5% 150px;
+        grid-template-rows: auto;
+        grid-gap: 5px 15px;
+        grid-template-areas:
+            "titleBar titleBar titleBar"
+            "colLeft colMain colRight";
+        justify-content: center;
+        margin: 0 auto;
+    }
+}
+
+@media screen and (min-width: 1300px){
+    .content{
+        width: 1250px;
+        max-width: 1250px !important;
+    }
+}
+
+
+@media screen and (max-width: 1300px) {
+    .hero {
+        display: grid;
+        padding-top: 30px;
+        grid-auto-columns: 1fr;
+        grid-template-columns: 0% 77.5% 150px;
+        grid-template-rows: auto;
+        grid-gap: 5px 15px;
+        grid-template-areas:
+            "titleBar titleBar titleBar"
+            "colLeft colMain colRight";
+        width: 100%;
+        margin: 0 auto;
+    }
+}
+
+
+@media screen and (max-width: 862px) {
+    .indexBody {
+        padding-bottom: 50px;
+        min-width: 95%;
+        margin: 0 auto !important;
+        display: flex;
+        justify-content: center;
+    }
+        .matchesResults {
+        display: none;
+    }
+
+    .hero .titleBar {
+        grid-area: titleBar;
+        text-align: center;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .hero {
+        display: grid;
+        padding-top: 30px;
+        grid-auto-columns: 1fr;
+        grid-template-columns: 0px 100% 0px;
+        grid-template-rows: auto;
+        grid-gap: 5px 15px;
+        grid-template-areas:
+            "titleBar titleBar titleBar"
+            "colLeft colMain colRight";
+        justify-content: center;
+    }
+    .colRight{
+        width: 0px;
+    }
+
+    .colLeft{
+        width: 0px;
+    }
+}
+
 @media screen and (min-width: 620px) {
     .matchesResults {
         display: normal;
     }
-}
-
-@media screen and (max-width: 620px) {
-    .matchesResults {
-        display: none;
-    }
-
-    .newsfeed {
+    .indexBody {
+        padding-bottom: 50px;
+        min-width: 95%;
+        margin: 0 auto !important;
+        display: flex;
+        justify-content: center;
     }
 }
 
-@media screen and (max-width: 1350px) {
-    .newsfeed {
-    }
-}
 
 /* News list */
 .newsContainer{
-    margin: 100px 0;
 }
 
-#showMore{
+.newsContainer-title{
+    padding-top: 20px;
+    text-align: center;
+    width: 100%;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+#showMore {
     margin-top: 0.2rem;
 }
 

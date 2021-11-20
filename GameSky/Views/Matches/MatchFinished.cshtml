@@ -16,14 +16,6 @@
     <div class="match-header" id="partialHeader">
         @Html.Partial("~/Views/Shared/Matches/_MatchHeader.cshtml", match)
     </div>
-
-    <div class="event-name">
-        <p>
-            <a asp-page="/event" asp-route-id="@match.Event.EventID">
-                @match.Event.Name
-            </a>
-        </p>
-    </div>
     <div class="clearfix spacer"></div>
     <div class="section-spacer"></div>
 

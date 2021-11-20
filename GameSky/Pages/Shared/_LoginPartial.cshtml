@@ -39,15 +39,15 @@
         {
             <li class="nav-item">
                 <a class="nav-link" title="Owning Team" asp-page="/team" asp-route-id="@_user.OwningTeamId">
-                    <span>My Team</span>
+                    <span>Moja drużyna</span>
                 </a>
             </li>
         }
-        <li class="nav-item">
+        @*<li class="nav-item">
             <a class="nav-link" title="Premium currency">
                 <img src="~/icons/dollars_symbol.png" class="icon" /> @_user.Dollars
             </a>
-        </li>
+        </li>*@
         <li class="nav-item">
             <a class="nav-link" title="Free currency" onclick="Payment()">
                 <img src="~/icons/euro_symbol.png" class="icon" /> <span id="goldText">@string.Format("{0:N}", _user.Gold)</span>
@@ -90,17 +90,17 @@
         </li>
         <li class="nav-item">
             <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
-                <button type="submit" class="nav-link btn btn-link">Logout</button>
+                <button type="submit" class="nav-link btn btn-link">WYLOGUJ</button>
             </form>
         </li>
     }
     else
     {
         <li class="nav-item">
-            <a class="nav-link" asp-area="Identity" asp-page="/Account/Register">Register</a>
+            <a class="nav-link" asp-area="Identity" asp-page="/Account/Register">REJESTRACJA</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">Login</a>
+            <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">LOGOWANIE</a>
         </li>
     }
 </ul>

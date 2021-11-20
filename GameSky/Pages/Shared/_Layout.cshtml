@@ -15,8 +15,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7Y2QRY1WN7"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-7Y2QRY1WN7');
+</script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" src="~/favicon.ico" type="image/ico" />
     <title>@ViewData["Title"] - ANISH</title>
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -31,15 +41,15 @@
     @RenderSection("Styles", false)
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white mb-3">
+    <header class="sticky-top">
+        <nav class="navbar navbar-expand-md navbar-toggleable-sm navbar-dark bg-white mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-page="/Index"><img src="~/images/sygnet.png" class="brand-logo" /></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <div class="navbar-collapse collapse d-md-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-page="/News">Artykuły</a>
@@ -180,11 +190,11 @@
         if (isMainAlert && isAdmin) {
             document.getElementById("body").style.margin = "0px 0px 50px 50px";
         } else if (isAdmin) {
-            document.getElementById("body").style.margin = "50px 0px 50px 50px";
+            document.getElementById("body").style.margin = "0px 0px 50px 50px";
         } else if (isMainAlert) {
             document.getElementById("body").style.margin = "0px 0px 50px 0px";
         } else {
-            document.getElementById("body").style.margin = "50px 0px 50px 0px";
+            document.getElementById("body").style.margin = "0px 0px 50px 0px";
         }
     function RefreshGold() {
         $.ajax({

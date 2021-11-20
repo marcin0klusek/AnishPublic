@@ -1,20 +1,19 @@
 {
   "dependencies": {
-    "mssql1": {
-      "type": "mssql.local",
-      "connectionId": "DefaultConnection"
-    },
-    "secrets1": {
-      "type": "secrets.user"
-    },
     "mssql2": {
-      "secretStore": "LocalSecretsFile",
+      "secretStore": "AzureAppSettings",
       "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/anish/databases/Anish",
       "type": "mssql.azure",
       "connectionId": "ConnectionStrings:DefaultConnection"
     },
+    "mssql1": {
+      "secretStore": "AzureAppSettings",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/anish/databases/Anish",
+      "type": "mssql.azure",
+      "connectionId": "DefaultConnection"
+    },
     "signalr1": {
-      "secretStore": "LocalSecretsFile",
+      "secretStore": "AzureAppSettings",
       "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.SignalRService/SignalR/Anish",
       "type": "signalr.azure",
       "connectionId": "Azure:SignalR:ConnectionString"
