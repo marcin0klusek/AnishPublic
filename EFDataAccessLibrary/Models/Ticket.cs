@@ -13,7 +13,9 @@ namespace EFDataAccessLibrary.Models
         public int Id { get; set; }
         public DateTime CreateAt { get; set; }
         public DateTime LastModify { get; set; }
+        [Required(ErrorMessage ="Podaj tytuł problemu")]
         public string Subject { get; set; }
+        [Required(ErrorMessage = "Zgłoszenie musi posiadać opis problemu")]
         public string Description { get; set; }
         public TicketStatus Status { get; set; }
         public string UserID { get; set; }

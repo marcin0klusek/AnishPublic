@@ -1,6 +1,8 @@
 ﻿using EFDataAccessLibrary.DataAccess;
 using EFDataAccessLibrary.Models;
 using GameSky.Areas.Identity.Pages.Account;
+using GameSky.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -67,6 +69,26 @@ namespace GameSky.Controllers
             }
             ModelState.AddModelError(string.Empty, "Invalid login attempt.");
             return RedirectToPage("/Account/Login", new { area = "Identity" });
+        }
+
+        [HttpPost]
+        [Route("user/SendEmail")]
+        public async Task<IActionResult> OnPostSendEmail(IFormCollection form)
+        {
+            string adr = form["EmailAddress"].ToString();
+            string top = form["Topic"].ToString();
+            string text = form["Text"].ToString();
+
+            Console.WriteLine($"Email {top} od {adr}");
+            return RedirectToPage("./Index");
+        }
+
+        [HttpPost]
+        [Route("user/sendemail")]
+        public async Task<IActionResult> OnPostSendEmail(EmailModel email)
+        {
+            Console.WriteLine($"Email {email.Topic} od {email.EmailAddress}");
+            return RedirectToPage("./Index");
         }
     }
 }

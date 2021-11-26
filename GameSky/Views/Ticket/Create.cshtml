@@ -28,12 +28,12 @@
             <form asp-controller="Ticket" asp-action="CreateTicket" method="post">
                 <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="form-group">
-                    <label asp-for="Subject" class="control-label">TEMAT</label>
+                    <label asp-for="Subject" class="control-label required">TEMAT</label>
                     <input asp-for="Subject" class="form-control" />
                     <span asp-validation-for="Subject" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Description" class="control-label">OPIS</label>
+                    <label asp-for="Description" class="control-label required">OPIS</label>
                     <textarea asp-for="Description" class="form-control textareadesc" ></textarea>
                     <span asp-validation-for="Description" class="text-danger"></span>
                 </div>

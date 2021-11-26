@@ -1,0 +1,55 @@
+﻿@page
+@model GameSky.Pages.ContactModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Contact";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+    string success = String.Empty;
+    if (ViewData["Success"] is not null)
+    {
+        success = ViewData["Success"].ToString();
+    }
+}
+
+@section Styles{
+<link rel="stylesheet" href="~/css/tickets.css" />
+}
+
+<div class="tickerCreator">
+    <div class="ticketHeader">
+        <h1>Skontaktuj się ze mną!</h1>
+        <p class="ticketSubtitle">
+            Masz pytanie? Chętnie z Tobą porozmawiam.
+        </p>
+    </div>
+    <div class="form-details">
+        <p class="ticket-details-header">SZCZEGÓŁY</p>
+        <hr class="hrdetails" />
+    </div>
+    <div class="row text-center m-auto">
+        <div class="col-md-4">
+            <form method="post" autocomplete="off">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Email.EmailAddress" class="control-label required">Adres e-mail</label>
+                    <input asp-for="Email.EmailAddress" type="email" class="form-control" />
+                    <span asp-validation-for="Email.EmailAddress" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email.Topic" class="control-label required">Tytuł</label>
+                    <input asp-for="Email.Topic" autocomplete="new-password" class="form-control">
+                    <span asp-validation-for="Email.Topic" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email.Text" class="control-label required">Treść</label>
+                    <textarea asp-for="Email.Text" class="form-control textareadesc"></textarea>
+                    <span asp-validation-for="Email.Text" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Wyślij" class="btn btn-primary btnCreate" />
+                </div>
+            </form>
+            <h5 style="width: 450px">@success</h5>
+        </div>
+    </div>
+</div>

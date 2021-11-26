@@ -100,7 +100,6 @@ namespace GameSky
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -110,10 +109,8 @@ namespace GameSky
             }
             else
             {
-                //app.UseExceptionHandler("/Error");
-                app.UseExceptionHandler("/errors/{0}");
-                app.UseStatusCodePagesWithReExecute("/errors/{0}");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseExceptionHandler("/Errors/{0}");
+                app.UseStatusCodePagesWithReExecute("/Errors/{0}");
                 app.UseHsts();
             }
 

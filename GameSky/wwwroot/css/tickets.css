@@ -12,6 +12,17 @@
     padding: 30px 100px;
 }
 
+.required::after{
+    content: '*';
+    color: red;
+    padding-left: 2px;
+    font-weight: 100;
+}
+
+.text-danger{
+    width: 450px;
+}
+
 .tickets--table{
     display: flex;
     flex-direction: column;

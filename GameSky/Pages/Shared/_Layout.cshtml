@@ -154,6 +154,8 @@
             <a asp-area="" asp-page="/Faq">FAQ</a>
             &minus;
             <a asp-area="" asp-page="/Changelogs">Blog</a>
+            &minus;
+            <a asp-area="" asp-page="/Contact">Kontakt</a>
         </div>
     </footer>
 
@@ -198,6 +200,7 @@
         }
     function RefreshGold() {
         $.ajax({
+            async: true,
             url: "/index?handler=UsersGold",
             type: "post",
             dataType: "JSON",
