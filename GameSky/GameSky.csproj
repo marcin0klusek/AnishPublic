@@ -7,6 +7,7 @@
     <StartupObject>GameSky.Program</StartupObject>
     <ApplicationIcon>sygnet.ico</ApplicationIcon>
     <SignAssembly>False</SignAssembly>
+    <ApplicationInsightsResourceId>/subscriptions/d635cdc4-89c9-4f36-8622-430bfc55ac70/resourcegroups/ANISH/providers/Microsoft.Insights/components/Anish</ApplicationInsightsResourceId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,6 +19,7 @@
     <PackageReference Include="Hangfire.AspNetCore" Version="1.7.25" />
     <PackageReference Include="Hangfire.SqlServer" Version="1.7.25" />
     <PackageReference Include="jQuery" Version="3.6.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.15.0" />
     <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.3" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
     <PackageReference Include="Microsoft.AspNet.WebPages" Version="3.2.7" />

@@ -98,6 +98,7 @@ namespace GameSky
                 option.LowercaseUrls = true;
                 option.LowercaseQueryStrings = true;
             });
+            services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_CONNECTIONSTRING"]);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
