@@ -43,14 +43,6 @@ namespace GameSky.Pages.Matches
             ViewBag.Upcoming = _upcomingMatches;
             ViewBag.Finished = _finishedMatches;
 
-            if (_upcomingMatches != null && _finishedMatches != null) {
-                _notyf.ShowInformation("Prawidłowo pobrano mecze");
-            }
-            else
-            {
-                _notyf.Warning("Coś poszło nie tak!");
-            }
-
             return View();
         }
 

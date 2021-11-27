@@ -86,7 +86,7 @@ namespace GameSky.Controllers
             match.Event = Db.GetEventById(Int32.Parse(form["Event"].ToString()));
             match.Team1 = Db.GetTeamByID(Int32.Parse(form["Team1.TeamID"].ToString()));
             match.Team2 = Db.GetTeamByID(Int32.Parse(form["Team2.TeamID"].ToString()));
-            match.StartDate = DateTime.Parse(form["StartDate"].ToString());
+            match.StartDate = DateTime.SpecifyKind(DateTime.Parse(form["StartDate"].ToString()), DateTimeKind.Utc).AddHours(-1);
 
             if (ModelState.IsValid)
             {
